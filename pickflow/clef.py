@@ -196,7 +196,7 @@ class ClefClient:
             raise ClefError(
                 f"O Clef não respondeu em {float(self.timeout_s):.0f} s ({self.url}). Se ele estava carregando o "
                 "modelo, aumente 'Tempo máximo' em Ajustes > Clef; se a placa ficou cheia (Clef + ComfyUI na mesma "
-                "VRAM), rode o Clef menor (--quant int8 ou int4) para ele caber junto do Qwen."
+                "VRAM), rode o Clef em int4 (--quant int4) para ele caber junto do Qwen."
             ) from e
         except Exception as e:  # noqa: BLE001
             raise ClefError(f"Não consegui falar com o Clef em {self.url}: {e or type(e).__name__}") from e

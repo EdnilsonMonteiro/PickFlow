@@ -1,104 +1,104 @@
-# addons/ — extensões suas
+# addons/ — your own extensions
 
-Esta pasta é ignorada pelo git (veja o `.gitignore`): o que você cria aqui fica só na sua máquina e `git pull`
-nunca mexe. Cada addon é uma pasta `addons/<nome>/`. A ordem de prioridade dos arquivos é
+This folder is ignored by git (see `.gitignore`): what you create here stays only on your machine and `git pull`
+never touches it. Each addon is a folder `addons/<name>/`. The file priority order is
 **`custom/` > `addons/` > `defaults/`**.
 
-Criar um addon novo a partir do modelo:
+Create a new addon from the template:
 
 ```
-python -m pickflow addon new meu-addon        # ou: Ajustes > Addons > Criar addon
+python -m pickflow addon new my-addon        # or: Settings > Addons > Create addon
 ```
 
-Reinicie o PickFlow. O addon aparece em **Ajustes > Addons** (onde também liga e desliga). Código Python e telas só
-valem depois de reiniciar; workflows, prompts e LoRAs do addon valem na hora.
+Restart PickFlow. The addon shows up in **Settings > Addons** (where you also turn it on and off). Python code and screens only
+apply after a restart; the addon's workflows, prompts and LoRAs apply immediately.
 
-## O que um addon pode ter
+## What an addon can have
 
 ```
-addons/meu-addon/
-├── addon.yaml          título, versão, config padrão, LLM próprio (opcional)
-├── addon.py            register(ctx): ganchos, ações, rotas, LLM, dados
-├── registry/           ligação técnica de fluxos novos (mesmo formato de defaults/registry)
-├── workflows/          .json do ComfyUI desses fluxos
-├── prompts/            prompts dos fluxos (mesmo formato de defaults/prompts)
-├── loras.yaml          LoRAs novas
-├── clef_prompt.yaml    descrição dos fluxos para o Clef, casos de uso (recipes), instructions_append
-└── web/                main.js, style.css (carregados sozinhos): interface nova
+addons/my-addon/
+├── addon.yaml          title, version, default config, own LLM (optional)
+├── addon.py            register(ctx): hooks, actions, routes, LLM, data
+├── registry/           technical wiring of new flows (same format as defaults/registry)
+├── workflows/          ComfyUI .json files of those flows
+├── prompts/            prompts of the flows (same format as defaults/prompts)
+├── loras.yaml          new LoRAs
+├── clef_prompt.yaml    description of the flows for the Clef, use cases (recipes), instructions_append
+└── web/                main.js, style.css (loaded automatically): new interface
 ```
 
-Tudo é opcional. Só recursos (sem `addon.py`) já é um addon válido: um fluxo novo do ComfyUI, por exemplo.
+Everything is optional. Resources alone (no `addon.py`) are already a valid addon: a new ComfyUI flow, for example.
 
 ## addon.py: `register(ctx)`
 
-| `ctx.…` | Para quê |
+| `ctx.…` | What for |
 |---|---|
-| `@ctx.hook("request")` | muda o texto do pedido antes de o Clef ler (`def f(texto, info)` → novo texto) |
-| `@ctx.hook("prompt")` | muda o prompt final de cada passo antes do ComfyUI (`info`: workflow, preset, mode, vars, loras, request) |
-| `@ctx.hook("plan" \| "step_done" \| "run_done")` | observadores (log, avisos, histórico) |
-| `@ctx.action("nome")` | fluxo feito em Python, sem ComfyUI; ligado por um registro com `kind: action` e `action: <addon>.nome` |
-| `ctx.llm` | o LLM de Ajustes: `await ctx.llm.ask(texto, system=…, images=[png])`, `ask_json(…)`, `.configured` |
-| `ctx.router` | rotas FastAPI próprias, em `/api/addons/<nome>/…` |
-| `ctx.config` | `addon.yaml > config` + `settings.yaml > addons.config.<nome>` |
-| `ctx.load_data()` / `ctx.save_data(d)` | dados do addon que sobrevivem ao reiniciar (`data/addons/<nome>.json`) |
-| `ctx.store`, `ctx.app`, `ctx.log(msg)` | acesso ao Store, ao FastAPI e ao log |
+| `@ctx.hook("request")` | changes the request text before the Clef reads it (`def f(text, info)` → new text) |
+| `@ctx.hook("prompt")` | changes each step's final prompt before ComfyUI (`info`: workflow, preset, mode, vars, loras, request) |
+| `@ctx.hook("plan" \| "step_done" \| "run_done")` | observers (log, notices, history) |
+| `@ctx.action("name")` | flow written in Python, without ComfyUI; wired by a registry with `kind: action` and `action: <addon>.name` |
+| `ctx.llm` | the LLM from Settings: `await ctx.llm.ask(text, system=…, images=[png])`, `ask_json(…)`, `.configured` |
+| `ctx.router` | your own FastAPI routes, under `/api/addons/<name>/…` |
+| `ctx.config` | `addon.yaml > config` + `settings.yaml > addons.config.<name>` |
+| `ctx.load_data()` / `ctx.save_data(d)` | addon data that survives restarts (`data/addons/<name>.json`) |
+| `ctx.store`, `ctx.app`, `ctx.log(msg)` | access to the Store, to FastAPI and to the log |
 
-Ganchos podem ser `def` ou `async def`. Erro num gancho é registrado e ignorado; um addon que quebra ao carregar é
-desligado e o erro aparece em Ajustes > Addons.
+Hooks can be `def` or `async def`. An error in a hook is logged and ignored; an addon that breaks while loading is
+turned off and the error shows up in Settings > Addons.
 
-### Ações (fluxos novos em Python)
+### Actions (new flows in Python)
 
-`registry/meu_fluxo.yaml`:
+`registry/my_flow.yaml`:
 
 ```yaml
-id: meu_fluxo
+id: my_flow
 kind: action
-action: meu-addon.minha_acao
-title: Meu fluxo
-images: [{key: image_1, label: Imagem, required: true}]
-params: []        # caixas, posições, máscara: os mesmos tipos dos outros fluxos; chegam em call.drawings
+action: my-addon.my_action
+title: My flow
+images: [{key: image_1, label: Image, required: true}]
+params: []        # boxes, positions, mask: the same types as the other flows; they arrive in call.drawings
 ```
 
 `addon.py`:
 
 ```python
-@ctx.action("minha_acao")
-async def minha_acao(call):          # call: ActionCall
-    im = call.pil("image_1")         # call.images["image_1"] = PNG em bytes
-    await call.status("Trabalhando…")           # mensagem na conversa
-    escolha = await call.ask("meu_tipo", title="Qual?", opcoes=["a", "b"])   # abre a tela registrada no JS
-    return [im.rotate(90, expand=True)]        # bytes PNG, PIL.Image ou lista
+@ctx.action("my_action")
+async def my_action(call):           # call: ActionCall
+    im = call.pil("image_1")         # call.images["image_1"] = PNG bytes
+    await call.status("Working…")                # message in the conversation
+    choice = await call.ask("my_kind", title="Which?", options=["a", "b"])   # opens the screen registered in the JS
+    return [im.rotate(90, expand=True)]        # PNG bytes, PIL.Image or a list
 ```
 
-`call` também traz `request`, `vars`, `drawings`, `prompt`, `llm`, `settings`. Para o Clef escolher o fluxo, descreva-o
-em `clef_prompt.yaml > workflows > meu_fluxo > description`.
+`call` also carries `request`, `vars`, `drawings`, `prompt`, `llm`, `settings`. For the Clef to choose the flow, describe it
+in `clef_prompt.yaml > workflows > my_flow > description`.
 
 ## web/main.js: `window.PickFlow`
 
 ```js
-const CF = window.PickFlow, h = CF.h;                      // h(tag, attrs, ...filhos) cria elementos (sem innerHTML)
-CF.addButton({ label, title, onClick })                    // ao lado de "Anexar imagem"
-CF.addResultAction({ label, onClick(imagem) })             // em cada imagem de resultado
-CF.addView({ id, title, mount(container) })                // tela nova no menu
-CF.addSettings({ id, title, mount(container) })            // bloco em Ajustes > Addons
-CF.registerInput('meu_tipo', async (evento) => valor)      // tela pedida pelo Python (call.ask); null cancela
+const CF = window.PickFlow, h = CF.h;                      // h(tag, attrs, ...children) creates elements (no innerHTML)
+CF.addButton({ label, title, onClick })                    // next to "Attach image"
+CF.addResultAction({ label, onClick(image) })              // on every result image
+CF.addView({ id, title, mount(container) })                // new screen in the menu
+CF.addSettings({ id, title, mount(container) })            // block in Settings > Addons
+CF.registerInput('my_kind', async (event) => value)        // screen requested by Python (call.ask); null cancels
 CF.on('run:end', ({images}) => …)                          // 'ready', 'view', 'run:event', 'run:end'
-CF.addonApi('meu-addon', '/rota', { method, body })        // chama as rotas do addon
-CF.config(nome) / CF.saveConfig(nome, obj)                 // configuração do addon
-CF.modal({ title, body, buttons }) · CF.toast(texto) · CF.api(caminho, opts)
-CF.setText(texto) · CF.attach(arquivo) · CF.send({ text })  // controlar a conversa
-CF.boxEditor({ img, color, multiple, … })                  // o editor de caixas do PickFlow, para telas suas
-CF.state                                                   // conversa, imagens anexadas, ajustes, workflows (leitura)
-CF.lang · CF.tr(texto)                                     // idioma da interface ('en' | 'pt') e tradução pelo catálogo
+CF.addonApi('my-addon', '/route', { method, body })        // calls the addon's routes
+CF.config(name) / CF.saveConfig(name, obj)                 // the addon's configuration
+CF.modal({ title, body, buttons }) · CF.toast(text) · CF.api(path, opts)
+CF.setText(text) · CF.attach(file) · CF.send({ text })     // drive the conversation
+CF.boxEditor({ img, color, multiple, … })                  // PickFlow's box editor, for your own screens
+CF.state                                                   // conversation, attached images, settings, workflows (read-only)
+CF.lang · CF.tr(text)                                      // interface language ('en' | 'pt') and translation through the catalog
 ```
 
-Texto vindo de fora entra no DOM com `textContent`/`h()`, nunca `innerHTML`. A interface abre em inglês: o PickFlow traduz
-na tela o que está no catálogo `web/locales/en.json`; para os textos do seu addon, escreva direto no idioma que quiser ou
-escolha pelo `CF.lang` (o que não está no catálogo aparece como foi escrito).
+Text coming from outside goes into the DOM with `textContent`/`h()`, never `innerHTML`. The interface opens in English: PickFlow translates
+on screen what is in the `web/locales/en.json` catalog; for your addon's own texts, write directly in whatever language you like or
+choose by `CF.lang` (what is not in the catalog shows up as written).
 
-## Boas práticas
+## Good practices
 
-- Prefixe ids (`meu_addon_…`), classes CSS e rotas com o nome do addon.
-- Conteúdo pessoal (prompts, LoRAs) fica aqui ou em `custom/`, nunca em `defaults/`.
-- `python -m pickflow addon new` e a skill **pickflow-addons** (`.claude/skills/pickflow-addons`) mostram o caminho
-  completo; Ajustes > Checagem dos workflows confere se as ações dos addons existem.
+- Prefix ids (`my_addon_…`), CSS classes and routes with the addon's name.
+- Personal content (prompts, LoRAs) stays here or in `custom/`, never in `defaults/`.
+- `python -m pickflow addon new` and the **pickflow-addons** skill (`.claude/skills/pickflow-addons`) show the whole
+  path; Settings > ComfyUI > Check workflows verifies that the addons' actions exist.

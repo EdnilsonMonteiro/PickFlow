@@ -282,7 +282,8 @@ function setupCard() {
       } }, 'Agora não'));
   }
   if (!st.clef.ok) {
-    items.push(['O Clef não está respondendo.', 'Ligue o servidor do Clef: abra clef_server/start_clef.bat (na primeira vez ele instala tudo sozinho) ou, só para testar a interface, troque para o modo de teste em Ajustes.']);
+    items.push(['O Clef não está respondendo.', 'Ligue o servidor do Clef: dê dois cliques em clef_server/start_clef.bat (Windows) ou rode bash clef_server/start_clef.sh (Linux/macOS); na primeira vez ele instala tudo sozinho e pergunta bf16 ou int4. Só para ver a interface funcionando, use o modo de teste.']);
+    actions.push(h('button', { class: 'btn secondary', onclick: useMockClef }, 'Usar o modo de teste'));
   } else if (st.clef.mode === 'mock') {
     items.push(['O Clef está em modo de teste.', 'Ele escolhe por palavras em comum, sem o modelo. Aponte para o servidor do Clef em Ajustes para decisões de verdade.']);
   }
@@ -291,6 +292,15 @@ function setupCard() {
   return h('div', { class: 'card setup' }, h('h3', null, 'Antes de começar'),
     h('ul', null, items.map(([a, b]) => h('li', null, h('b', null, a + ' '), b))),
     h('div', { class: 'row' }, actions));
+}
+// Primeira vez sem o servidor do Clef: um clique troca para o modo de teste (escolhe por palavras em comum, sem o modelo).
+async function useMockClef() {
+  try {
+    S.settings = await api('/api/settings', { method: 'PUT', body: { clef: { mode: 'mock' } } });
+    toast('Modo de teste ligado. Para decisões de verdade, ligue o Clef e mude em Ajustes > Clef.');
+  } catch (e) { toast(e.message); }
+  await refreshStatus();
+  renderFeed();
 }
 function renderPills() {
   const st = S.status, p = S.C.pills;
@@ -2453,64 +2463,89 @@ function mountSettings(main) {
     try { await api('/api/settings', { method: 'PUT', body: { ui: { language: e.target.value } } }); location.reload(); } catch (err) { toast(err.message); }
   } }, [['en', 'English'], ['pt', 'Português (Brasil)']].map(([v, t]) =>
     h('option', { value: v, selected: ((s.ui || {}).language || 'en') === v, translate: 'no' }, t)));
-  page.append(h('div', { class: 'inner' },
-    h('div', { class: 'card stack' }, h('h2', null, 'Idioma'),
-      field('Idioma da interface', langSel, 'Vale para a interface e para as mensagens do PickFlow. As descrições e instruções que o Clef lê continuam como estão.')),
-    h('div', { class: 'card stack' }, h('h2', null, 'ComfyUI'),
-      field('Endereço', h('div', { class: 'row' }, h('div', { class: 'grow' }, comfyInput), h('button', { class: 'btn secondary', onclick: (e) => testComfy(e) }, 'Testar')), 'Desktop costuma usar a porta 8000; a versão portátil, 8188.'),
-      comfyMsg,
-      field('Reduzir imagens enviadas para até (megapixels)', num(s.comfyui, 'max_input_mp', 0, 16, 0.5),
-        'Fotos de celular têm 12 MP e deixam o ComfyUI muito lento sem melhorar o resultado. 0 desliga a redução.'),
-      field('Codificador de texto (CLIP)', encSel,
-        'O Qwen3-VL 8B em duas versões. Os workflows de editar, transferir, pose e 3D usam o fp8 (heretic); os de trocar pessoa e roupa, o int8 (convrot). Escolher uma versão troca o arquivo em todos os workflows; só dá para escolher as que o ComfyUI tem.'),
-      switchEl('Liberar a VRAM do ComfyUI antes de o Clef decidir', s.comfyui.free_vram_before_clef, (v) => { s.comfyui.free_vram_before_clef = v; }),
-      switchEl('Liberar a VRAM ao terminar cada execução', s.comfyui.free_vram_after_run, (v) => { s.comfyui.free_vram_after_run = v; })),
-    h('div', { class: 'card stack' }, h('h2', null, 'Nós, LoRAs e modelos'),
-      h('p', { class: 'sub' }, 'Confere o que os workflows precisam dentro do ComfyUI (nós do PickFlow, LoRAs, modelos) e instala o que você marcar. Também mostra como instalar o ComfyUI, se ainda não tiver.'),
-      h('div', null, h('button', { class: 'btn secondary', onclick: () => setupModal() }, 'Abrir o assistente'))),
-    h('div', { class: 'card stack' }, h('h2', null, 'Clef'),
-      field('Modo', mode),
-      field('Onde o Clef roda', h('div', { class: 'row' }, h('div', { class: 'grow' }, deviceSel),
-        h('button', { class: 'btn secondary', onclick: (e) => applyClefDevice(e.target, deviceSel.value) }, 'Aplicar no servidor')),
-        'Na CPU o Clef usa a memória RAM e não disputa a placa com o Qwen: é o padrão e não precisa descarregar nada entre uma imagem e outra. Custa RAM (em bf16 são uns 18 GB; com quantização int8, uns 9,5 GB; com int4, uns 5,6 GB) e responde em 1 a 3 segundos. Na GPU ele é bem mais rápido, mas ocupa a VRAM do Qwen e costuma ter de ser descarregado antes de cada geração. Quem manda é o que o servidor do Clef informa em /health: este ajuste vale quando ele não informa, e também decide se o PickFlow libera a VRAM do ComfyUI antes de o Clef decidir. Clique em Aplicar no servidor para trocar sem reiniciar; se o seu servidor for antigo, suba ele com --device cpu (ou --device cuda) e, se a RAM estiver apertada, com --quant int8 ou int4.'),
-      h('div', { class: 'row wrap' }, h('div', { class: 'grow' }, field('Endereço do servidor', txt(s.clef, 'url'))), h('div', null, field('Caminho', txt(s.clef, 'path')))),
-      h('div', { class: 'row wrap' },
-        h('div', { class: 'grow' }, field('Máximo de etapas por pedido', num(s.clef, 'max_steps', 1, 6, 1), 'Quantos workflows em sequência o Clef pode propor.')),
-        h('div', { class: 'grow' }, field('Perguntar a você abaixo de', num(s.clef, 'ask_below', 0, 1, 0.05), 'Se a confiança do Clef na rota for menor, você escolhe. 0 desliga.')),
-        h('div', { class: 'grow' }, field('Imagens enviadas ao Clef', num(s.clef, 'max_images', 1, 8, 1)))),
-      field('Descarregar o Clef antes de gerar a imagem', unloadSel,
-        'Automático: só descarrega se o Clef e o ComfyUI não couberem juntos na memória. O Clef recarrega no próximo pedido (alguns segundos).'),
-      h('div', { class: 'row wrap' },
-        h('div', { class: 'grow' }, field('VRAM que o workflow usa (GB)', num(s.clef, 'need_vram_gb', 1, 96, 1))),
-        h('div', { class: 'grow' }, field('RAM que o workflow usa (GB)', num(s.clef, 'need_ram_gb', 1, 256, 1))),
-        h('div', { class: 'grow' }, field('Folga (GB)', num(s.clef, 'margin_gb', 0, 16, 0.5)))),
-      switchEl('Liberar os modelos do ComfyUI se faltar VRAM para carregar o Clef', s.clef.make_room_for_clef, (v) => { s.clef.make_room_for_clef = v; }),
-      field('Chave de API (só se o servidor exigir)', txt(s.clef, 'api_key')),
-      h('div', { class: 'row' }, h('button', { class: 'btn secondary', onclick: (e) => unloadClef(e.target) },
-        'Descarregar o Clef agora')),
-      memBox,
-      h('div', { class: 'hint' }, 'O servidor local do Clef está em clef_server/ (veja o README).')),
-    learnCard(s, num, field, switchEl),
-    llmCard(s),
-    h('div', { class: 'card stack' }, h('h2', null, 'Agente de casos de uso'),
-      h('p', { class: 'sub' }, 'Quando o Clef acha que nenhum workflow ou caso de uso cobre o pedido todo (por exemplo, "deixe a pessoa colorida e depois cole no cenário"), um LLM monta um caso de uso novo consultando o Clef. Usa o modelo em uso do redator (acima). Fica desligado até você ligar.'),
-      switchEl('Ligar o agente', !!s.agent.enabled, (v) => { s.agent.enabled = v; }),
-      switchEl('Perguntar a você antes de usar e guardar o caso criado', s.agent.confirm !== false, (v) => { s.agent.confirm = v; }),
-      h('div', { class: 'row wrap' },
-        h('div', { class: 'grow' }, field('Confiança mínima na lacuna', num(s.agent, 'gap_min', 0.3, 1, 0.05), 'O Clef precisa estar pelo menos assim seguro de que falta uma etapa para o agente agir.')),
-        h('div', { class: 'grow' }, field('Respostas do LLM por criação', num(s.agent, 'max_rounds', 2, 20, 1))),
-        h('div', { class: 'grow' }, field('Consultas ao Clef por criação', num(s.agent, 'max_clef_calls', 0, 20, 1))),
-        h('div', { class: 'grow' }, field('Passos no máximo', num(s.agent, 'max_steps', 2, 8, 1)))),
-      h('div', { class: 'row wrap' },
-        h('div', { class: 'grow' }, field('Casos em teste guardados', num(s.agent, 'max_trial', 1, 50, 1), 'Passando disso, sai o mais antigo que você não mandou manter.')),
-        h('div', { class: 'grow' }, field('Casos mantidos no máximo', num(s.agent, 'max_generated', 1, 200, 1), 'Chegando aqui o agente para de criar até você apagar ou fundir alguns.')))),
-    h('div', { class: 'row' }, msg, h('span', { class: 'grow' }), h('button', { class: 'btn', onclick: async () => {
-      try { S.settings = await api('/api/settings', { method: 'PUT', body: s }); toast('Salvo'); refreshStatus(); } catch (e) { msg.textContent = e.message; }
-    } }, 'Salvar ajustes')),
-    addonsCard(),
-    h('div', { class: 'card stack' }, h('h2', null, 'Checagem dos workflows'),
-      h('p', { class: 'sub' }, 'Converte cada workflow para a API do ComfyUI e confere nós, ligações, modelos e LoRAs instalados. Rode depois de mexer nos workflows.'),
-      h('div', null, dbtn), docBox)));
+  // Ajustes em seções (abas): cada cartão fala de uma coisa só, e há UM botão Salvar, sempre à vista, para tudo o que é campo.
+  // Idioma, "Testar" do ComfyUI e os botões dos addons gravam na hora, como sempre.
+  const section = (title, sub, ...kids) => h('div', { class: 'card stack' }, h('h2', null, title),
+    sub ? h('p', { class: 'sub' }, sub) : null, ...kids);
+  const save = async () => {
+    try { S.settings = await api('/api/settings', { method: 'PUT', body: s }); toast('Salvo'); msg.textContent = ''; refreshStatus(); } catch (e) { msg.textContent = e.message; }
+  };
+  const panels = {
+    general: [
+      section('Idioma', null,
+        field('Idioma da interface', langSel, 'Vale para a interface e para as mensagens do PickFlow. As descrições e instruções que o Clef lê continuam como estão.'))],
+    comfyui: [
+      section('Conexão', null,
+        field('Endereço', h('div', { class: 'row' }, h('div', { class: 'grow' }, comfyInput), h('button', { class: 'btn secondary', onclick: (e) => testComfy(e) }, 'Testar')), 'Desktop costuma usar a porta 8000; a versão portátil, 8188.'),
+        comfyMsg),
+      section('Imagens e modelos', null,
+        field('Reduzir imagens enviadas para até (megapixels)', num(s.comfyui, 'max_input_mp', 0, 16, 0.5),
+          'Fotos de celular têm 12 MP e deixam o ComfyUI muito lento sem melhorar o resultado. 0 desliga a redução.'),
+        field('Codificador de texto (CLIP)', encSel,
+          'O Qwen3-VL 8B em duas versões. Os workflows de editar, transferir, pose e 3D usam o fp8 (heretic); os de trocar pessoa e roupa, o int8 (convrot). Escolher uma versão troca o arquivo em todos os workflows; só dá para escolher as que o ComfyUI tem.')),
+      section('Memória do ComfyUI', 'Ajuda quando o ComfyUI e o Clef dividem a mesma placa de vídeo.',
+        switchEl('Liberar a VRAM do ComfyUI antes de o Clef decidir', s.comfyui.free_vram_before_clef, (v) => { s.comfyui.free_vram_before_clef = v; }),
+        switchEl('Liberar a VRAM ao terminar cada execução', s.comfyui.free_vram_after_run, (v) => { s.comfyui.free_vram_after_run = v; })),
+      section('Instalação e conferência', 'O assistente confere o que os workflows precisam dentro do ComfyUI (nós do PickFlow, LoRAs, modelos) e instala o que você marcar. A checagem converte cada workflow para a API do ComfyUI e confere nós, ligações e modelos; rode depois de mexer nos workflows.',
+        h('div', { class: 'row wrap' }, h('button', { class: 'btn secondary', onclick: () => setupModal() }, 'Abrir o assistente'), dbtn),
+        docBox)],
+    clef: [
+      section('Servidor', 'Onde o servidor do Clef está. Para ligar o que vem com o PickFlow, rode start_clef (ele pergunta bf16 ou int4).',
+        field('Modo', mode),
+        h('div', { class: 'row wrap' }, h('div', { class: 'grow' }, field('Endereço do servidor', txt(s.clef, 'url'))), h('div', null, field('Caminho', txt(s.clef, 'path')))),
+        h('div', { class: 'row wrap' },
+          h('div', { class: 'grow' }, field('Tempo máximo de resposta (segundos)', num(s.clef, 'timeout_s', 10, 900, 10),
+            'Ele pode levar uns 30 s só para carregar o modelo no primeiro pedido.')),
+          h('div', { class: 'grow' }, field('Chave de API (só se o servidor exigir)', txt(s.clef, 'api_key'))))),
+      section('Decisão', null,
+        h('div', { class: 'row wrap' },
+          h('div', { class: 'grow' }, field('Máximo de etapas por pedido', num(s.clef, 'max_steps', 1, 6, 1), 'Quantos workflows em sequência o Clef pode propor.')),
+          h('div', { class: 'grow' }, field('Perguntar a você abaixo de', num(s.clef, 'ask_below', 0, 1, 0.05), 'Se a confiança do Clef na rota for menor, você escolhe. 0 desliga.')),
+          h('div', { class: 'grow' }, field('Imagens enviadas ao Clef', num(s.clef, 'max_images', 1, 8, 1))))),
+      section('Memória', 'Clef e ComfyUI na mesma máquina: o PickFlow mede a memória e descarrega o Clef antes de gerar só quando os dois não cabem juntos.',
+        field('Onde o Clef roda', h('div', { class: 'row' }, h('div', { class: 'grow' }, deviceSel),
+          h('button', { class: 'btn secondary', onclick: (e) => applyClefDevice(e.target, deviceSel.value) }, 'Aplicar no servidor')),
+          'Na CPU o Clef usa a RAM (~18 GB em bf16) e não disputa a placa com o Qwen. Na GPU é bem mais rápido, mas ocupa VRAM e costuma ser descarregado antes de cada geração; o int4 (~7,9 GB) só roda em placa NVIDIA. O servidor informa o que está usando em /health: este ajuste vale quando ele não informa. "Aplicar no servidor" troca sem reiniciar.'),
+        field('Descarregar o Clef antes de gerar a imagem', unloadSel,
+          'Automático: só descarrega se o Clef e o ComfyUI não couberem juntos na memória. O Clef recarrega no próximo pedido (alguns segundos).'),
+        h('div', { class: 'row wrap' },
+          h('div', { class: 'grow' }, field('VRAM que o workflow usa (GB)', num(s.clef, 'need_vram_gb', 1, 96, 1))),
+          h('div', { class: 'grow' }, field('RAM que o workflow usa (GB)', num(s.clef, 'need_ram_gb', 1, 256, 1))),
+          h('div', { class: 'grow' }, field('Folga (GB)', num(s.clef, 'margin_gb', 0, 16, 0.5)))),
+        switchEl('Liberar os modelos do ComfyUI se faltar VRAM para carregar o Clef', s.clef.make_room_for_clef, (v) => { s.clef.make_room_for_clef = v; }),
+        h('div', { class: 'row' }, h('button', { class: 'btn secondary', onclick: (e) => unloadClef(e.target) }, 'Descarregar o Clef agora')),
+        memBox),
+      learnCard(s, num, field, switchEl)],
+    ai: [
+      llmCard(s),
+      section('Agente de casos de uso', 'Quando o Clef acha que nenhum workflow ou caso de uso cobre o pedido todo (por exemplo, "deixe a pessoa colorida e depois cole no cenário"), um LLM monta um caso de uso novo consultando o Clef. Usa o modelo em uso do redator (acima). Fica desligado até você ligar.',
+        switchEl('Ligar o agente', !!s.agent.enabled, (v) => { s.agent.enabled = v; }),
+        switchEl('Perguntar a você antes de usar e guardar o caso criado', s.agent.confirm !== false, (v) => { s.agent.confirm = v; }),
+        h('div', { class: 'row wrap' },
+          h('div', { class: 'grow' }, field('Confiança mínima na lacuna', num(s.agent, 'gap_min', 0.3, 1, 0.05), 'O Clef precisa estar pelo menos assim seguro de que falta uma etapa para o agente agir.')),
+          h('div', { class: 'grow' }, field('Respostas do LLM por criação', num(s.agent, 'max_rounds', 2, 20, 1))),
+          h('div', { class: 'grow' }, field('Consultas ao Clef por criação', num(s.agent, 'max_clef_calls', 0, 20, 1))),
+          h('div', { class: 'grow' }, field('Passos no máximo', num(s.agent, 'max_steps', 2, 8, 1)))),
+        h('div', { class: 'row wrap' },
+          h('div', { class: 'grow' }, field('Casos em teste guardados', num(s.agent, 'max_trial', 1, 50, 1), 'Passando disso, sai o mais antigo que você não mandou manter.')),
+          h('div', { class: 'grow' }, field('Casos mantidos no máximo', num(s.agent, 'max_generated', 1, 200, 1), 'Chegando aqui o agente para de criar até você apagar ou fundir alguns.'))))],
+    addons: [addonsCard()],
+  };
+  const TABS = [['general', 'Geral'], ['comfyui', 'ComfyUI'], ['clef', 'Clef'], ['ai', 'Redator e agente'], ['addons', 'Addons']];
+  const saveBar = h('div', { class: 'savebar' }, msg, h('span', { class: 'grow' }), h('button', { class: 'btn', onclick: save }, 'Salvar ajustes'));
+  const panelEls = Object.fromEntries(Object.entries(panels).map(([id, kids]) => [id, h('div', { class: 'tab-panel stack', role: 'tabpanel' }, ...kids)]));
+  const tabBar = h('div', { class: 'tabs', role: 'tablist', 'aria-label': 'Seções dos ajustes' }, TABS.map(([id, label]) =>
+    h('button', { type: 'button', role: 'tab', 'data-tab': id, onclick: () => show(id) }, label)));
+  // a aba aberta ao entrar: a última que você usou; na primeira vez, a do que está faltando (ComfyUI e depois Clef)
+  const first = S.settingsTab || (S.status && !S.status.comfy.ok ? 'comfyui' : (S.status && !S.status.clef.ok ? 'clef' : 'general'));
+  function show(id) {
+    S.settingsTab = id;
+    for (const [k, el] of Object.entries(panelEls)) el.hidden = k !== id;
+    for (const b of tabBar.children) { const on = b.dataset.tab === id; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); }
+    saveBar.hidden = id === 'general' || id === 'addons';        // só os campos precisam do botão Salvar
+  }
+  page.append(h('div', { class: 'inner' }, tabBar, ...Object.values(panelEls), saveBar));
+  show(panelEls[first] ? first : 'general');
   clefMemory(memBox);
 }
 

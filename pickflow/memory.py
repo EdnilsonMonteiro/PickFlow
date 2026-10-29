@@ -11,7 +11,7 @@ Há duas políticas, e quem escolhe é o device em que o Clef está (`Memory.cle
   `/health` informar um valor alto e a RAM estiver apertada ele também sai, porque a
   geração no ComfyUI usa bastante RAM do sistema.
 - **Clef em `cpu`**: a disputa é de RAM. Na GPU ele não ocupa nada, e na RAM ele precisa
-  de ~9,5 GB quantizado em int8 (~5,6 GB em int4). Descarregar libera RAM do sistema, não
+  de ~18 GB em bf16 (o int4 só roda em placa NVIDIA). Descarregar libera RAM do sistema, não
   VRAM: a regra de VRAM não se aplica (nem deve disparar) e a de RAM vem primeiro.
 
 `clef_device` fica "" quando o servidor não informou o device; nesse caso vale a regra

@@ -1,11 +1,14 @@
-# Só para rodar o Clef localmente (o PickFlow em si usa o requirements.txt da raiz).
-# torch precisa ser a build CUDA certa para a sua placa: https://pytorch.org/get-started/locally/
-torch>=2.11
+# Só para rodar o Clef localmente (o PickFlow em si usa o requirements.txt da raiz). start_clef.py instala tudo isto.
+# O torch NÃO entra aqui: o start_clef.py instala a build certa (CUDA 12.8 com placa NVIDIA, CPU sem ela);
+# na mão, veja https://pytorch.org/get-started/locally/
 transformers>=5.10.2
-huggingface_hub
+huggingface_hub>=0.30
+safetensors
+accelerate
 pillow
 fastapi
 uvicorn
-bitsandbytes
-# para o /health reportar a RAM do processo; sem ele o PickFlow não sabe quanto o Clef ocupa na RAM
+# int4 (nf4): só roda em placa NVIDIA; no macOS não existe
+bitsandbytes; sys_platform != "darwin"
+# o /health reporta a RAM do processo; sem isto o PickFlow não sabe quanto o Clef ocupa na RAM
 psutil

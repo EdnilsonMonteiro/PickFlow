@@ -7,19 +7,22 @@ API System One. O campo `images` aceita data URLs ou base64 puro.
 Para não disputar VRAM com o ComfyUI, o modelo é carregado no primeiro pedido e
 descarregado depois de `--idle-unload` segundos sem uso.
 
-**Modo GPU x modo CPU/RAM.** Em bf16 o Clef ocupa ~17,8 GB dos 24 GB da placa, então
-ele e o Qwen (16 GB) não cabem juntos: é preciso descarregar um para o outro entrar.
-Rodando na CPU (`--device cpu` com `--quant int8` ou `--quant int4`, ~9,5 GB e ~5,6 GB
-de RAM) ele sobra para a GPU e a disputa passa a ser de RAM. `GET /health` informa
-`device`, `dtype`, `loaded`, `vram` (só em cuda) e `ram_gb` (RSS do processo, sempre),
-que é o que o PickFlow usa para decidir. `POST /v1/device` troca o device em tempo de
-execução; o modelo recarrega no pedido seguinte.
+**Quantização: bf16 ou int4.** `--quant bf16` (padrão) é o modo mais fiel: ~17,8 GB de VRAM
+(chega a ~26 GB ao decidir com imagens). `--quant int4` (bitsandbytes, nf4) quantiza os mesmos pesos ao
+carregar: ~7,9 GB (pico ~16 GB) e decisões bem mais rápidas, mas **só roda em placa NVIDIA** (CUDA).
+Na CPU (`--device cpu`) só o bf16 funciona (~18 GB de RAM). `GET /health` informa `device`, `dtype`,
+`quant`, `loaded`, `vram` (só em cuda), `ram_gb` (RSS do processo) e `vram_expected_gb`/`vram_work_gb`, que
+é o que o PickFlow usa para decidir se o Clef cabe junto do ComfyUI. `POST /v1/device` troca o device em
+tempo de execução; o modelo recarrega no pedido seguinte.
 
-    python clef_server/server.py --model Cloudflare/clef-flash --port 8321
-    python clef_server/server.py --model Cloudflare/clef --device cpu --quant int8
+Para escolher a quantização na hora de ligar, use `start_clef.py` (ou o `.bat`/`.sh` que o chama).
 
-Observação: escrito a partir da documentação pública do repositório; não foi
-executado com os pesos reais no ambiente onde o projeto foi criado.
+    python clef_server/server.py --model Cloudflare/clef-flash --port 8321 --quant int4
+    python clef_server/server.py --model Cloudflare/clef-flash --device cpu
+
+Funciona igual no Windows e no Linux. A lógica de carga segue `joint_schema_model.load_release_model`
+(a mesma do servidor de referência da Cloudflare); `tests/test_clef_server.py` a exercita com um modelo de
+mentira, sem os pesos.
 """
 from __future__ import annotations
 
@@ -37,9 +40,52 @@ from fastapi import FastAPI, HTTPException, Request
 from PIL import Image
 
 
+QUANTS = ("bf16", "int4")
+#: Quanto o modelo pesa na GPU (GB), medido no clef-flash; ao decidir, o pico sobe VRAM_ACTIVATIONS_GB (7,9 -> 16,4 em int4).
+VRAM_WEIGHTS_GB = {"bf16": 17.8, "int4": 7.9}
+VRAM_ACTIVATIONS_GB = 8.5
+
+
+def normalize_quant(value) -> str:
+    """"bf16" ou "int4". Vazio, "none" e "bf16" são o modelo sem quantização."""
+    q = str(value or "bf16").strip().lower()
+    if q in ("", "none", "bf16", "bfloat16"):
+        return "bf16"
+    if q in ("int4", "4bit", "nf4"):
+        return "int4"
+    raise ValueError(f"quantization '{value}' does not exist: use bf16 or int4.")
+
+
+def check_setup(device: str, quant: str) -> str:
+    """Por que esta combinação não vai funcionar (texto pronto para o usuário), ou "" se está tudo certo.
+
+    Roda antes de carregar: o erro do bitsandbytes ou do CUDA no meio do `from_pretrained` é bem menos claro."""
+    dev = str(device or "cuda").strip().lower()
+    if dev.split(":", 1)[0] not in ("cpu", "cuda"):
+        return f"device '{device}' is not valid; use cpu, cuda or cuda:0."
+    if quant == "int4" and dev.startswith("cpu"):
+        return ("int4 only runs on an NVIDIA card (CUDA): on the CPU use bf16 (~18 GB of RAM). "
+                "Pick --quant bf16 or --device cuda.")
+    if dev.startswith("cuda"):
+        try:
+            import torch
+        except ImportError:
+            return "torch is not installed in this environment (run start_clef.py to install it)."
+        if not torch.cuda.is_available():
+            return ("torch does not see an NVIDIA card (CUDA). Install torch with CUDA "
+                    "(start_clef.py does this) or run on the CPU with --device cpu (bf16, ~18 GB of RAM).")
+    if quant == "int4":
+        try:
+            import bitsandbytes  # noqa: F401
+        except ImportError:
+            return "the bitsandbytes package is not installed (pip install bitsandbytes); int4 needs it."
+    return ""
+
+
 class Holder:
-    def __init__(self, model: str, device: str, idle_unload: float, quant: str = "none"):
-        self.model_id, self.device, self.idle, self.quant = model, device, idle_unload, quant
+    def __init__(self, model: str, device: str, idle_unload: float, quant: str = "bf16"):
+        self.model_id, self.device, self.idle = model, device, idle_unload
+        self.quant = normalize_quant(quant)
         self.model = self.processor = self.systemone = None
         self.last_used = 0.0
         self.lock = threading.Lock()
@@ -47,10 +93,13 @@ class Holder:
     def load(self):
         if self.model is not None:
             return
+        why = check_setup(self.device, self.quant)          # antes de baixar ~19 GB à toa
+        if why:
+            raise RuntimeError(why)
         from huggingface_hub import snapshot_download
 
         path = self.model_id
-        if not __import__("os").path.isdir(path):
+        if not os.path.isdir(path):
             path = snapshot_download(self.model_id)
         if path not in sys.path:
             sys.path.insert(0, path)  # o joint_schema_model.py vem no repositório
@@ -59,14 +108,12 @@ class Holder:
         print(f"[clef] carregando {self.model_id} em {self.device} ({self.quant})…", flush=True)
         t0 = time.time()
         kwargs = {}
-        if self.quant in ("int8", "int4"):  # load_release_model repassa kwargs ao from_pretrained
+        if self.quant == "int4":  # load_release_model repassa kwargs ao from_pretrained
             import torch
             from transformers import BitsAndBytesConfig
 
-            kwargs["quantization_config"] = (
-                BitsAndBytesConfig(load_in_8bit=True) if self.quant == "int8"
-                else BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16,
-                                        bnb_4bit_quant_type="nf4"))
+            kwargs["quantization_config"] = BitsAndBytesConfig(
+                load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16, bnb_4bit_quant_type="nf4")
         self.model, self.processor = load_release_model(path, device=self.device, **kwargs)
         self.systemone = systemone
         print(f"[clef] pronto em {time.time() - t0:.0f}s", flush=True)
@@ -95,8 +142,8 @@ class Holder:
     def vram_expected_gb(self) -> float:
         """Quanto o modelo ocupa na GPU: medido agora (se carregado) ou pela quantização.
 
-        É o número que o PickFlow usa para saber se o Clef cabe ao lado do ComfyUI. As estimativas
-        são as do README: bf16 ~17,8 GB, int8 ~9,5 GB, int4 ~5,6 GB (mais a cabeça em bf16)."""
+        É o número que o PickFlow usa para saber se o Clef cabe ao lado do ComfyUI. Estimativas medidas
+        no clef-flash: bf16 ~17,8 GB, int4 ~7,9 GB (a cabeça e a visão ficam em bf16)."""
         if self.model is not None:
             try:
                 import torch
@@ -105,7 +152,7 @@ class Holder:
                     return round(torch.cuda.memory_allocated() / 2**30, 2)
             except Exception:  # noqa: BLE001
                 pass
-        return {"": 17.8, "none": 17.8, "int8": 9.6, "int4": 6.0}.get(str(self.quant or "none"), 0.0)
+        return VRAM_WEIGHTS_GB[self.quant]
 
     def vram_work_gb(self) -> float:
         """Quanto ele precisa de VRAM para **trabalhar**: os pesos mais as ativações de uma decisão.
@@ -113,7 +160,7 @@ class Holder:
         Medido no `clef-flash` com 2 imagens: o pico sobe ~8,5 GB acima dos pesos (7,9 → 16,4 GB em int4;
         em bf16 chega a 25,8 GB). É este número — não o tamanho dos pesos — que diz se o Clef cabe junto
         do ComfyUI enquanto decide."""
-        return round(self.vram_expected_gb() + 8.5, 2)
+        return round(self.vram_expected_gb() + VRAM_ACTIVATIONS_GB, 2)
 
 
 def decode_image(item) -> Image.Image:
@@ -230,7 +277,7 @@ def create_app(holder: Holder) -> FastAPI:
         loaded = holder.model is not None
         out = {"ok": True, "model": holder.model_id, "loaded": loaded,
                "device": holder.device, "dtype": _dtype(holder.model) if loaded else "",
-               "quant": "" if holder.quant in (None, "none") else holder.quant,
+               "quant": "" if holder.quant in (None, "none", "bf16") else holder.quant,
                "vram_expected_gb": holder.vram_expected_gb(),
                "vram_work_gb": holder.vram_work_gb()}
         ram = _rss_gb()
@@ -296,17 +343,22 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default="Cloudflare/clef-flash", help="id no Hugging Face ou pasta local")
     ap.add_argument("--device", default="cuda",
-                    help=("onde o Clef roda: 'cuda' ou 'cuda:0' usa a VRAM (~17,8 GB em bf16 e disputa com o ComfyUI); "
-                          "'cpu' roda na RAM e libera a GPU — nesse caso use junto --quant int8 (~9,5 GB de RAM) "
-                          "ou --quant int4 (~5,6 GB). Dá para trocar depois por POST /v1/device."))
+                    help=("onde o Clef roda: 'cuda' ou 'cuda:0' usa a VRAM (bf16 ~17,8 GB, int4 ~7,9 GB; disputa com o "
+                          "ComfyUI); 'cpu' roda na RAM (~18 GB, só bf16) e libera a GPU. Dá para trocar depois por "
+                          "POST /v1/device."))
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--port", type=int, default=8321)
     ap.add_argument("--idle-unload", type=float, default=120, help="segundos sem uso até descarregar (0 = nunca)")
-    ap.add_argument("--quant", choices=["none", "int8", "int4"], default="none",
-                    help="quantização do backbone via bitsandbytes (precisa do pacote bitsandbytes)")
+    ap.add_argument("--quant", choices=["bf16", "int4", "none"], default="bf16",
+                    help="bf16 (padrão, mais fiel) ou int4 (bitsandbytes; só em placa NVIDIA). 'none' = bf16.")
     ap.add_argument("--preload", action="store_true", help="carrega o modelo já na partida")
     a = ap.parse_args()
-    holder = Holder(a.model, a.device, a.idle_unload, a.quant)
+    quant = normalize_quant(a.quant)
+    why = check_setup(a.device, quant)
+    if why:                                   # falha na partida, com o motivo, e não no primeiro pedido
+        print(f"[clef] cannot start like this: {why}", file=sys.stderr, flush=True)
+        sys.exit(2)
+    holder = Holder(a.model, a.device, a.idle_unload, quant)
     if a.preload:
         holder.load()
         holder.last_used = time.time()

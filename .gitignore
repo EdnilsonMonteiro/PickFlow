@@ -64,3 +64,6 @@ desktop.ini
 *.safetensors
 *.gguf
 *.ckpt
+
+# Clef local: a ultima quantizacao escolhida em start_clef.py
+/clef_server/.last_quant

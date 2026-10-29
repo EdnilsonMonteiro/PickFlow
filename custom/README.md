@@ -1,73 +1,73 @@
-# custom/ — o que é seu
+# custom/ — what is yours
 
-Esta pasta é ignorada pelo git (veja o `.gitignore`): tudo que você coloca ou edita aqui fica só na sua máquina
-e **vale mais** do que o que vem em `defaults/`. Atualizar o repositório (`git pull`) nunca mexe nela.
+This folder is ignored by git (see `.gitignore`): everything you put or edit here stays only on your machine
+and **beats** what ships in `defaults/`. Updating the repository (`git pull`) never touches it.
 
 ```
 custom/
-├── settings.yaml        endereços do ComfyUI e do Clef, memória... (criado pela tela Ajustes)
-├── clef_prompt.yaml     só o que você mudou no prompt do Clef (descrições, casos de uso)
-├── workflows/           seus arquivos .json salvos no ComfyUI
-│   └── NSFW/            (exemplo) subpastas valem; esta e tudo dentro dela também fica fora do git
-├── registry/            ligação técnica dos SEUS workflows (nós de imagem, prompt, saída)
-├── prompts/             seus prompts, por workflow
-├── loras.yaml           suas LoRAs (descrição, força, prompt padrão) e ajustes nas padrão
-└── models.yaml          (opcional) LoRAs e modelos extras para o assistente de instalação
+├── settings.yaml        ComfyUI and Clef addresses, memory... (created by the Settings screen)
+├── clef_prompt.yaml     only what you changed in the Clef prompt (descriptions, use cases)
+├── workflows/           your .json files saved from ComfyUI
+│   └── NSFW/            (example) subfolders are fine; this one and everything inside it also stays out of git
+├── registry/            technical wiring of YOUR workflows (image nodes, prompt, output)
+├── prompts/             your prompts, per workflow
+├── loras.yaml           your LoRAs (description, strength, default prompt) and tweaks to the default ones
+└── models.yaml          (optional) extra LoRAs and models for the install assistant
 ```
 
-## Adicionar uma LoRA sua
+## Adding a LoRA of your own
 
-Aba **LoRAs → Nova LoRA** (ou edite `custom/loras.yaml`):
+**LoRAs tab → New LoRA** (or edit `custom/loras.yaml`):
 
 ```yaml
 loras:
-- id: minha_lora
-  title: Minha LoRA
-  file: pasta\arquivo.safetensors     # como aparece em models/loras do ComfyUI
+- id: my_lora
+  title: My LoRA
+  file: folder\file.safetensors       # as it appears in ComfyUI's models/loras
   strength: 0.7
-  auto: true                           # o Clef pode ligar sozinho
-  description: Quando o pedido for X, use esta LoRA.
-  prompt: "instrução que sempre acompanha a LoRA"   # ou {turbo: ..., quality: ...}
-  adjust: {natexp: 0}                  # força de outras LoRAs enquanto esta estiver ligada
-  settings: {resolution: 1024}         # ajustes do workflow (nomes em knobs: do registro)
-  conflicts: [consistency]             # não funciona junto com estas: ao ligar esta, as outras saem (vale nos dois lados)
+  auto: true                           # the Clef may turn it on by itself
+  description: When the request is X, use this LoRA.
+  prompt: "instruction that always goes with the LoRA"   # or {turbo: ..., quality: ...}
+  adjust: {natexp: 0}                  # strength of other LoRAs while this one is on
+  settings: {resolution: 1024}         # workflow settings (names in the registry's knobs:)
+  conflicts: [consistency]             # does not work together with these: turning this one on removes the others (both ways)
 ```
 
-Também dá para **baixar pelo link do Hugging Face** (aba LoRAs → *Baixar do Hugging Face*). Se o arquivo exigir chave,
-escreva `HF_TOKEN=seu_token` no arquivo `.env` da pasta do PickFlow (modelo em `.env.example`; o git ignora o `.env`).
+You can also **download it from a Hugging Face link** (LoRAs tab → *Download from Hugging Face*). If the file requires a key,
+write `HF_TOKEN=your_token` in the `.env` file of the PickFlow folder (template in `.env.example`; git ignores `.env`).
 
-Mesmo `id` de `defaults/loras.yaml` = a sua vale mais; `disabled: true` esconde uma padrão. Para uma LoRA entrar sempre
-num prompt, use o campo `loras:` do prompt em `custom/prompts/<id>.yaml`.
+Same `id` as in `defaults/loras.yaml` = yours wins; `disabled: true` hides a default. To make a LoRA always enter
+a prompt, use the prompt's `loras:` field in `custom/prompts/<id>.yaml`.
 
-## Adicionar um workflow seu
+## Adding a workflow of your own
 
-1. No ComfyUI, salve o workflow (**Workflow → Salvar**) e copie o `.json` para `custom/workflows/`
-   (pode usar subpastas).
-2. No PickFlow, aba **Workflows e prompts → Adicionar workflow**. Escolha o arquivo, confira onde entram
-   as imagens e o prompt e clique em **Adicionar**.
+1. In ComfyUI, save the workflow (**Workflow → Save**) and copy the `.json` into `custom/workflows/`
+   (subfolders are fine).
+2. In PickFlow, **Workflows and prompts → Add workflow** tab. Choose the file, check where the
+   images and the prompt go in, and click **Add**.
 
-O PickFlow cria `custom/registry/<id>.yaml` e `custom/prompts/<id>.yaml`. Seu arquivo `.json` nunca é alterado.
-Caixas e máscaras, nós a descartar e valores fixos são acrescentados à mão no registro; use os de
-`defaults/registry/` como exemplo (`object_move.yaml` tem caixas, `t2i.yaml` tem nós dentro de subgraph).
+PickFlow creates `custom/registry/<id>.yaml` and `custom/prompts/<id>.yaml`. Your `.json` file is never changed.
+Boxes and masks, nodes to discard and fixed values are added by hand in the registry; use the ones in
+`defaults/registry/` as examples (`object_move.yaml` has boxes, `t2i.yaml` has nodes inside a subgraph).
 
-## Usar uma versão sua de um padrão (por exemplo, com outro workflow)
+## Using your own version of a default (for example, with another workflow)
 
-Copie `defaults/registry/<id>.yaml` para `custom/registry/` (mesmo nome e mesmo `id`) e troque `file:` pelo seu
-workflow, como `file: NSFW/Meu workflow.json`. Em `custom/prompts/<id>.yaml` ficam os seus prompts para aquele id
-(comece copiando `defaults/prompts/<id>.yaml` e acrescente os seus). Tudo isso fica fora do git.
-O arquivo de prompts em `custom/` **substitui** o padrão inteiro: depois de um `git pull`, compare com o padrão para ver
-os prompts novos. O workflow `edit` tem 8 entradas de imagem (as sem imagem saem do grafo); ao trazer o seu, mantenha
-as 8 e a numeração dos nós de `defaults/registry/edit.yaml`, ou o PickFlow não saberá onde pôr as imagens.
+Copy `defaults/registry/<id>.yaml` to `custom/registry/` (same name and same `id`) and change `file:` to your
+workflow, such as `file: NSFW/My workflow.json`. In `custom/prompts/<id>.yaml` go your prompts for that id
+(start by copying `defaults/prompts/<id>.yaml` and add yours). All of this stays out of git.
+The prompts file in `custom/` **replaces** the whole default: after a `git pull`, compare with the default to see
+the new prompts. The `edit` workflow has 8 image inputs (the ones without an image are removed from the graph); when bringing yours, keep
+the 8 and the node numbering of `defaults/registry/edit.yaml`, or PickFlow will not know where to put the images.
 
-## Mudar um padrão sem perder as atualizações
+## Changing a default without losing updates
 
-- **Prompts e descrições:** edite pela interface. Só a diferença vai para `custom/`; o botão
-  **Restaurar padrão** apaga a sua versão.
-- **Trocar o arquivo ou os nós de um padrão:** copie `defaults/registry/<id>.yaml` para `custom/registry/`
-  (mesmo nome, mesmo `id`) e edite a cópia. Se o seu workflow tem outro nome, ponha o `.json` em
-  `custom/workflows/` e ajuste `file:` na cópia.
+- **Prompts and descriptions:** edit through the interface. Only the difference goes to `custom/`; the
+  **Restore default** button deletes your version.
+- **Changing a default's file or nodes:** copy `defaults/registry/<id>.yaml` to `custom/registry/`
+  (same name, same `id`) and edit the copy. If your workflow has another name, put the `.json` in
+  `custom/workflows/` and adjust `file:` in the copy.
 
-## Remover
+## Removing
 
-**Remover da lista** (na própria tela) tira o workflow do PickFlow e apaga os seus registros e prompts.
-O `.json` continua em `custom/workflows/`. Para sumir de vez, apague o arquivo.
+**Remove from the list** (on the screen itself) takes the workflow out of PickFlow and deletes your registries and prompts.
+The `.json` stays in `custom/workflows/`. To get rid of it for good, delete the file.

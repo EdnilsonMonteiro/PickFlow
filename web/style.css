@@ -453,3 +453,11 @@ svg.orbit .cap { font-size: 9px; fill: var(--muted); }
 .pose-hit { cursor: grab; }
 .pose-hit:active { cursor: grabbing; }
 .pose-side { min-width: 220px; max-width: 280px; }
+
+/* Ajustes em abas: as seções ficam numa fila de botões e o Salvar acompanha a rolagem */
+[hidden] { display: none !important; }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+.tabs button { background: none; border: 0; border-bottom: 2px solid transparent; padding: 8px 14px; color: var(--muted); font-weight: 500; margin-bottom: -1px; }
+.tabs button:hover { color: var(--ink); }
+.tabs button.on { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+.savebar { position: sticky; bottom: -24px; display: flex; align-items: center; gap: 12px; margin: 0 -24px -24px; padding: 12px 24px; background: var(--surface); border-top: 1px solid var(--line); }

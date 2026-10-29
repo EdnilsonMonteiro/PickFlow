@@ -20,7 +20,8 @@ Usuário → PickFlow (porta 7860) → Clef (decide)      [clef.py, router.py]
                                → LLM opcional (redator de prompt, agente, fusão)   [addons.LLM, writer.py]
 ```
 
-Rodar: `start.bat` / `start.sh` (ou `python -m pickflow`). Testes: `python -m pytest -q` (**378 passam**; ~5 min).
+Rodar: `start.bat` / `bash start.sh` (ou `python -m pickflow`). Clef local: `clef_server/start_clef.bat` / `bash clef_server/start_clef.sh`
+(os dois só chamam `start_clef.py`, que pergunta **bf16 ou int4**). Testes: `python -m pytest -q` (**387 passam**; ~5 min).
 CLI extra: `python -m pickflow addon new <nome>`.
 
 ## 2. Regras duras (não quebre)
@@ -60,6 +61,8 @@ CLI extra: `python -m pickflow addon new <nome>`.
 | `pickflow/loras.py` | pilha de LoRAs (`effective_loras`), conflitos, ajustes do grafo (`knobs`), `compose` (monta o prompt) |
 | `pickflow/families.py` | modelos de imagem: tag `models` (sem tag = `qwen21`, `*` = todos), `implements` (workflow que faz o papel de outro para um modelo), `load` (`families.yaml`), `model_files`/`available` (o que o chat oferece: família com workflow no PickFlow E arquivo no ComfyUI; o padrão sempre), `ModelView` (o Store visto por um modelo: `enabled_workflows/recipes`, `loras`, `prompts`, `resolve`; `Store.for_model`) |
 | `pickflow/encoders.py` | codificador de texto (CLIP): `ENCODERS` fp8 (heretic) × int8 (convrot), `apply` (troca o arquivo dos `CLIPLoader` Qwen3-VL no grafo da API, depois do conversor), `available` (o que o `object_info` lista); escolha em `settings.comfyui.text_encoder` (`auto`/`fp8`/`int8`), `GET /api/encoders` |
+| `clef_server/` | servidor do Clef que vem no projeto: `server.py` (`--quant bf16|int4`, `--device cuda|cpu`; `check_setup` recusa na partida int4 na CPU, CUDA ausente e falta de bitsandbytes), `start_clef.py` (um só script para Windows e Linux: cria o `.venv`, instala o torch CUDA 12.8 ou CPU, **pergunta a quantização**, sobe o servidor), `start_clef.bat`/`.sh` (só acham o Python) |
+| `docs/` | documentação por assunto (installation, workflows, use-cases, clef, customizing, troubleshooting, development — em inglês); o `README.md` é só o caminho curto |
 | `pickflow/pvars.py` | variáveis de prompt (`choice`, `count`, `angle`, `pick`) e tokens |
 | `pickflow/pose.py` | poses de pessoas: `parse` (DWPose -> 18 pontos em frações), `usable` (tira repetidas/minúsculas, ordena da esquerda para a direita), `draw` (mapa OpenPose), `describe` (frase em inglês do que mudou), `clean` (valida o que vem da tela) |
 | `pickflow/quality.py` | medidas baratas da foto com PIL (sem numpy): `measure` (megapixels + nitidez = variância do mapa de bordas a 768 px) e `describe` (frase em inglês que vai no `state` do Clef). Limiares calibrados em 241 fotos reais (`SOFT` = p10, `CRISP` = mediana) |
@@ -165,6 +168,10 @@ Sem framework: `h(tag, attrs, ...filhos)` cria elementos (filhos `null` são ign
 ao selecionar uma caixa que re-renderiza, capture o ponteiro DEPOIS de renderizar; confira sintaxe com
 `node --check web/app.js`. Elemento escondido com `position: absolute` precisa de um ancestral posicionado (o checkbox do
 `.switch` sem isso fazia o documento rolar ao ganhar foco e a tela ficava preta); `html, body` têm `overflow: hidden`.
+**Ajustes** (`mountSettings`) são abas — *Geral*, *ComfyUI*, *Clef*, *Redator e agente*, *Addons* (`S.settingsTab`; a primeira vez abre a aba do
+que está faltando) — e um só botão **Salvar ajustes** (barra fixa `.savebar`, escondida em *Geral* e *Addons*, que gravam na hora). Cartão novo
+entra em `panels.<aba>` com `section(título, subtítulo, ...)`. Elemento com `hidden` precisa de `[hidden] { display: none !important }`
+(já está no CSS): `.stack` e `.card` têm `display` e anulavam o atributo.
 Ler `textContent` de volta devolve o texto JÁ traduzido: não compare com texto em português.
 
 ## 8. Recursos construídos nesta fase (contexto)
@@ -233,6 +240,20 @@ Ler `textContent` de volta devolve o texto JÁ traduzido: não compare com texto
   `encoders.apply` no grafo já convertido (inclui os `CLIPLoader` dentro de subgraph, que o conversor achata); com a versão
   escolhida fora do ComfyUI nada muda e um `status` avisa. O assistente (`SetupService._files`) marca o outro arquivo como
   `unused` e não o conta como pendente. O CLIP PE do `t2i` (`qwen3.5_9b_..._pe_t2i`) não é tocado.
+- **Servidor do Clef: bf16 e int4, Windows e Linux** (`clef_server/`): `--quant` aceita `bf16` (padrão; `none` é apelido) e `int4`
+  (bitsandbytes nf4; **o int8 saiu**: nunca foi medido e a bitsandbytes na CPU não o garante). `check_setup(device, quant)` roda antes de
+  baixar ~19 GB e na partida, e diz o motivo (int4 precisa de CUDA, torch sem CUDA, bitsandbytes ausente). As estimativas são as medidas
+  no clef-flash: bf16 17,8 GB (pico ~26), int4 7,9 GB (pico 16,4 = pesos + 8,5 de ativações). `/health` devolve `quant` `""` (bf16) ou
+  `int4`. `start_clef.py` é um único launcher (sem um .bat por quantização): `--quant` pula a pergunta, a última escolha vira o Enter
+  (`.last_quant`, ignorado pelo git), sem placa NVIDIA só oferece bf16 na CPU. **Testado** com um `joint_schema_model` de mentira e uma
+  conversa HTTP real com o `ClefClient` (`tests/test_clef_server.py`); **não testado** com os pesos reais neste servidor (o servidor de
+  referência que o usuário roda à parte é outro, mais completo; a assinatura de `load_release_model` foi conferida nos pesos dele) nem em Linux de verdade.
+- **Primeira experiência**: o `README.md` é o caminho curto (~130 linhas); o resto está em `docs/`. O cartão *Antes de começar* tem
+  um botão **Usar o modo de teste** quando o Clef não responde. `start.bat`/`start.sh` marcam `.venv/.ready` só depois do `pip install`
+  (uma instalação interrompida não fica "pronta"). Linux: o `.gitattributes` força LF nos `.sh`; **o bit de execução precisa ser posto
+  no commit** (`git update-index --chmod=+x start.sh install_nodes.sh clef_server/start_clef.sh`), senão `./start.sh` falha (`bash start.sh`
+  funciona). No Linux as grafias dos arquivos contam: `tests`/script de conferência provaram que todo `file:` dos registros bate com o
+  nome exato em `defaults/workflows/`.
 - **Camada 3 do aprendizado (decidida, NÃO implementada)**: rodar um "harness2-lite" só se as camadas 0-2 mostrarem
   resultado — tratar `custom/clef_prompt.yaml` e os `when` dos prompts como superfície mutável, com um replay dos
   pedidos já rotulados (as respostas do Clef podem ser cacheadas, custo ~zero), o LLM do redator como *improver* e a
@@ -378,11 +399,11 @@ reinicie o demo.
 ## 10. Como fazer…
 
 - **Workflow novo**: `.json` em `custom/workflows/` (ou `defaults/` se for padrão) + registro + prompts + descrição em
-  `clef_prompt.yaml`; ou importe pela interface. Rode Ajustes > Verificar workflows no ComfyUI real.
+  `clef_prompt.yaml`; ou importe pela interface. Rode Ajustes > ComfyUI > Verificar workflows no ComfyUI real.
 - **Prompt novo num workflow existente**: acrescente um preset em `defaults/prompts/<id>.yaml` (com `when` claro para
   o Clef) e atualize a contagem nos testes.
 - **LoRA nova**: `defaults/loras.yaml` (descrição que o Clef entende, `conflicts`, `settings`) + `defaults/models.yaml`
-  (para o assistente instalar) + linha na tabela do README + preset que a use, se couber. Cuidado com `adjust` vs
+  (para o assistente instalar) + linha na tabela de LoRAs de `docs/installation.md` + preset que a use, se couber. Cuidado com `adjust` vs
   `strength` explícito.
 - **Caso de uso novo**: `recipes` em `defaults/clef_prompt.yaml`, com `images`, `roles` e `description` bem escritos.
 - **Parâmetro de desenho novo**: `params` no registro; coleta em `_collect_drawings`, normalização em `_norm_boxes`,
@@ -393,6 +414,6 @@ reinicie o demo.
 
 1. `python -m pytest -q` verde (e `node --check web/app.js` se mexeu na interface).
 2. Mexeu na interface? Suba o demo e olhe capturas de tela.
-3. Atualize `README.md` (e esta página, se a arquitetura mudou) e a skill se mudou algo de addons.
+3. Atualize `docs/` (o assunto certo; o `README.md` só muda se o caminho curto mudou), esta página se a arquitetura mudou e a skill se mudou algo de addons.
 4. Diga ao usuário o que não foi testado no ComfyUI/Clef reais e o que reiniciar (mudanças em `.py` e `web/` exigem
    reiniciar o PickFlow; registros, prompts, LoRAs e workflows valem na hora).
