@@ -1,0 +1,41 @@
+# Prompts do workflow 'transfer_multi' (vários objetos para uma imagem). Use {request} onde o pedido do usuário entra.
+# {green_map} vira, a partir do que você desenha, "Green box 1: put the object from <image2>…" para cada caixa verde.
+
+default: varios
+presets:
+- id: varios
+  name: Transferir vários objetos
+  when: Bring two or more objects, people or body parts, each from an image, into one destination image.
+  text: |-
+    Transfer {objects_noun} into <image1>. Each numbered green box in <image1> marks where one object goes and the size it should have.
+    {green_map}
+    Match the perspective, scale, orientation, lighting, shadows, color and overall style of <image1> so every transferred element blends in naturally, as if it were originally part of <image1>. DO NOT change the shape and details of the transferred elements. Preserve everything else in <image1> exactly. Remove all the red and green boxes, the numbers and any borders.
+    {request}
+  needs: 3
+  slots: order
+  rewrite: false
+  vars:
+  - key: objects
+    kind: count
+    label: Quantos objetos
+    max: 4
+    first_ref: 2
+    default: 4
+    noun: object
+    plural: objects
+    noun_pt: object
+    plural_pt: objects
+    each_pt: Bring {n} {noun}
+    question: How many object images does the request say to bring into the destination image? Count only the images 
+      that have an object, person or body part to transfer (not counting the destination image). If they do not say, use
+      all the other images.
+  - key: dest
+    kind: pick
+    label: Imagem de destino
+    slot: image_1
+    default: 1
+    what_pt: the DESTINATION image, the scene that receives the objects (the one that shows the place where they will 
+      be)
+    question: Which of the uploaded images is the DESTINATION, the scene that receives the objects? The others are the 
+      object images. If the request says "in image N", it is N; otherwise it is usually the one that shows a place or 
+      setting.

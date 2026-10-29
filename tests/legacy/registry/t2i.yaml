@@ -1,0 +1,23 @@
+# Ligação técnica do workflow 't2i' (nós do ComfyUI). Raramente precisa mudar.
+# Os ids "459:471" são nós de dentro do subgraph (formato <subgraph>:<nó>).
+
+id: t2i
+file: image_qwen_image_2_1_t2i.json
+title: Gerar imagem do zero (Quality)
+group: geração
+images: []
+prompt:
+  node: 459
+  widget: prompt
+set:
+- node: "459:458"
+  widget: seed
+  value: random
+drop:
+- "459:471"
+- "459:473"
+- "459:475"
+note: Workflow oficial do ComfyUI (Qwen-Image 2.1, texto para imagem, 25 passos). O reescritor de prompt embutido (nós 471, 473 e 475) é
+  descartado para não exigir o modelo de texto extra; o PickFlow já escreve o prompt. O tamanho vem do nó ResolutionSelector salvo no workflow.
+outputs:
+- 461

@@ -1,0 +1,19 @@
+# Modelos de imagem que o PickFlow sabe escolher no chat (só aparecem quando há workflow para eles no PickFlow
+# E o arquivo do modelo está no ComfyUI). Tudo o que não tem a tag `models` é do Qwen-Image 2.1.
+#
+#   id     o mesmo texto que vai na tag `models` de um workflow, prompt, LoRA ou caso de uso
+#   title  nome na lista do chat
+#   match  padrões do nome do arquivo (em models/diffusion_models, unet ou checkpoints) que provam que o modelo está
+#          instalado; sem `match` a família vale sempre que houver workflow dela
+#   default  o modelo usado quando ninguém escolhe
+#
+# Para mudar ou acrescentar, crie custom/families.yaml com o mesmo formato (mesmo id = o seu vale mais).
+
+families:
+- id: qwen21
+  title: Qwen-Image 2.1
+  default: true
+- id: moss_image
+  title: MOSS-Image
+  match:
+  - '*moss*'

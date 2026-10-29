@@ -1,0 +1,8 @@
+# O passo de detectar a pose não usa prompt (o DWPose só lê a foto).
+default: padrao
+presets:
+- id: padrao
+  name: Achar as pessoas e os pontos do corpo
+  when: Always.
+  text: '{request}'
+  rewrite: false

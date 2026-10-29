@@ -1,0 +1,40 @@
+# Ligação técnica do workflow 'object_move' (nós do ComfyUI). Raramente precisa mudar.
+
+id: object_move
+file: Qwen2.1 Object Move (red-green).json
+title: Mover ou trocar objetos (Quality)
+group: objetos
+images:
+- key: image_1
+  node: 5
+  label: Imagem
+  required: true
+  hint: Foto onde o objeto será movido.
+prompt:
+  node: 8
+  widget: prompt
+params:
+- key: red
+  type: box
+  image: image_1
+  label: Objeto a mover (caixa vermelha)
+  color: red
+  node: 6
+  widgets:
+  - src_x
+  - src_y
+  - src_w
+  - src_h
+- key: green
+  type: box
+  image: image_1
+  label: Destino (caixa verde)
+  color: green
+  node: 6
+  widgets:
+  - tgt_x
+  - tgt_y
+  - tgt_w
+  - tgt_h
+outputs:
+- 11

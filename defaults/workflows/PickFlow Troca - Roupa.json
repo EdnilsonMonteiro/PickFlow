@@ -1,0 +1,5098 @@
+{
+ "id": "fcf97584-b7d3-4597-b7d3-0464d6a2bf91",
+ "revision": 0,
+ "last_node_id": 76,
+ "last_link_id": 69,
+ "nodes": [
+  {
+   "id": 2,
+   "type": "LoadImage",
+   "pos": [
+    500,
+    80
+   ],
+   "size": [
+    424,
+    515
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "imagem",
+     "name": "image",
+     "type": "COMBO",
+     "widget": {
+      "name": "image"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "escolher arquivo para enviar",
+     "name": "upload",
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGEM",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      1,
+      8
+     ]
+    },
+    {
+     "localized_name": "MÁSCARA",
+     "name": "MASK",
+     "type": "MASK",
+     "links": null
+    }
+   ],
+   "title": "Pessoa (foto que troca de roupa)",
+   "properties": {
+    "Node name for S&R": "LoadImage",
+    "cnr_id": "comfy-core",
+    "ver": "0.38.0"
+   },
+   "widgets_values": [
+    "example.png",
+    "image"
+   ],
+   "widgets_values_named": {
+    "image": "example.png",
+    "upload": "image"
+   },
+   "color": "#14424d",
+   "bgcolor": "#161f21"
+  },
+  {
+   "id": 3,
+   "type": "AUSBOSS_NODES_ImageCropRotatePad",
+   "pos": [
+    500,
+    823
+   ],
+   "size": [
+    424,
+    860
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "image",
+     "name": "image",
+     "type": "COMBO",
+     "widget": {
+      "name": "image"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "rotation_degrees",
+     "name": "rotation_degrees",
+     "type": "FLOAT",
+     "widget": {
+      "name": "rotation_degrees"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "crop_aspect_ratio",
+     "name": "crop_aspect_ratio",
+     "type": "COMBO",
+     "widget": {
+      "name": "crop_aspect_ratio"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "crop_x",
+     "name": "crop_x",
+     "type": "INT",
+     "widget": {
+      "name": "crop_x"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "crop_y",
+     "name": "crop_y",
+     "type": "INT",
+     "widget": {
+      "name": "crop_y"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "crop_width",
+     "name": "crop_width",
+     "type": "INT",
+     "widget": {
+      "name": "crop_width"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "crop_height",
+     "name": "crop_height",
+     "type": "INT",
+     "widget": {
+      "name": "crop_height"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "pad_left",
+     "name": "pad_left",
+     "type": "INT",
+     "widget": {
+      "name": "pad_left"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "pad_top",
+     "name": "pad_top",
+     "type": "INT",
+     "widget": {
+      "name": "pad_top"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "pad_right",
+     "name": "pad_right",
+     "type": "INT",
+     "widget": {
+      "name": "pad_right"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "pad_bottom",
+     "name": "pad_bottom",
+     "type": "INT",
+     "widget": {
+      "name": "pad_bottom"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "feather",
+     "name": "feather",
+     "type": "INT",
+     "widget": {
+      "name": "feather"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "canvas_multiple",
+     "name": "canvas_multiple",
+     "type": "INT",
+     "widget": {
+      "name": "canvas_multiple"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "fill_color",
+     "name": "fill_color",
+     "type": "STRING",
+     "widget": {
+      "name": "fill_color"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "resize_to_megapixels",
+     "name": "resize_to_megapixels",
+     "shape": 7,
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "resize_to_megapixels"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "megapixels",
+     "name": "megapixels",
+     "shape": 7,
+     "type": "FLOAT",
+     "widget": {
+      "name": "megapixels"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "resize_method",
+     "name": "resize_method",
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "resize_method"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "resolution_steps",
+     "name": "resolution_steps",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "resolution_steps"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "stitch_blend",
+     "name": "stitch_blend",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "stitch_blend"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "stitch_grow",
+     "name": "stitch_grow",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "stitch_grow"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "painted_area",
+     "name": "painted_area",
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "painted_area"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "upload",
+     "name": "upload",
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "image",
+     "name": "image",
+     "type": "IMAGE",
+     "links": [
+      6,
+      12
+     ]
+    },
+    {
+     "localized_name": "mask",
+     "name": "mask",
+     "type": "MASK",
+     "links": null
+    },
+    {
+     "localized_name": "stitcher",
+     "name": "stitcher",
+     "type": "AUSBOSS_STITCHER",
+     "links": null
+    },
+    {
+     "localized_name": "original",
+     "name": "original",
+     "type": "IMAGE",
+     "links": null
+    },
+    {
+     "localized_name": "width",
+     "name": "width",
+     "type": "INT",
+     "links": null
+    },
+    {
+     "localized_name": "height",
+     "name": "height",
+     "type": "INT",
+     "links": null
+    },
+    {
+     "localized_name": "prompt_image",
+     "name": "prompt_image",
+     "type": "IMAGE",
+     "links": null
+    }
+   ],
+   "title": "Roupa (referência)",
+   "properties": {
+    "Node name for S&R": "AUSBOSS_NODES_ImageCropRotatePad",
+    "cnr_id": "ausboss-nodes",
+    "ver": "2.5.1"
+   },
+   "widgets_values": {
+    "image": "example.png",
+    "rotation_degrees": 0,
+    "crop_aspect_ratio": "free",
+    "crop_x": 0,
+    "crop_y": 0,
+    "crop_width": 0,
+    "crop_height": 0,
+    "pad_left": 0,
+    "pad_top": 0,
+    "pad_right": 0,
+    "pad_bottom": 0,
+    "feather": 24,
+    "canvas_multiple": 1,
+    "fill_color": "#808080",
+    "resize_to_megapixels": false,
+    "megapixels": 1,
+    "resize_method": "lanczos",
+    "resolution_steps": 1,
+    "stitch_blend": 32,
+    "stitch_grow": 0,
+    "painted_area": "fill"
+   },
+   "widgets_values_named": {
+    "image": "example.png",
+    "rotation_degrees": 0,
+    "crop_aspect_ratio": "free",
+    "crop_x": 0,
+    "crop_y": 0,
+    "crop_width": 0,
+    "crop_height": 0,
+    "pad_left": 0,
+    "pad_top": 0,
+    "pad_right": 0,
+    "pad_bottom": 0,
+    "feather": 24,
+    "canvas_multiple": 1,
+    "fill_color": "#808080",
+    "resize_to_megapixels": false,
+    "megapixels": 1,
+    "resize_method": "lanczos",
+    "resolution_steps": 1,
+    "stitch_blend": 32,
+    "stitch_grow": 0,
+    "painted_area": "fill",
+    "upload": "image"
+   },
+   "color": "#14424d",
+   "bgcolor": "#161f21"
+  },
+  {
+   "id": 4,
+   "type": "AUSBOSS_NODES_Text",
+   "pos": [
+    964,
+    280
+   ],
+   "size": [
+    424,
+    168
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "text",
+     "name": "text",
+     "type": "STRING",
+     "widget": {
+      "name": "text"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "text",
+     "name": "text",
+     "type": "STRING",
+     "links": [
+      2
+     ]
+    }
+   ],
+   "title": "Quem vestir",
+   "properties": {
+    "Node name for S&R": "AUSBOSS_NODES_Text",
+    "cnr_id": "ausboss-nodes",
+    "ver": "2.5.1"
+   },
+   "widgets_values": [
+    "the person"
+   ],
+   "widgets_values_named": {
+    "text": "the person"
+   },
+   "color": "#14424d",
+   "bgcolor": "#161f21"
+  },
+  {
+   "id": 5,
+   "type": "AUSBOSS_NODES_Text",
+   "pos": [
+    964,
+    518
+   ],
+   "size": [
+    424,
+    168
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "text",
+     "name": "text",
+     "type": "STRING",
+     "widget": {
+      "name": "text"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "text",
+     "name": "text",
+     "type": "STRING",
+     "links": [
+      3
+     ]
+    }
+   ],
+   "title": "Text - What to take from it",
+   "properties": {
+    "Node name for S&R": "AUSBOSS_NODES_Text",
+    "cnr_id": "ausboss-nodes",
+    "ver": "2.5.1"
+   },
+   "widgets_values": [
+    "the outfit shown in image 2"
+   ],
+   "widgets_values_named": {
+    "text": "the outfit shown in image 2"
+   },
+   "color": "#14424d",
+   "bgcolor": "#161f21"
+  },
+  {
+   "id": 6,
+   "type": "PrimitiveBoolean",
+   "pos": [
+    964,
+    756
+   ],
+   "size": [
+    424,
+    58
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "valor",
+     "name": "value",
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "value"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "BOOLEANO",
+     "name": "BOOLEAN",
+     "type": "BOOLEAN",
+     "links": [
+      5
+     ]
+    }
+   ],
+   "title": "Boolean - Describe the outfit for me",
+   "properties": {
+    "Node name for S&R": "PrimitiveBoolean",
+    "cnr_id": "comfy-core",
+    "ver": "0.38.0"
+   },
+   "widgets_values": [
+    true
+   ],
+   "widgets_values_named": {
+    "value": true
+   },
+   "color": "#14424d",
+   "bgcolor": "#161f21"
+  },
+  {
+   "id": 7,
+   "type": "AUSBOSS_NODES_Seed",
+   "pos": [
+    964,
+    1130
+   ],
+   "size": [
+    424,
+    216
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "seed",
+     "name": "seed",
+     "type": "INT",
+     "widget": {
+      "name": "seed"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "seed",
+     "name": "seed",
+     "type": "INT",
+     "links": [
+      13
+     ]
+    }
+   ],
+   "title": "Seed",
+   "properties": {
+    "Node name for S&R": "AUSBOSS_NODES_Seed",
+    "cnr_id": "ausboss-nodes",
+    "ver": "2.5.1",
+    "ausboss_seed_history": [
+     694734744961252,
+     124178187715151,
+     203511716154524,
+     861878025428123,
+     283775233208080,
+     240888714304099,
+     1074259810237512,
+     379403244143479
+    ]
+   },
+   "widgets_values": [
+    424428046508414,
+    "randomize"
+   ],
+   "widgets_values_named": {
+    "seed": 424428046508414,
+    "control_after_generate": "randomize"
+   },
+   "color": "#14424d",
+   "bgcolor": "#161f21"
+  },
+  {
+   "id": 8,
+   "type": "CLIPLoader",
+   "pos": [
+    1468,
+    582
+   ],
+   "size": [
+    520,
+    106
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "clip_name",
+     "name": "clip_name",
+     "type": "COMBO",
+     "widget": {
+      "name": "clip_name"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "type",
+     "name": "type",
+     "type": "COMBO",
+     "widget": {
+      "name": "type"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "device",
+     "name": "device",
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "device"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "clip",
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      4,
+      10
+     ]
+    }
+   ],
+   "title": "Text encoder",
+   "properties": {
+    "Node name for S&R": "CLIPLoader",
+    "cnr_id": "comfy-core",
+    "ver": "0.38.0"
+   },
+   "widgets_values": [
+    "qwen3vl_8b_int8_convrot.safetensors",
+    "qwen_image",
+    "default"
+   ],
+   "widgets_values_named": {
+    "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
+    "type": "qwen_image",
+    "device": "default"
+   },
+   "color": "#432",
+   "bgcolor": "#653"
+  },
+  {
+   "id": 9,
+   "type": "VAELoader",
+   "pos": [
+    1468,
+    766
+   ],
+   "size": [
+    520,
+    58
+   ],
+   "flags": {},
+   "order": 8,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "vae_name",
+     "name": "vae_name",
+     "type": "COMBO",
+     "widget": {
+      "name": "vae_name"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "vae",
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      11
+     ]
+    }
+   ],
+   "title": "VAE",
+   "properties": {
+    "Node name for S&R": "VAELoader",
+    "cnr_id": "comfy-core",
+    "ver": "0.38.0"
+   },
+   "widgets_values": [
+    "qwen_image_2.1_vae_bf16.safetensors"
+   ],
+   "widgets_values_named": {
+    "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+   },
+   "color": "#322",
+   "bgcolor": "#533"
+  },
+  {
+   "id": 10,
+   "type": "UNETLoader",
+   "pos": [
+    1468,
+    898
+   ],
+   "size": [
+    520,
+    82
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "unet_name",
+     "name": "unet_name",
+     "type": "COMBO",
+     "widget": {
+      "name": "unet_name"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "tipo_peso",
+     "name": "weight_dtype",
+     "type": "COMBO",
+     "widget": {
+      "name": "weight_dtype"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "MODELO",
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      16
+     ]
+    }
+   ],
+   "title": "Diffusion model",
+   "properties": {
+    "Node name for S&R": "UNETLoader",
+    "cnr_id": "comfy-core",
+    "ver": "0.38.0"
+   },
+   "widgets_values": [
+    "qwen_image_2.1_int8_convrot.safetensors",
+    "default"
+   ],
+   "widgets_values_named": {
+    "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+    "weight_dtype": "default"
+   },
+   "color": "#323",
+   "bgcolor": "#535"
+  },
+  {
+   "id": 11,
+   "type": "2b3b23fb-69d6-49f4-8659-2d88d0e8062e",
+   "pos": [
+    1468,
+    238
+   ],
+   "size": [
+    240,
+    166
+   ],
+   "flags": {},
+   "order": 19,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "your picture",
+     "name": "your picture",
+     "type": "IMAGE",
+     "link": 1
+    },
+    {
+     "localized_name": "who",
+     "name": "who",
+     "shape": 7,
+     "type": "STRING",
+     "link": 2
+    },
+    {
+     "localized_name": "what to take",
+     "name": "what to take",
+     "shape": 7,
+     "type": "STRING",
+     "link": 3
+    },
+    {
+     "localized_name": "text encoder",
+     "name": "text encoder",
+     "type": "CLIP",
+     "link": 4
+    },
+    {
+     "localized_name": "describe it for me",
+     "name": "describe it for me",
+     "type": "BOOLEAN",
+     "link": 5
+    },
+    {
+     "localized_name": "outfit picture",
+     "name": "outfit picture",
+     "type": "IMAGE",
+     "link": 6
+    },
+    {
+     "localized_name": "add to the request",
+     "name": "add to the request",
+     "shape": 7,
+     "type": "STRING",
+     "link": 7
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "prompt",
+     "name": "prompt",
+     "type": "STRING",
+     "links": [
+      9
+     ]
+    }
+   ],
+   "properties": {
+    "previewExposures": []
+   },
+   "color": "#14424d",
+   "bgcolor": "#161f21"
+  },
+  {
+   "id": 12,
+   "type": "77fd31a8-05b8-474a-8177-c12c87cb1f40",
+   "pos": [
+    1748,
+    238
+   ],
+   "size": [
+    240,
+    186
+   ],
+   "flags": {},
+   "order": 20,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "your picture",
+     "name": "your picture",
+     "type": "IMAGE",
+     "link": 8
+    },
+    {
+     "localized_name": "prompt",
+     "name": "prompt",
+     "type": "STRING",
+     "link": 9
+    },
+    {
+     "localized_name": "text encoder",
+     "name": "text encoder",
+     "type": "CLIP",
+     "link": 10
+    },
+    {
+     "localized_name": "vae",
+     "name": "vae",
+     "type": "VAE",
+     "link": 11
+    },
+    {
+     "localized_name": "outfit picture",
+     "name": "outfit picture",
+     "type": "IMAGE",
+     "link": 12
+    },
+    {
+     "localized_name": "seed",
+     "name": "seed",
+     "type": "INT",
+     "link": 13
+    },
+    {
+     "localized_name": "model",
+     "name": "model",
+     "type": "MODEL",
+     "link": 14
+    },
+    {
+     "localized_name": "steps",
+     "name": "steps",
+     "type": "INT",
+     "link": 15
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "result",
+     "name": "result",
+     "type": "IMAGE",
+     "links": [
+      69
+     ]
+    },
+    {
+     "localized_name": "your picture sized",
+     "name": "your picture sized",
+     "type": "IMAGE",
+     "links": null
+    }
+   ],
+   "properties": {
+    "previewExposures": []
+   },
+   "color": "#14424d",
+   "bgcolor": "#161f21"
+  },
+  {
+   "id": 14,
+   "type": "AUSBOSS_NODES_SaveImage",
+   "pos": [
+    2668,
+    80
+   ],
+   "size": [
+    400,
+    1439
+   ],
+   "flags": {},
+   "order": 23,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 69
+    },
+    {
+     "localized_name": "filename",
+     "name": "filename",
+     "shape": 7,
+     "type": "STRING",
+     "link": null
+    },
+    {
+     "localized_name": "caption_text",
+     "name": "caption_text",
+     "shape": 7,
+     "type": "STRING",
+     "link": null
+    },
+    {
+     "localized_name": "filename_prefix",
+     "name": "filename_prefix",
+     "type": "STRING",
+     "widget": {
+      "name": "filename_prefix"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "format",
+     "name": "format",
+     "type": "COMBO",
+     "widget": {
+      "name": "format"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "save_metadata",
+     "name": "save_metadata",
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "save_metadata"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "exact_name",
+     "name": "exact_name",
+     "shape": 7,
+     "type": "STRING",
+     "widget": {
+      "name": "exact_name"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "on_existing",
+     "name": "on_existing",
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "on_existing"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "output_dir",
+     "name": "output_dir",
+     "shape": 7,
+     "type": "STRING",
+     "widget": {
+      "name": "output_dir"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "caption",
+     "name": "caption",
+     "shape": 7,
+     "type": "STRING",
+     "widget": {
+      "name": "caption"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "name_counter",
+     "name": "name_counter",
+     "shape": 7,
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "name_counter"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "name_date",
+     "name": "name_date",
+     "shape": 7,
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "name_date"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "name_time",
+     "name": "name_time",
+     "shape": 7,
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "name_time"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "name_size",
+     "name": "name_size",
+     "shape": 7,
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "name_size"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "name_batch",
+     "name": "name_batch",
+     "shape": 7,
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "name_batch"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "preview",
+     "name": "preview",
+     "shape": 7,
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "preview"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "file_path",
+     "name": "file_path",
+     "type": "STRING",
+     "links": null
+    },
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "links": null
+    }
+   ],
+   "title": "Save Image",
+   "properties": {
+    "Node name for S&R": "AUSBOSS_NODES_SaveImage",
+    "cnr_id": "ausboss-nodes",
+    "ver": "2.5.1"
+   },
+   "widgets_values": {
+    "filename_prefix": "qwen21_outfit_swap",
+    "format": "png",
+    "save_metadata": true,
+    "exact_name": "",
+    "on_existing": "overwrite",
+    "output_dir": "",
+    "caption": "",
+    "name_counter": true,
+    "name_date": false,
+    "name_time": false,
+    "name_size": false,
+    "name_batch": false,
+    "preview": true
+   },
+   "widgets_values_named": {
+    "filename_prefix": "qwen21_outfit_swap",
+    "format": "png",
+    "save_metadata": true,
+    "exact_name": "",
+    "on_existing": "overwrite",
+    "output_dir": "",
+    "caption": "",
+    "name_counter": true,
+    "name_date": false,
+    "name_time": false,
+    "name_size": false,
+    "name_batch": false,
+    "preview": true
+   },
+   "color": "#14424d",
+   "bgcolor": "#161f21"
+  },
+  {
+   "id": 70,
+   "type": "AUSBOSS_NODES_LoraLoader",
+   "pos": [
+    1468,
+    1212
+   ],
+   "size": [
+    520,
+    224
+   ],
+   "flags": {},
+   "order": 18,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "model",
+     "name": "model",
+     "type": "MODEL",
+     "link": 16
+    },
+    {
+     "localized_name": "clip",
+     "name": "clip",
+     "shape": 7,
+     "type": "CLIP",
+     "link": null
+    },
+    {
+     "localized_name": "loras",
+     "name": "loras",
+     "type": "STRING",
+     "widget": {
+      "name": "loras"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "trigger_separator",
+     "name": "trigger_separator",
+     "shape": 7,
+     "type": "STRING",
+     "widget": {
+      "name": "trigger_separator"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "on_missing",
+     "name": "on_missing",
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "on_missing"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "model",
+     "name": "model",
+     "type": "MODEL",
+     "links": [
+      14
+     ]
+    },
+    {
+     "localized_name": "clip",
+     "name": "clip",
+     "type": "CLIP",
+     "links": null
+    },
+    {
+     "localized_name": "triggers",
+     "name": "triggers",
+     "type": "STRING",
+     "links": null
+    }
+   ],
+   "title": "LoRA Loader - Outfit Swap LoRA",
+   "properties": {
+    "Node name for S&R": "AUSBOSS_NODES_LoraLoader",
+    "ausbossLoraLinked": true,
+    "cnr_id": "ausboss-nodes",
+    "ver": "2.5.1"
+   },
+   "widgets_values": [
+    "[{\"id\":\"rmvegagu014\",\"name\":\"qwen-image-2.1-outfit-swap.safetensors\",\"strength\":1,\"strength_clip\":1,\"enabled\":true,\"triggers\":\"\"},{\"id\":\"rmvegagu015\",\"name\":\"Qwen-Image-2.1-viggle-turbo-v0.2.1-6step-lora-r128.safetensors\",\"strength\":1,\"strength_clip\":1,\"enabled\":false,\"triggers\":\"\"}]",
+    ", ",
+    "error"
+   ],
+   "widgets_values_named": {
+    "loras": "[{\"id\":\"rmvegagu014\",\"name\":\"qwen-image-2.1-outfit-swap.safetensors\",\"strength\":1,\"strength_clip\":1,\"enabled\":true,\"triggers\":\"\"},{\"id\":\"rmvegagu015\",\"name\":\"Qwen-Image-2.1-viggle-turbo-v0.2.1-6step-lora-r128.safetensors\",\"strength\":1,\"strength_clip\":1,\"enabled\":false,\"triggers\":\"\"}]",
+    "trigger_separator": ", ",
+    "on_missing": "error"
+   },
+   "color": "#14424d",
+   "bgcolor": "#161f21"
+  },
+  {
+   "id": 71,
+   "type": "AUSBOSS_NODES_Integer",
+   "pos": [
+    964,
+    1579
+   ],
+   "size": [
+    424,
+    94
+   ],
+   "flags": {},
+   "order": 13,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "value",
+     "name": "value",
+     "type": "INT",
+     "widget": {
+      "name": "value"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "int",
+     "name": "int",
+     "type": "INT",
+     "links": [
+      15
+     ]
+    }
+   ],
+   "title": "Integer - Steps",
+   "properties": {
+    "Node name for S&R": "AUSBOSS_NODES_Integer",
+    "cnr_id": "ausboss-nodes",
+    "ver": "2.5.1"
+   },
+   "widgets_values": [
+    6
+   ],
+   "widgets_values_named": {
+    "value": 6
+   },
+   "color": "#14424d",
+   "bgcolor": "#161f21"
+  },
+  {
+   "id": 76,
+   "type": "AUSBOSS_NODES_Text",
+   "pos": [
+    964,
+    892
+   ],
+   "size": [
+    424,
+    168
+   ],
+   "flags": {},
+   "order": 16,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "text",
+     "name": "text",
+     "type": "STRING",
+     "widget": {
+      "name": "text"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "text",
+     "name": "text",
+     "type": "STRING",
+     "links": [
+      7
+     ]
+    }
+   ],
+   "title": "Text - Add to the request",
+   "properties": {
+    "Node name for S&R": "AUSBOSS_NODES_Text",
+    "cnr_id": "ausboss-nodes",
+    "ver": "2.5.1"
+   },
+   "widgets_values": [
+    "Replace everything they wear."
+   ],
+   "widgets_values_named": {
+    "text": "Replace everything they wear."
+   },
+   "color": "#14424d",
+   "bgcolor": "#161f21"
+  }
+ ],
+ "links": [
+  [
+   1,
+   2,
+   0,
+   11,
+   0,
+   "IMAGE"
+  ],
+  [
+   2,
+   4,
+   0,
+   11,
+   1,
+   "STRING"
+  ],
+  [
+   3,
+   5,
+   0,
+   11,
+   2,
+   "STRING"
+  ],
+  [
+   4,
+   8,
+   0,
+   11,
+   3,
+   "CLIP"
+  ],
+  [
+   5,
+   6,
+   0,
+   11,
+   4,
+   "BOOLEAN"
+  ],
+  [
+   6,
+   3,
+   0,
+   11,
+   5,
+   "IMAGE"
+  ],
+  [
+   7,
+   76,
+   0,
+   11,
+   6,
+   "STRING"
+  ],
+  [
+   8,
+   2,
+   0,
+   12,
+   0,
+   "IMAGE"
+  ],
+  [
+   9,
+   11,
+   0,
+   12,
+   1,
+   "STRING"
+  ],
+  [
+   10,
+   8,
+   0,
+   12,
+   2,
+   "CLIP"
+  ],
+  [
+   11,
+   9,
+   0,
+   12,
+   3,
+   "VAE"
+  ],
+  [
+   12,
+   3,
+   0,
+   12,
+   4,
+   "IMAGE"
+  ],
+  [
+   13,
+   7,
+   0,
+   12,
+   5,
+   "INT"
+  ],
+  [
+   14,
+   70,
+   0,
+   12,
+   6,
+   "MODEL"
+  ],
+  [
+   15,
+   71,
+   0,
+   12,
+   7,
+   "INT"
+  ],
+  [
+   16,
+   10,
+   0,
+   70,
+   0,
+   "MODEL"
+  ],
+  [
+   69,
+   12,
+   0,
+   14,
+   0,
+   "IMAGE"
+  ]
+ ],
+ "groups": [],
+ "definitions": {
+  "subgraphs": [
+   {
+    "id": "2b3b23fb-69d6-49f4-8659-2d88d0e8062e",
+    "version": 1,
+    "state": {
+     "lastGroupId": 15,
+     "lastNodeId": 77,
+     "lastLinkId": 68,
+     "lastRerouteId": 0
+    },
+    "revision": 0,
+    "config": {},
+    "name": "Write the prompt",
+    "inputNode": {
+     "id": -10,
+     "bounding": [
+      -260,
+      120,
+      150,
+      180
+     ]
+    },
+    "outputNode": {
+     "id": -20,
+     "bounding": [
+      3850,
+      120,
+      150,
+      60
+     ]
+    },
+    "inputs": [
+     {
+      "id": "c79c3470-dff0-5a89-ba3c-440132e21204",
+      "name": "your picture",
+      "type": "IMAGE",
+      "linkIds": [
+       21
+      ],
+      "localized_name": "your picture",
+      "pos": [
+       0,
+       0
+      ]
+     },
+     {
+      "id": "1b640001-b509-528b-9d6a-5012d65b8951",
+      "name": "who",
+      "type": "STRING",
+      "linkIds": [
+       25
+      ],
+      "localized_name": "who",
+      "pos": [
+       0,
+       0
+      ]
+     },
+     {
+      "id": "3981ccf0-7f32-5092-9052-72fe6a7e4bd3",
+      "name": "what to take",
+      "type": "STRING",
+      "linkIds": [
+       26
+      ],
+      "localized_name": "what to take",
+      "pos": [
+       0,
+       0
+      ]
+     },
+     {
+      "id": "b7bff22b-c297-50bd-94b2-0423ab7536a8",
+      "name": "text encoder",
+      "type": "CLIP",
+      "linkIds": [
+       23,
+       24,
+       35
+      ],
+      "localized_name": "text encoder",
+      "pos": [
+       0,
+       0
+      ]
+     },
+     {
+      "id": "5b5a56fc-de5b-579e-a99b-7e355bf4c589",
+      "name": "describe it for me",
+      "type": "BOOLEAN",
+      "linkIds": [
+       27
+      ],
+      "localized_name": "describe it for me",
+      "pos": [
+       0,
+       0
+      ]
+     },
+     {
+      "id": "578b4987-50c2-5a23-9778-676ab4063dd9",
+      "name": "outfit picture",
+      "type": "IMAGE",
+      "linkIds": [
+       22
+      ],
+      "localized_name": "outfit picture",
+      "pos": [
+       0,
+       0
+      ]
+     },
+     {
+      "id": "2d9d836a-557b-56b6-84c0-d409ebdfea3c",
+      "name": "add to the request",
+      "type": "STRING",
+      "linkIds": [
+       45
+      ],
+      "localized_name": "add to the request",
+      "pos": [
+       0,
+       0
+      ]
+     }
+    ],
+    "outputs": [
+     {
+      "id": "25db078e-36b8-570e-ada6-86dfba3356c2",
+      "name": "prompt",
+      "type": "STRING",
+      "linkIds": [
+       46
+      ],
+      "localized_name": "prompt",
+      "pos": [
+       0,
+       0
+      ]
+     }
+    ],
+    "widgets": [],
+    "nodes": [
+     {
+      "id": 40,
+      "type": "MarkdownNote",
+      "pos": [
+       20,
+       80
+      ],
+      "size": [
+       460,
+       88
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note",
+      "properties": {},
+      "widgets_values": [
+       "Both pictures are made smaller, about 0.6 megapixels, before the text encoder looks at them."
+      ],
+      "widgets_values_named": {
+       "text": "Both pictures are made smaller, about 0.6 megapixels, before the text encoder looks at them."
+      },
+      "color": "#1f2c38",
+      "bgcolor": "#2a3b4a"
+     },
+     {
+      "id": 60,
+      "type": "AUSBOSS_NODES_ImageResize",
+      "pos": [
+       20,
+       238
+      ],
+      "size": [
+       460,
+       278
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "image",
+        "name": "image",
+        "type": "IMAGE",
+        "link": 21
+       },
+       {
+        "localized_name": "mask",
+        "name": "mask",
+        "shape": 7,
+        "type": "MASK",
+        "link": null
+       },
+       {
+        "localized_name": "target_mode",
+        "name": "target_mode",
+        "type": "COMBO",
+        "widget": {
+         "name": "target_mode"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "width",
+        "name": "width",
+        "type": "INT",
+        "link": null
+       },
+       {
+        "localized_name": "height",
+        "name": "height",
+        "type": "INT",
+        "link": null
+       },
+       {
+        "localized_name": "edge_length",
+        "name": "edge_length",
+        "type": "INT",
+        "widget": {
+         "name": "edge_length"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "megapixels",
+        "name": "megapixels",
+        "type": "FLOAT",
+        "widget": {
+         "name": "megapixels"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "scale_factor",
+        "name": "scale_factor",
+        "type": "FLOAT",
+        "widget": {
+         "name": "scale_factor"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "keep_proportion",
+        "name": "keep_proportion",
+        "type": "COMBO",
+        "widget": {
+         "name": "keep_proportion"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "fill_color",
+        "name": "fill_color",
+        "type": "STRING",
+        "widget": {
+         "name": "fill_color"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "divisible_by",
+        "name": "divisible_by",
+        "type": "INT",
+        "widget": {
+         "name": "divisible_by"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "interpolation",
+        "name": "interpolation",
+        "type": "COMBO",
+        "widget": {
+         "name": "interpolation"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "image",
+        "name": "image",
+        "type": "IMAGE",
+        "links": [
+         29,
+         34
+        ]
+       },
+       {
+        "localized_name": "mask",
+        "name": "mask",
+        "type": "MASK",
+        "links": []
+       },
+       {
+        "localized_name": "width",
+        "name": "width",
+        "type": "INT",
+        "links": []
+       },
+       {
+        "localized_name": "height",
+        "name": "height",
+        "type": "INT",
+        "links": []
+       }
+      ],
+      "title": "Image Resize - Your picture for the two checks",
+      "properties": {
+       "Node name for S&R": "AUSBOSS_NODES_ImageResize",
+       "cnr_id": "ausboss-nodes",
+       "ver": "2.5.1"
+      },
+      "widgets_values": [
+       "megapixels",
+       0,
+       0,
+       1024,
+       0.6,
+       0.5,
+       "fit",
+       "#000000",
+       32,
+       "lanczos"
+      ],
+      "widgets_values_named": {
+       "target_mode": "megapixels",
+       "width": 0,
+       "height": 0,
+       "edge_length": 1024,
+       "megapixels": 0.6,
+       "scale_factor": 0.5,
+       "keep_proportion": "fit",
+       "fill_color": "#000000",
+       "divisible_by": 32,
+       "interpolation": "lanczos"
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 20,
+      "type": "AUSBOSS_NODES_ImageResize",
+      "pos": [
+       20,
+       596
+      ],
+      "size": [
+       460,
+       278
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "image",
+        "name": "image",
+        "type": "IMAGE",
+        "link": 22
+       },
+       {
+        "localized_name": "mask",
+        "name": "mask",
+        "shape": 7,
+        "type": "MASK",
+        "link": null
+       },
+       {
+        "localized_name": "target_mode",
+        "name": "target_mode",
+        "type": "COMBO",
+        "widget": {
+         "name": "target_mode"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "width",
+        "name": "width",
+        "type": "INT",
+        "link": null
+       },
+       {
+        "localized_name": "height",
+        "name": "height",
+        "type": "INT",
+        "link": null
+       },
+       {
+        "localized_name": "edge_length",
+        "name": "edge_length",
+        "type": "INT",
+        "widget": {
+         "name": "edge_length"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "megapixels",
+        "name": "megapixels",
+        "type": "FLOAT",
+        "widget": {
+         "name": "megapixels"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "scale_factor",
+        "name": "scale_factor",
+        "type": "FLOAT",
+        "widget": {
+         "name": "scale_factor"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "keep_proportion",
+        "name": "keep_proportion",
+        "type": "COMBO",
+        "widget": {
+         "name": "keep_proportion"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "fill_color",
+        "name": "fill_color",
+        "type": "STRING",
+        "widget": {
+         "name": "fill_color"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "divisible_by",
+        "name": "divisible_by",
+        "type": "INT",
+        "widget": {
+         "name": "divisible_by"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "interpolation",
+        "name": "interpolation",
+        "type": "COMBO",
+        "widget": {
+         "name": "interpolation"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "image",
+        "name": "image",
+        "type": "IMAGE",
+        "links": [
+         28
+        ]
+       },
+       {
+        "localized_name": "mask",
+        "name": "mask",
+        "type": "MASK",
+        "links": []
+       },
+       {
+        "localized_name": "width",
+        "name": "width",
+        "type": "INT",
+        "links": []
+       },
+       {
+        "localized_name": "height",
+        "name": "height",
+        "type": "INT",
+        "links": []
+       }
+      ],
+      "title": "Image Resize - Outfit picture for the describer",
+      "properties": {
+       "Node name for S&R": "AUSBOSS_NODES_ImageResize",
+       "cnr_id": "ausboss-nodes",
+       "ver": "2.5.1"
+      },
+      "widgets_values": [
+       "megapixels",
+       0,
+       0,
+       1024,
+       0.6,
+       0.5,
+       "fit",
+       "#000000",
+       32,
+       "lanczos"
+      ],
+      "widgets_values_named": {
+       "target_mode": "megapixels",
+       "width": 0,
+       "height": 0,
+       "edge_length": 1024,
+       "megapixels": 0.6,
+       "scale_factor": 0.5,
+       "keep_proportion": "fit",
+       "fill_color": "#000000",
+       "divisible_by": 32,
+       "interpolation": "lanczos"
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 41,
+      "type": "MarkdownNote",
+      "pos": [
+       560,
+       80
+      ],
+      "size": [
+       460,
+       88
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note",
+      "properties": {},
+      "widgets_values": [
+       "The text encoder looks at your picture and answers yes or no. Match Text turns an answer that starts with yes into on."
+      ],
+      "widgets_values_named": {
+       "text": "The text encoder looks at your picture and answers yes or no. Match Text turns an answer that starts with yes into on."
+      },
+      "color": "#1f2c38",
+      "bgcolor": "#2a3b4a"
+     },
+     {
+      "id": 61,
+      "type": "TextGenerate",
+      "pos": [
+       560,
+       238
+      ],
+      "size": [
+       460,
+       288
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "clip",
+        "name": "clip",
+        "type": "CLIP",
+        "link": 23
+       },
+       {
+        "localized_name": "imagem",
+        "name": "image",
+        "shape": 7,
+        "type": "IMAGE",
+        "link": 29
+       },
+       {
+        "localized_name": "vídeo",
+        "name": "video",
+        "shape": 7,
+        "type": "IMAGE",
+        "link": null
+       },
+       {
+        "localized_name": "áudio",
+        "name": "audio",
+        "shape": 7,
+        "type": "AUDIO",
+        "link": null
+       },
+       {
+        "localized_name": "system_prompt",
+        "name": "system_prompt",
+        "shape": 7,
+        "type": "STRING",
+        "link": null
+       },
+       {
+        "localized_name": "prompt",
+        "name": "prompt",
+        "type": "STRING",
+        "widget": {
+         "name": "prompt"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "comprimento_máximo",
+        "name": "max_length",
+        "type": "INT",
+        "widget": {
+         "name": "max_length"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "modo_de_amostragem",
+        "name": "sampling_mode",
+        "type": "COMFY_DYNAMICCOMBO_V3",
+        "widget": {
+         "name": "sampling_mode"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "pensando",
+        "name": "thinking",
+        "shape": 7,
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "thinking"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "use_default_template",
+        "name": "use_default_template",
+        "shape": 7,
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "use_default_template"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "mtp",
+        "name": "mtp",
+        "shape": 7,
+        "type": "COMBO",
+        "widget": {
+         "name": "mtp"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "texto_gerado",
+        "name": "generated_text",
+        "type": "STRING",
+        "links": [
+         30
+        ]
+       },
+       {
+        "localized_name": "raciocínio",
+        "name": "thinking",
+        "type": "STRING",
+        "links": null
+       }
+      ],
+      "title": "Are the feet in the picture",
+      "properties": {
+       "Node name for S&R": "TextGenerate",
+       "cnr_id": "comfy-core",
+       "ver": "0.38.0"
+      },
+      "widgets_values": [
+       "Are the person's feet or shoes in this picture? Answer yes or no.",
+       16,
+       "off",
+       true,
+       true,
+       "auto"
+      ],
+      "widgets_values_named": {
+       "prompt": "Are the person's feet or shoes in this picture? Answer yes or no.",
+       "max_length": 16,
+       "sampling_mode": "off",
+       "thinking": true,
+       "use_default_template": true,
+       "mtp": "auto"
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 62,
+      "type": "RegexMatch",
+      "pos": [
+       560,
+       654
+      ],
+      "size": [
+       460,
+       214
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "string",
+        "name": "string",
+        "type": "STRING",
+        "widget": {
+         "name": "string"
+        },
+        "link": 30
+       },
+       {
+        "localized_name": "regex_pattern",
+        "name": "regex_pattern",
+        "type": "STRING",
+        "widget": {
+         "name": "regex_pattern"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "ignorar_maiusculas_minusculas",
+        "name": "case_insensitive",
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "case_insensitive"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "multilinha",
+        "name": "multiline",
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "multiline"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "dotall",
+        "name": "dotall",
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "dotall"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "correspondencias",
+        "name": "matches",
+        "type": "BOOLEAN",
+        "links": [
+         31
+        ]
+       }
+      ],
+      "title": "Match Text - Starts with yes",
+      "properties": {
+       "Node name for S&R": "RegexMatch",
+       "cnr_id": "comfy-core",
+       "ver": "0.38.0"
+      },
+      "widgets_values": [
+       "",
+       "^\\s*yes\\b",
+       true,
+       false,
+       false
+      ],
+      "widgets_values_named": {
+       "string": "",
+       "regex_pattern": "^\\s*yes\\b",
+       "case_insensitive": true,
+       "multiline": false,
+       "dotall": false
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 42,
+      "type": "MarkdownNote",
+      "pos": [
+       1100,
+       80
+      ],
+      "size": [
+       460,
+       88
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note",
+      "properties": {},
+      "widgets_values": [
+       "The same kind of check for the legs. Without legs in your picture, only the top half of the outfit gets described."
+      ],
+      "widgets_values_named": {
+       "text": "The same kind of check for the legs. Without legs in your picture, only the top half of the outfit gets described."
+      },
+      "color": "#1f2c38",
+      "bgcolor": "#2a3b4a"
+     },
+     {
+      "id": 65,
+      "type": "TextGenerate",
+      "pos": [
+       1100,
+       238
+      ],
+      "size": [
+       460,
+       288
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "clip",
+        "name": "clip",
+        "type": "CLIP",
+        "link": 35
+       },
+       {
+        "localized_name": "imagem",
+        "name": "image",
+        "shape": 7,
+        "type": "IMAGE",
+        "link": 34
+       },
+       {
+        "localized_name": "vídeo",
+        "name": "video",
+        "shape": 7,
+        "type": "IMAGE",
+        "link": null
+       },
+       {
+        "localized_name": "áudio",
+        "name": "audio",
+        "shape": 7,
+        "type": "AUDIO",
+        "link": null
+       },
+       {
+        "localized_name": "system_prompt",
+        "name": "system_prompt",
+        "shape": 7,
+        "type": "STRING",
+        "link": null
+       },
+       {
+        "localized_name": "prompt",
+        "name": "prompt",
+        "type": "STRING",
+        "widget": {
+         "name": "prompt"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "comprimento_máximo",
+        "name": "max_length",
+        "type": "INT",
+        "widget": {
+         "name": "max_length"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "modo_de_amostragem",
+        "name": "sampling_mode",
+        "type": "COMFY_DYNAMICCOMBO_V3",
+        "widget": {
+         "name": "sampling_mode"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "pensando",
+        "name": "thinking",
+        "shape": 7,
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "thinking"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "use_default_template",
+        "name": "use_default_template",
+        "shape": 7,
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "use_default_template"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "mtp",
+        "name": "mtp",
+        "shape": 7,
+        "type": "COMBO",
+        "widget": {
+         "name": "mtp"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "texto_gerado",
+        "name": "generated_text",
+        "type": "STRING",
+        "links": [
+         36
+        ]
+       },
+       {
+        "localized_name": "raciocínio",
+        "name": "thinking",
+        "type": "STRING",
+        "links": null
+       }
+      ],
+      "title": "Are the legs in the picture",
+      "properties": {
+       "Node name for S&R": "TextGenerate",
+       "cnr_id": "comfy-core",
+       "ver": "0.38.0"
+      },
+      "widgets_values": [
+       "Are the person's legs in this picture? Answer yes or no.",
+       16,
+       "off",
+       true,
+       true,
+       "auto"
+      ],
+      "widgets_values_named": {
+       "prompt": "Are the person's legs in this picture? Answer yes or no.",
+       "max_length": 16,
+       "sampling_mode": "off",
+       "thinking": true,
+       "use_default_template": true,
+       "mtp": "auto"
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 66,
+      "type": "RegexMatch",
+      "pos": [
+       1100,
+       654
+      ],
+      "size": [
+       460,
+       214
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "string",
+        "name": "string",
+        "type": "STRING",
+        "widget": {
+         "name": "string"
+        },
+        "link": 36
+       },
+       {
+        "localized_name": "regex_pattern",
+        "name": "regex_pattern",
+        "type": "STRING",
+        "widget": {
+         "name": "regex_pattern"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "ignorar_maiusculas_minusculas",
+        "name": "case_insensitive",
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "case_insensitive"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "multilinha",
+        "name": "multiline",
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "multiline"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "dotall",
+        "name": "dotall",
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "dotall"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "correspondencias",
+        "name": "matches",
+        "type": "BOOLEAN",
+        "links": [
+         37
+        ]
+       }
+      ],
+      "title": "Match Text - Legs answer starts with yes",
+      "properties": {
+       "Node name for S&R": "RegexMatch",
+       "cnr_id": "comfy-core",
+       "ver": "0.38.0"
+      },
+      "widgets_values": [
+       "",
+       "^\\s*yes\\b",
+       true,
+       false,
+       false
+      ],
+      "widgets_values_named": {
+       "string": "",
+       "regex_pattern": "^\\s*yes\\b",
+       "case_insensitive": true,
+       "multiline": false,
+       "dotall": false
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 43,
+      "type": "MarkdownNote",
+      "pos": [
+       1640,
+       80
+      ],
+      "size": [
+       460,
+       88
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note",
+      "properties": {},
+      "widgets_values": [
+       "Two versions of what the describer is told. The second leaves out shoes and is used when your picture does not show the feet."
+      ],
+      "widgets_values_named": {
+       "text": "Two versions of what the describer is told. The second leaves out shoes and is used when your picture does not show the feet."
+      },
+      "color": "#1f2c38",
+      "bgcolor": "#2a3b4a"
+     },
+     {
+      "id": 21,
+      "type": "AUSBOSS_NODES_Text",
+      "pos": [
+       1640,
+       238
+      ],
+      "size": [
+       460,
+       340
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "text",
+        "name": "text",
+        "type": "STRING",
+        "widget": {
+         "name": "text"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "text",
+        "name": "text",
+        "type": "STRING",
+        "links": [
+         32
+        ]
+       }
+      ],
+      "title": "Text - Instructions when the feet are in the picture",
+      "properties": {
+       "Node name for S&R": "AUSBOSS_NODES_Text",
+       "cnr_id": "ausboss-nodes",
+       "ver": "2.5.1"
+      },
+      "widgets_values": [
+       "You write short image-edit descriptions. Reply with one phrase only, no preamble, no quotes.\n\nLook at the clothing in this picture. Describe the outfit in one short phrase for an image editor: name every garment, the top, the bottom (skirt, shorts, trousers, dress) and any shoes or accessories, each with its color, pattern and the details that identify it (collar, straps, sleeves, trim, buttons, belt, chain). Start with 'the' and end with 'shown in image 2'. Do not describe the background or any person."
+      ],
+      "widgets_values_named": {
+       "text": "You write short image-edit descriptions. Reply with one phrase only, no preamble, no quotes.\n\nLook at the clothing in this picture. Describe the outfit in one short phrase for an image editor: name every garment, the top, the bottom (skirt, shorts, trousers, dress) and any shoes or accessories, each with its color, pattern and the details that identify it (collar, straps, sleeves, trim, buttons, belt, chain). Start with 'the' and end with 'shown in image 2'. Do not describe the background or any person."
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 63,
+      "type": "AUSBOSS_NODES_Text",
+      "pos": [
+       1640,
+       648
+      ],
+      "size": [
+       460,
+       360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "text",
+        "name": "text",
+        "type": "STRING",
+        "widget": {
+         "name": "text"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "text",
+        "name": "text",
+        "type": "STRING",
+        "links": [
+         33
+        ]
+       }
+      ],
+      "title": "Text - Instructions when the feet are not in the picture",
+      "properties": {
+       "Node name for S&R": "AUSBOSS_NODES_Text",
+       "cnr_id": "ausboss-nodes",
+       "ver": "2.5.1"
+      },
+      "widgets_values": [
+       "You write short image-edit descriptions. Reply with one phrase only, no preamble, no quotes.\n\nLook at the clothing in this picture. Describe the outfit in one short phrase for an image editor: name every garment, the top, the bottom (skirt, shorts, trousers, dress) and any accessories, each with its color, pattern and the details that identify it (collar, straps, sleeves, trim, buttons, belt, chain). Leave out shoes, boots and socks: the picture the outfit goes on does not show the feet. Start with 'the' and end with 'shown in image 2, without the shoes'. Do not describe the background or any person."
+      ],
+      "widgets_values_named": {
+       "text": "You write short image-edit descriptions. Reply with one phrase only, no preamble, no quotes.\n\nLook at the clothing in this picture. Describe the outfit in one short phrase for an image editor: name every garment, the top, the bottom (skirt, shorts, trousers, dress) and any accessories, each with its color, pattern and the details that identify it (collar, straps, sleeves, trim, buttons, belt, chain). Leave out shoes, boots and socks: the picture the outfit goes on does not show the feet. Start with 'the' and end with 'shown in image 2, without the shoes'. Do not describe the background or any person."
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 64,
+      "type": "ComfySwitchNode",
+      "pos": [
+       1640,
+       1078
+      ],
+      "size": [
+       460,
+       78
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "falso",
+        "name": "on_false",
+        "shape": 7,
+        "type": "STRING",
+        "link": 33
+       },
+       {
+        "localized_name": "verdadeiro",
+        "name": "on_true",
+        "shape": 7,
+        "type": "STRING",
+        "link": 32
+       },
+       {
+        "localized_name": "alternar",
+        "name": "switch",
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "switch"
+        },
+        "link": 31
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "saída",
+        "name": "output",
+        "type": "STRING",
+        "links": [
+         38
+        ]
+       }
+      ],
+      "title": "With or without shoes",
+      "properties": {
+       "Node name for S&R": "ComfySwitchNode",
+       "cnr_id": "comfy-core",
+       "ver": "0.38.0"
+      },
+      "widgets_values": [
+       false
+      ],
+      "widgets_values_named": {
+       "switch": false
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 44,
+      "type": "MarkdownNote",
+      "pos": [
+       2180,
+       80
+      ],
+      "size": [
+       460,
+       88
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note",
+      "properties": {},
+      "widgets_values": [
+       "What the describer is told when your picture shows no legs: only the clothes worn on the upper body. The last switch picks it."
+      ],
+      "widgets_values_named": {
+       "text": "What the describer is told when your picture shows no legs: only the clothes worn on the upper body. The last switch picks it."
+      },
+      "color": "#1f2c38",
+      "bgcolor": "#2a3b4a"
+     },
+     {
+      "id": 67,
+      "type": "AUSBOSS_NODES_Text",
+      "pos": [
+       2180,
+       238
+      ],
+      "size": [
+       460,
+       420
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "text",
+        "name": "text",
+        "type": "STRING",
+        "widget": {
+         "name": "text"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "text",
+        "name": "text",
+        "type": "STRING",
+        "links": [
+         39
+        ]
+       }
+      ],
+      "title": "Text - Instructions when the legs are not in the picture",
+      "properties": {
+       "Node name for S&R": "AUSBOSS_NODES_Text",
+       "cnr_id": "ausboss-nodes",
+       "ver": "2.5.1"
+      },
+      "widgets_values": [
+       "You write short image-edit descriptions. Reply with one phrase only, no preamble, no quotes.\n\nLook at the clothing in this picture. The picture it goes on shows the person only from the chest or waist up, so describe only what is worn on the upper body, in one short phrase for an image editor: the outer layer (jacket, coat, cardigan, shirt, sweater, or the top of a dress or overalls) and what shows under it, each with its color, pattern and the details that identify it (collar, sleeves, buttons, trim, straps). Leave out trousers, skirts, shorts, the lower part of a dress, shoes and socks. Start with 'the' and end with 'shown in image 2'. Do not describe the background or any person."
+      ],
+      "widgets_values_named": {
+       "text": "You write short image-edit descriptions. Reply with one phrase only, no preamble, no quotes.\n\nLook at the clothing in this picture. The picture it goes on shows the person only from the chest or waist up, so describe only what is worn on the upper body, in one short phrase for an image editor: the outer layer (jacket, coat, cardigan, shirt, sweater, or the top of a dress or overalls) and what shows under it, each with its color, pattern and the details that identify it (collar, sleeves, buttons, trim, straps). Leave out trousers, skirts, shorts, the lower part of a dress, shoes and socks. Start with 'the' and end with 'shown in image 2'. Do not describe the background or any person."
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 68,
+      "type": "ComfySwitchNode",
+      "pos": [
+       2180,
+       728
+      ],
+      "size": [
+       460,
+       78
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "falso",
+        "name": "on_false",
+        "shape": 7,
+        "type": "STRING",
+        "link": 39
+       },
+       {
+        "localized_name": "verdadeiro",
+        "name": "on_true",
+        "shape": 7,
+        "type": "STRING",
+        "link": 38
+       },
+       {
+        "localized_name": "alternar",
+        "name": "switch",
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "switch"
+        },
+        "link": 37
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "saída",
+        "name": "output",
+        "type": "STRING",
+        "links": [
+         40
+        ]
+       }
+      ],
+      "title": "Whole outfit or top half",
+      "properties": {
+       "Node name for S&R": "ComfySwitchNode",
+       "cnr_id": "comfy-core",
+       "ver": "0.38.0"
+      },
+      "widgets_values": [
+       false
+      ],
+      "widgets_values_named": {
+       "switch": false
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 45,
+      "type": "MarkdownNote",
+      "pos": [
+       2720,
+       80
+      ],
+      "size": [
+       460,
+       88
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note",
+      "properties": {},
+      "widgets_values": [
+       "The text encoder looks at the outfit picture and writes one phrase. Keep thinking on, or it can return nothing."
+      ],
+      "widgets_values_named": {
+       "text": "The text encoder looks at the outfit picture and writes one phrase. Keep thinking on, or it can return nothing."
+      },
+      "color": "#1f2c38",
+      "bgcolor": "#2a3b4a"
+     },
+     {
+      "id": 22,
+      "type": "TextGenerate",
+      "pos": [
+       2720,
+       238
+      ],
+      "size": [
+       460,
+       288
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "clip",
+        "name": "clip",
+        "type": "CLIP",
+        "link": 24
+       },
+       {
+        "localized_name": "imagem",
+        "name": "image",
+        "shape": 7,
+        "type": "IMAGE",
+        "link": 28
+       },
+       {
+        "localized_name": "vídeo",
+        "name": "video",
+        "shape": 7,
+        "type": "IMAGE",
+        "link": null
+       },
+       {
+        "localized_name": "áudio",
+        "name": "audio",
+        "shape": 7,
+        "type": "AUDIO",
+        "link": null
+       },
+       {
+        "localized_name": "system_prompt",
+        "name": "system_prompt",
+        "shape": 7,
+        "type": "STRING",
+        "link": null
+       },
+       {
+        "localized_name": "prompt",
+        "name": "prompt",
+        "type": "STRING",
+        "widget": {
+         "name": "prompt"
+        },
+        "link": 40
+       },
+       {
+        "localized_name": "comprimento_máximo",
+        "name": "max_length",
+        "type": "INT",
+        "widget": {
+         "name": "max_length"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "modo_de_amostragem",
+        "name": "sampling_mode",
+        "type": "COMFY_DYNAMICCOMBO_V3",
+        "widget": {
+         "name": "sampling_mode"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "pensando",
+        "name": "thinking",
+        "shape": 7,
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "thinking"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "use_default_template",
+        "name": "use_default_template",
+        "shape": 7,
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "use_default_template"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "mtp",
+        "name": "mtp",
+        "shape": 7,
+        "type": "COMBO",
+        "widget": {
+         "name": "mtp"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "texto_gerado",
+        "name": "generated_text",
+        "type": "STRING",
+        "links": [
+         41
+        ]
+       },
+       {
+        "localized_name": "raciocínio",
+        "name": "thinking",
+        "type": "STRING",
+        "links": null
+       }
+      ],
+      "title": "Describe the outfit",
+      "properties": {
+       "Node name for S&R": "TextGenerate",
+       "cnr_id": "comfy-core",
+       "ver": "0.38.0"
+      },
+      "widgets_values": [
+       "",
+       200,
+       "off",
+       true,
+       true,
+       "auto"
+      ],
+      "widgets_values_named": {
+       "prompt": "",
+       "max_length": 200,
+       "sampling_mode": "off",
+       "thinking": true,
+       "use_default_template": true,
+       "mtp": "auto"
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 23,
+      "type": "RegexReplace",
+      "pos": [
+       2720,
+       654
+      ],
+      "size": [
+       460,
+       292
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "string",
+        "name": "string",
+        "type": "STRING",
+        "widget": {
+         "name": "string"
+        },
+        "link": 41
+       },
+       {
+        "localized_name": "regex_pattern",
+        "name": "regex_pattern",
+        "type": "STRING",
+        "widget": {
+         "name": "regex_pattern"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "substituir",
+        "name": "replace",
+        "type": "STRING",
+        "widget": {
+         "name": "replace"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "ignorar_maiusculas_minusculas",
+        "name": "case_insensitive",
+        "shape": 7,
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "case_insensitive"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "multilinha",
+        "name": "multiline",
+        "shape": 7,
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "multiline"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "dotall",
+        "name": "dotall",
+        "shape": 7,
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "dotall"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "quantidade",
+        "name": "count",
+        "shape": 7,
+        "type": "INT",
+        "widget": {
+         "name": "count"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "TEXTO",
+        "name": "STRING",
+        "type": "STRING",
+        "links": [
+         42
+        ]
+       }
+      ],
+      "title": "Trim stray quotes and spaces",
+      "properties": {
+       "Node name for S&R": "RegexReplace",
+       "cnr_id": "comfy-core",
+       "ver": "0.38.0"
+      },
+      "widgets_values": [
+       "",
+       "^[\\s\"']+|[\\s\"'.]+$",
+       "",
+       false,
+       false,
+       false,
+       0
+      ],
+      "widgets_values_named": {
+       "string": "",
+       "regex_pattern": "^[\\s\"']+|[\\s\"'.]+$",
+       "replace": "",
+       "case_insensitive": false,
+       "multiline": false,
+       "dotall": false,
+       "count": 0
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 46,
+      "type": "MarkdownNote",
+      "pos": [
+       3260,
+       80
+      ],
+      "size": [
+       460,
+       88
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note",
+      "properties": {},
+      "widgets_values": [
+       "Switch on: the described phrase. Switch off: your typed words, and the describer does not run. Format Text puts either into the sentence Qwen gets."
+      ],
+      "widgets_values_named": {
+       "text": "Switch on: the described phrase. Switch off: your typed words, and the describer does not run. Format Text puts either into the sentence Qwen gets."
+      },
+      "color": "#1f2c38",
+      "bgcolor": "#2a3b4a"
+     },
+     {
+      "id": 24,
+      "type": "Reroute",
+      "pos": [
+       3260,
+       238
+      ],
+      "size": [
+       75,
+       26
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+       {
+        "name": "",
+        "type": "*",
+        "link": 27
+       }
+      ],
+      "outputs": [
+       {
+        "name": "",
+        "type": "BOOLEAN",
+        "links": [
+         43
+        ]
+       }
+      ],
+      "properties": {
+       "showOutputText": false,
+       "horizontal": false
+      }
+     },
+     {
+      "id": 25,
+      "type": "ComfySwitchNode",
+      "pos": [
+       3260,
+       334
+      ],
+      "size": [
+       460,
+       78
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "falso",
+        "name": "on_false",
+        "shape": 7,
+        "type": "STRING",
+        "link": 26
+       },
+       {
+        "localized_name": "verdadeiro",
+        "name": "on_true",
+        "shape": 7,
+        "type": "STRING",
+        "link": 42
+       },
+       {
+        "localized_name": "alternar",
+        "name": "switch",
+        "type": "BOOLEAN",
+        "widget": {
+         "name": "switch"
+        },
+        "link": 43
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "saída",
+        "name": "output",
+        "type": "STRING",
+        "links": [
+         44
+        ]
+       }
+      ],
+      "title": "Described or typed",
+      "properties": {
+       "Node name for S&R": "ComfySwitchNode",
+       "cnr_id": "comfy-core",
+       "ver": "0.38.0"
+      },
+      "widgets_values": [
+       false
+      ],
+      "widgets_values_named": {
+       "switch": false
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 26,
+      "type": "StringFormat",
+      "pos": [
+       3260,
+       490
+      ],
+      "size": [
+       460,
+       200
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "a",
+        "name": "values.a",
+        "shape": 7,
+        "type": "*",
+        "link": 25
+       },
+       {
+        "localized_name": "b",
+        "name": "values.b",
+        "shape": 7,
+        "type": "*",
+        "link": 44
+       },
+       {
+        "localized_name": "c",
+        "name": "values.c",
+        "shape": 7,
+        "type": "*",
+        "link": 45
+       },
+       {
+        "localized_name": "f_string",
+        "name": "f_string",
+        "type": "STRING",
+        "widget": {
+         "name": "f_string"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "d",
+        "name": "values.d",
+        "shape": 7,
+        "type": "*",
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "TEXTO",
+        "name": "STRING",
+        "type": "STRING",
+        "links": [
+         46
+        ]
+       }
+      ],
+      "title": "Format Text - Put the prompt together",
+      "properties": {
+       "Node name for S&R": "StringFormat",
+       "cnr_id": "comfy-core",
+       "ver": "0.38.0"
+      },
+      "widgets_values": [
+       "Dress {a} in image 1 in {b}. Keep their face, hair, hands, pose and the background exactly the same. {c}"
+      ],
+      "widgets_values_named": {
+       "f_string": "Dress {a} in image 1 in {b}. Keep their face, hair, hands, pose and the background exactly the same. {c}"
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     }
+    ],
+    "groups": [
+     {
+      "id": 5,
+      "title": "1 · Smaller pictures",
+      "bounding": [
+       0,
+       0,
+       500,
+       904
+      ],
+      "color": "#1d5560",
+      "flags": {}
+     },
+     {
+      "id": 6,
+      "title": "2 · Feet check",
+      "bounding": [
+       540,
+       0,
+       500,
+       898
+      ],
+      "color": "#1d5560",
+      "flags": {}
+     },
+     {
+      "id": 7,
+      "title": "3 · Legs check",
+      "bounding": [
+       1080,
+       0,
+       500,
+       898
+      ],
+      "color": "#1d5560",
+      "flags": {}
+     },
+     {
+      "id": 8,
+      "title": "4 · Describer instructions",
+      "bounding": [
+       1620,
+       0,
+       500,
+       1184
+      ],
+      "color": "#1d5560",
+      "flags": {}
+     },
+     {
+      "id": 9,
+      "title": "5 · Top half instructions",
+      "bounding": [
+       2160,
+       0,
+       500,
+       834
+      ],
+      "color": "#1d5560",
+      "flags": {}
+     },
+     {
+      "id": 10,
+      "title": "6 · Description",
+      "bounding": [
+       2700,
+       0,
+       500,
+       976
+      ],
+      "color": "#1d5560",
+      "flags": {}
+     },
+     {
+      "id": 11,
+      "title": "7 · Prompt",
+      "bounding": [
+       3240,
+       0,
+       500,
+       716
+      ],
+      "color": "#1d5560",
+      "flags": {}
+     }
+    ],
+    "links": [
+     {
+      "id": 21,
+      "origin_id": -10,
+      "origin_slot": 0,
+      "target_id": 60,
+      "target_slot": 0,
+      "type": "IMAGE"
+     },
+     {
+      "id": 22,
+      "origin_id": -10,
+      "origin_slot": 5,
+      "target_id": 20,
+      "target_slot": 0,
+      "type": "IMAGE"
+     },
+     {
+      "id": 26,
+      "origin_id": -10,
+      "origin_slot": 2,
+      "target_id": 25,
+      "target_slot": 0,
+      "type": "STRING"
+     },
+     {
+      "id": 27,
+      "origin_id": -10,
+      "origin_slot": 4,
+      "target_id": 24,
+      "target_slot": 0,
+      "type": "BOOLEAN"
+     },
+     {
+      "id": 30,
+      "origin_id": 61,
+      "origin_slot": 0,
+      "target_id": 62,
+      "target_slot": 0,
+      "type": "STRING"
+     },
+     {
+      "id": 31,
+      "origin_id": 62,
+      "origin_slot": 0,
+      "target_id": 64,
+      "target_slot": 2,
+      "type": "BOOLEAN"
+     },
+     {
+      "id": 32,
+      "origin_id": 21,
+      "origin_slot": 0,
+      "target_id": 64,
+      "target_slot": 1,
+      "type": "STRING"
+     },
+     {
+      "id": 33,
+      "origin_id": 63,
+      "origin_slot": 0,
+      "target_id": 64,
+      "target_slot": 0,
+      "type": "STRING"
+     },
+     {
+      "id": 36,
+      "origin_id": 65,
+      "origin_slot": 0,
+      "target_id": 66,
+      "target_slot": 0,
+      "type": "STRING"
+     },
+     {
+      "id": 37,
+      "origin_id": 66,
+      "origin_slot": 0,
+      "target_id": 68,
+      "target_slot": 2,
+      "type": "BOOLEAN"
+     },
+     {
+      "id": 38,
+      "origin_id": 64,
+      "origin_slot": 0,
+      "target_id": 68,
+      "target_slot": 1,
+      "type": "STRING"
+     },
+     {
+      "id": 39,
+      "origin_id": 67,
+      "origin_slot": 0,
+      "target_id": 68,
+      "target_slot": 0,
+      "type": "STRING"
+     },
+     {
+      "id": 41,
+      "origin_id": 22,
+      "origin_slot": 0,
+      "target_id": 23,
+      "target_slot": 0,
+      "type": "STRING"
+     },
+     {
+      "id": 42,
+      "origin_id": 23,
+      "origin_slot": 0,
+      "target_id": 25,
+      "target_slot": 1,
+      "type": "STRING"
+     },
+     {
+      "id": 43,
+      "origin_id": 24,
+      "origin_slot": 0,
+      "target_id": 25,
+      "target_slot": 2,
+      "type": "BOOLEAN"
+     },
+     {
+      "id": 46,
+      "origin_id": 26,
+      "origin_slot": 0,
+      "target_id": -20,
+      "target_slot": 0,
+      "type": "STRING"
+     },
+     {
+      "id": 23,
+      "origin_id": -10,
+      "origin_slot": 3,
+      "target_id": 61,
+      "target_slot": 0,
+      "type": "CLIP"
+     },
+     {
+      "id": 29,
+      "origin_id": 60,
+      "origin_slot": 0,
+      "target_id": 61,
+      "target_slot": 1,
+      "type": "IMAGE"
+     },
+     {
+      "id": 35,
+      "origin_id": -10,
+      "origin_slot": 3,
+      "target_id": 65,
+      "target_slot": 0,
+      "type": "CLIP"
+     },
+     {
+      "id": 34,
+      "origin_id": 60,
+      "origin_slot": 0,
+      "target_id": 65,
+      "target_slot": 1,
+      "type": "IMAGE"
+     },
+     {
+      "id": 24,
+      "origin_id": -10,
+      "origin_slot": 3,
+      "target_id": 22,
+      "target_slot": 0,
+      "type": "CLIP"
+     },
+     {
+      "id": 28,
+      "origin_id": 20,
+      "origin_slot": 0,
+      "target_id": 22,
+      "target_slot": 1,
+      "type": "IMAGE"
+     },
+     {
+      "id": 40,
+      "origin_id": 68,
+      "origin_slot": 0,
+      "target_id": 22,
+      "target_slot": 5,
+      "type": "STRING"
+     },
+     {
+      "id": 25,
+      "origin_id": -10,
+      "origin_slot": 1,
+      "target_id": 26,
+      "target_slot": 0,
+      "type": "STRING"
+     },
+     {
+      "id": 44,
+      "origin_id": 25,
+      "origin_slot": 0,
+      "target_id": 26,
+      "target_slot": 1,
+      "type": "STRING"
+     },
+     {
+      "id": 45,
+      "origin_id": -10,
+      "origin_slot": 6,
+      "target_id": 26,
+      "target_slot": 2,
+      "type": "STRING"
+     }
+    ],
+    "extra": {}
+   },
+   {
+    "id": "77fd31a8-05b8-474a-8177-c12c87cb1f40",
+    "version": 1,
+    "state": {
+     "lastGroupId": 15,
+     "lastNodeId": 77,
+     "lastLinkId": 68,
+     "lastRerouteId": 0
+    },
+    "revision": 0,
+    "config": {},
+    "name": "Swap with Qwen 2.1",
+    "inputNode": {
+     "id": -10,
+     "bounding": [
+      -260,
+      120,
+      150,
+      200
+     ]
+    },
+    "outputNode": {
+     "id": -20,
+     "bounding": [
+      2230,
+      120,
+      150,
+      80
+     ]
+    },
+    "inputs": [
+     {
+      "id": "70e04c45-756b-5d72-9d61-a22ee8b2e09a",
+      "name": "your picture",
+      "type": "IMAGE",
+      "linkIds": [
+       47
+      ],
+      "localized_name": "your picture",
+      "pos": [
+       0,
+       0
+      ]
+     },
+     {
+      "id": "4c1ef7b9-dccd-5834-a3df-3e4bc7275ec0",
+      "name": "prompt",
+      "type": "STRING",
+      "linkIds": [
+       49
+      ],
+      "localized_name": "prompt",
+      "pos": [
+       0,
+       0
+      ]
+     },
+     {
+      "id": "d2fd2a77-f778-5538-83e3-b6b523aaa0f7",
+      "name": "text encoder",
+      "type": "CLIP",
+      "linkIds": [
+       52
+      ],
+      "localized_name": "text encoder",
+      "pos": [
+       0,
+       0
+      ]
+     },
+     {
+      "id": "4c7672d8-7fbe-5846-9568-cc225ca72af8",
+      "name": "vae",
+      "type": "VAE",
+      "linkIds": [
+       53,
+       54
+      ],
+      "localized_name": "vae",
+      "pos": [
+       0,
+       0
+      ]
+     },
+     {
+      "id": "fb4bf1b9-7876-590e-89d4-bf0a27153501",
+      "name": "outfit picture",
+      "type": "IMAGE",
+      "linkIds": [
+       48
+      ],
+      "localized_name": "outfit picture",
+      "pos": [
+       0,
+       0
+      ]
+     },
+     {
+      "id": "71b06084-ca97-5536-a8fd-e798c403c7c5",
+      "name": "seed",
+      "type": "INT",
+      "linkIds": [
+       50
+      ],
+      "localized_name": "seed",
+      "pos": [
+       0,
+       0
+      ]
+     },
+     {
+      "id": "2ea6cdb9-1a18-55d2-9c29-58a2e3213033",
+      "name": "model",
+      "type": "MODEL",
+      "linkIds": [
+       55
+      ],
+      "localized_name": "model",
+      "pos": [
+       0,
+       0
+      ]
+     },
+     {
+      "id": "f4f11f39-4198-5909-9527-1abe931b6579",
+      "name": "steps",
+      "type": "INT",
+      "linkIds": [
+       51
+      ],
+      "localized_name": "steps",
+      "pos": [
+       0,
+       0
+      ]
+     }
+    ],
+    "outputs": [
+     {
+      "id": "fb9d63dd-9df5-5267-a335-662cacbabe7a",
+      "name": "result",
+      "type": "IMAGE",
+      "linkIds": [
+       67
+      ],
+      "localized_name": "result",
+      "pos": [
+       0,
+       0
+      ]
+     },
+     {
+      "id": "5acbe8e2-9ba3-5aab-8437-eca70d245623",
+      "name": "your picture sized",
+      "type": "IMAGE",
+      "linkIds": [
+       68
+      ],
+      "localized_name": "your picture sized",
+      "pos": [
+       0,
+       0
+      ]
+     }
+    ],
+    "widgets": [],
+    "nodes": [
+     {
+      "id": 47,
+      "type": "MarkdownNote",
+      "pos": [
+       20,
+       80
+      ],
+      "size": [
+       460,
+       88
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note",
+      "properties": {},
+      "widgets_values": [
+       "Your picture goes to about 2 megapixels and the outfit picture to about 1, each rounded to a multiple of 32."
+      ],
+      "widgets_values_named": {
+       "text": "Your picture goes to about 2 megapixels and the outfit picture to about 1, each rounded to a multiple of 32."
+      },
+      "color": "#1f2c38",
+      "bgcolor": "#2a3b4a"
+     },
+     {
+      "id": 30,
+      "type": "AUSBOSS_NODES_ImageResize",
+      "pos": [
+       20,
+       238
+      ],
+      "size": [
+       460,
+       278
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "image",
+        "name": "image",
+        "type": "IMAGE",
+        "link": 47
+       },
+       {
+        "localized_name": "mask",
+        "name": "mask",
+        "shape": 7,
+        "type": "MASK",
+        "link": null
+       },
+       {
+        "localized_name": "target_mode",
+        "name": "target_mode",
+        "type": "COMBO",
+        "widget": {
+         "name": "target_mode"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "width",
+        "name": "width",
+        "type": "INT",
+        "link": null
+       },
+       {
+        "localized_name": "height",
+        "name": "height",
+        "type": "INT",
+        "link": null
+       },
+       {
+        "localized_name": "edge_length",
+        "name": "edge_length",
+        "type": "INT",
+        "widget": {
+         "name": "edge_length"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "megapixels",
+        "name": "megapixels",
+        "type": "FLOAT",
+        "widget": {
+         "name": "megapixels"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "scale_factor",
+        "name": "scale_factor",
+        "type": "FLOAT",
+        "widget": {
+         "name": "scale_factor"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "keep_proportion",
+        "name": "keep_proportion",
+        "type": "COMBO",
+        "widget": {
+         "name": "keep_proportion"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "fill_color",
+        "name": "fill_color",
+        "type": "STRING",
+        "widget": {
+         "name": "fill_color"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "divisible_by",
+        "name": "divisible_by",
+        "type": "INT",
+        "widget": {
+         "name": "divisible_by"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "interpolation",
+        "name": "interpolation",
+        "type": "COMBO",
+        "widget": {
+         "name": "interpolation"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "image",
+        "name": "image",
+        "type": "IMAGE",
+        "links": [
+         56,
+         68
+        ]
+       },
+       {
+        "localized_name": "mask",
+        "name": "mask",
+        "type": "MASK",
+        "links": []
+       },
+       {
+        "localized_name": "width",
+        "name": "width",
+        "type": "INT",
+        "links": []
+       },
+       {
+        "localized_name": "height",
+        "name": "height",
+        "type": "INT",
+        "links": []
+       }
+      ],
+      "title": "Image Resize - Your picture to 2 MP",
+      "properties": {
+       "Node name for S&R": "AUSBOSS_NODES_ImageResize",
+       "cnr_id": "ausboss-nodes",
+       "ver": "2.5.1"
+      },
+      "widgets_values": [
+       "megapixels",
+       0,
+       0,
+       1024,
+       2,
+       0.5,
+       "fit",
+       "#000000",
+       32,
+       "lanczos"
+      ],
+      "widgets_values_named": {
+       "target_mode": "megapixels",
+       "width": 0,
+       "height": 0,
+       "edge_length": 1024,
+       "megapixels": 2,
+       "scale_factor": 0.5,
+       "keep_proportion": "fit",
+       "fill_color": "#000000",
+       "divisible_by": 32,
+       "interpolation": "lanczos"
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 31,
+      "type": "AUSBOSS_NODES_ImageResize",
+      "pos": [
+       20,
+       596
+      ],
+      "size": [
+       460,
+       278
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "image",
+        "name": "image",
+        "type": "IMAGE",
+        "link": 48
+       },
+       {
+        "localized_name": "mask",
+        "name": "mask",
+        "shape": 7,
+        "type": "MASK",
+        "link": null
+       },
+       {
+        "localized_name": "target_mode",
+        "name": "target_mode",
+        "type": "COMBO",
+        "widget": {
+         "name": "target_mode"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "width",
+        "name": "width",
+        "type": "INT",
+        "link": null
+       },
+       {
+        "localized_name": "height",
+        "name": "height",
+        "type": "INT",
+        "link": null
+       },
+       {
+        "localized_name": "edge_length",
+        "name": "edge_length",
+        "type": "INT",
+        "widget": {
+         "name": "edge_length"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "megapixels",
+        "name": "megapixels",
+        "type": "FLOAT",
+        "widget": {
+         "name": "megapixels"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "scale_factor",
+        "name": "scale_factor",
+        "type": "FLOAT",
+        "widget": {
+         "name": "scale_factor"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "keep_proportion",
+        "name": "keep_proportion",
+        "type": "COMBO",
+        "widget": {
+         "name": "keep_proportion"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "fill_color",
+        "name": "fill_color",
+        "type": "STRING",
+        "widget": {
+         "name": "fill_color"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "divisible_by",
+        "name": "divisible_by",
+        "type": "INT",
+        "widget": {
+         "name": "divisible_by"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "interpolation",
+        "name": "interpolation",
+        "type": "COMBO",
+        "widget": {
+         "name": "interpolation"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "image",
+        "name": "image",
+        "type": "IMAGE",
+        "links": [
+         57
+        ]
+       },
+       {
+        "localized_name": "mask",
+        "name": "mask",
+        "type": "MASK",
+        "links": []
+       },
+       {
+        "localized_name": "width",
+        "name": "width",
+        "type": "INT",
+        "links": []
+       },
+       {
+        "localized_name": "height",
+        "name": "height",
+        "type": "INT",
+        "links": []
+       }
+      ],
+      "title": "Image Resize - Outfit picture to 1 MP",
+      "properties": {
+       "Node name for S&R": "AUSBOSS_NODES_ImageResize",
+       "cnr_id": "ausboss-nodes",
+       "ver": "2.5.1"
+      },
+      "widgets_values": [
+       "megapixels",
+       0,
+       0,
+       1024,
+       1,
+       0.5,
+       "fit",
+       "#000000",
+       32,
+       "lanczos"
+      ],
+      "widgets_values_named": {
+       "target_mode": "megapixels",
+       "width": 0,
+       "height": 0,
+       "edge_length": 1024,
+       "megapixels": 1,
+       "scale_factor": 0.5,
+       "keep_proportion": "fit",
+       "fill_color": "#000000",
+       "divisible_by": 32,
+       "interpolation": "lanczos"
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 48,
+      "type": "MarkdownNote",
+      "pos": [
+       560,
+       80
+      ],
+      "size": [
+       460,
+       88
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note",
+      "properties": {},
+      "widgets_values": [
+       "Qwen gets both pictures and the prompt. Image 1 is your picture, image 2 is the outfit. The result is the size of image 1."
+      ],
+      "widgets_values_named": {
+       "text": "Qwen gets both pictures and the prompt. Image 1 is your picture, image 2 is the outfit. The result is the size of image 1."
+      },
+      "color": "#1f2c38",
+      "bgcolor": "#2a3b4a"
+     },
+     {
+      "id": 33,
+      "type": "Reroute",
+      "pos": [
+       560,
+       238
+      ],
+      "size": [
+       75,
+       26
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+       {
+        "name": "",
+        "type": "*",
+        "link": 49
+       }
+      ],
+      "outputs": [
+       {
+        "name": "",
+        "type": "STRING",
+        "links": [
+         58
+        ]
+       }
+      ],
+      "properties": {
+       "showOutputText": false,
+       "horizontal": false
+      }
+     },
+     {
+      "id": 34,
+      "type": "TextEncodeQwenImage21",
+      "pos": [
+       560,
+       334
+      ],
+      "size": [
+       460,
+       286
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "clip",
+        "name": "clip",
+        "type": "CLIP",
+        "link": 52
+       },
+       {
+        "localized_name": "image_1",
+        "name": "images.image_1",
+        "shape": 7,
+        "type": "IMAGE",
+        "link": 56
+       },
+       {
+        "localized_name": "image_2",
+        "name": "images.image_2",
+        "shape": 7,
+        "type": "IMAGE",
+        "link": 57
+       },
+       {
+        "localized_name": "image_3",
+        "name": "images.image_3",
+        "shape": 7,
+        "type": "IMAGE",
+        "link": null
+       },
+       {
+        "localized_name": "image_4",
+        "name": "images.image_4",
+        "shape": 7,
+        "type": "IMAGE",
+        "link": null
+       },
+       {
+        "localized_name": "vae",
+        "name": "vae",
+        "shape": 7,
+        "type": "VAE",
+        "link": 53
+       },
+       {
+        "localized_name": "prompt",
+        "name": "prompt",
+        "type": "STRING",
+        "widget": {
+         "name": "prompt"
+        },
+        "link": 58
+       },
+       {
+        "localized_name": "negative_prompt",
+        "name": "negative_prompt",
+        "type": "STRING",
+        "widget": {
+         "name": "negative_prompt"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "resolution",
+        "name": "resolution",
+        "type": "INT",
+        "widget": {
+         "name": "resolution"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "positive",
+        "name": "positive",
+        "type": "CONDITIONING",
+        "links": [
+         60
+        ]
+       },
+       {
+        "localized_name": "negative",
+        "name": "negative",
+        "type": "CONDITIONING",
+        "links": [
+         61
+        ]
+       },
+       {
+        "localized_name": "latent",
+        "name": "latent",
+        "type": "LATENT",
+        "links": [
+         62
+        ]
+       }
+      ],
+      "title": "Encode both pictures and the prompt",
+      "properties": {
+       "Node name for S&R": "TextEncodeQwenImage21",
+       "cnr_id": "comfy-core",
+       "ver": "0.38.0"
+      },
+      "widgets_values": [
+       "",
+       "",
+       0
+      ],
+      "widgets_values_named": {
+       "prompt": "",
+       "negative_prompt": "",
+       "resolution": 0
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 49,
+      "type": "MarkdownNote",
+      "pos": [
+       1100,
+       80
+      ],
+      "size": [
+       460,
+       88
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note",
+      "properties": {},
+      "widgets_values": [
+       "Steps come from the top level: 25, or 8 with the Speed LoRA. CFG 1, euler and simple. The cache node speeds up every step."
+      ],
+      "widgets_values_named": {
+       "text": "Steps come from the top level: 25, or 8 with the Speed LoRA. CFG 1, euler and simple. The cache node speeds up every step."
+      },
+      "color": "#1f2c38",
+      "bgcolor": "#2a3b4a"
+     },
+     {
+      "id": 32,
+      "type": "QwenImage21Cache",
+      "pos": [
+       1100,
+       238
+      ],
+      "size": [
+       460,
+       82
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "model",
+        "name": "model",
+        "type": "MODEL",
+        "link": 55
+       },
+       {
+        "localized_name": "device",
+        "name": "device",
+        "type": "COMBO",
+        "widget": {
+         "name": "device"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "dtype",
+        "name": "dtype",
+        "type": "COMBO",
+        "widget": {
+         "name": "dtype"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "MODELO",
+        "name": "MODEL",
+        "type": "MODEL",
+        "links": [
+         59
+        ]
+       }
+      ],
+      "title": "Reference cache",
+      "properties": {
+       "Node name for S&R": "QwenImage21Cache",
+       "cnr_id": "comfy-core",
+       "ver": "0.38.0"
+      },
+      "widgets_values": [
+       "auto",
+       "default"
+      ],
+      "widgets_values_named": {
+       "device": "auto",
+       "dtype": "default"
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 35,
+      "type": "Reroute",
+      "pos": [
+       1100,
+       398
+      ],
+      "size": [
+       75,
+       26
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+       {
+        "name": "",
+        "type": "*",
+        "link": 50
+       }
+      ],
+      "outputs": [
+       {
+        "name": "",
+        "type": "INT",
+        "links": [
+         63
+        ]
+       }
+      ],
+      "properties": {
+       "showOutputText": false,
+       "horizontal": false
+      }
+     },
+     {
+      "id": 39,
+      "type": "Reroute",
+      "pos": [
+       1100,
+       494
+      ],
+      "size": [
+       75,
+       26
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+       {
+        "name": "",
+        "type": "*",
+        "link": 51
+       }
+      ],
+      "outputs": [
+       {
+        "name": "",
+        "type": "INT",
+        "links": [
+         64
+        ]
+       }
+      ],
+      "properties": {
+       "showOutputText": false,
+       "horizontal": false
+      }
+     },
+     {
+      "id": 36,
+      "type": "KSampler",
+      "pos": [
+       1100,
+       590
+      ],
+      "size": [
+       460,
+       262
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "modelo",
+        "name": "model",
+        "type": "MODEL",
+        "link": 59
+       },
+       {
+        "localized_name": "positivo",
+        "name": "positive",
+        "type": "CONDITIONING",
+        "link": 60
+       },
+       {
+        "localized_name": "negativo",
+        "name": "negative",
+        "type": "CONDITIONING",
+        "link": 61
+       },
+       {
+        "localized_name": "imagem_latente",
+        "name": "latent_image",
+        "type": "LATENT",
+        "link": 62
+       },
+       {
+        "localized_name": "semente",
+        "name": "seed",
+        "type": "INT",
+        "widget": {
+         "name": "seed"
+        },
+        "link": 63
+       },
+       {
+        "localized_name": "passos",
+        "name": "steps",
+        "type": "INT",
+        "widget": {
+         "name": "steps"
+        },
+        "link": 64
+       },
+       {
+        "localized_name": "cfg",
+        "name": "cfg",
+        "type": "FLOAT",
+        "widget": {
+         "name": "cfg"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "nome_do_sampler",
+        "name": "sampler_name",
+        "type": "COMBO",
+        "widget": {
+         "name": "sampler_name"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "agendador",
+        "name": "scheduler",
+        "type": "COMBO",
+        "widget": {
+         "name": "scheduler"
+        },
+        "link": null
+       },
+       {
+        "localized_name": "denoise",
+        "name": "denoise",
+        "type": "FLOAT",
+        "widget": {
+         "name": "denoise"
+        },
+        "link": null
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "LATENT",
+        "name": "LATENT",
+        "type": "LATENT",
+        "links": [
+         65
+        ]
+       }
+      ],
+      "title": "Sampler",
+      "properties": {
+       "Node name for S&R": "KSampler",
+       "cnr_id": "comfy-core",
+       "ver": "0.38.0"
+      },
+      "widgets_values": [
+       20261001,
+       "fixed",
+       25,
+       1,
+       "euler",
+       "simple",
+       1
+      ],
+      "widgets_values_named": {
+       "seed": 20261001,
+       "control_after_generate": "fixed",
+       "steps": 25,
+       "cfg": 1,
+       "sampler_name": "euler",
+       "scheduler": "simple",
+       "denoise": 1
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 50,
+      "type": "MarkdownNote",
+      "pos": [
+       1640,
+       80
+      ],
+      "size": [
+       460,
+       88
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note",
+      "properties": {},
+      "widgets_values": [
+       "The decoded picture has four channels. Split Image with Alpha drops the fourth, so it saves as a normal picture."
+      ],
+      "widgets_values_named": {
+       "text": "The decoded picture has four channels. Split Image with Alpha drops the fourth, so it saves as a normal picture."
+      },
+      "color": "#1f2c38",
+      "bgcolor": "#2a3b4a"
+     },
+     {
+      "id": 37,
+      "type": "VAEDecode",
+      "pos": [
+       1640,
+       238
+      ],
+      "size": [
+       460,
+       46
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "amostras",
+        "name": "samples",
+        "type": "LATENT",
+        "link": 65
+       },
+       {
+        "localized_name": "vae",
+        "name": "vae",
+        "type": "VAE",
+        "link": 54
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "IMAGEM",
+        "name": "IMAGE",
+        "type": "IMAGE",
+        "links": [
+         66
+        ]
+       }
+      ],
+      "title": "Decode",
+      "properties": {
+       "Node name for S&R": "VAEDecode",
+       "cnr_id": "comfy-core",
+       "ver": "0.38.0"
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     },
+     {
+      "id": 38,
+      "type": "SplitImageWithAlpha",
+      "pos": [
+       1640,
+       362
+      ],
+      "size": [
+       460,
+       46
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+       {
+        "localized_name": "imagem",
+        "name": "image",
+        "type": "IMAGE",
+        "link": 66
+       }
+      ],
+      "outputs": [
+       {
+        "localized_name": "IMAGEM",
+        "name": "IMAGE",
+        "type": "IMAGE",
+        "links": [
+         67
+        ]
+       },
+       {
+        "localized_name": "MÁSCARA",
+        "name": "MASK",
+        "type": "MASK",
+        "links": []
+       }
+      ],
+      "title": "Drop the alpha channel",
+      "properties": {
+       "Node name for S&R": "SplitImageWithAlpha",
+       "cnr_id": "comfy-core",
+       "ver": "0.38.0"
+      },
+      "color": "#14424d",
+      "bgcolor": "#161f21"
+     }
+    ],
+    "groups": [
+     {
+      "id": 12,
+      "title": "1 · Picture sizes",
+      "bounding": [
+       0,
+       0,
+       500,
+       904
+      ],
+      "color": "#1d5560",
+      "flags": {}
+     },
+     {
+      "id": 13,
+      "title": "2 · Pictures and prompt",
+      "bounding": [
+       540,
+       0,
+       500,
+       652
+      ],
+      "color": "#1d5560",
+      "flags": {}
+     },
+     {
+      "id": 14,
+      "title": "3 · Sampler",
+      "bounding": [
+       1080,
+       0,
+       500,
+       872
+      ],
+      "color": "#1d5560",
+      "flags": {}
+     },
+     {
+      "id": 15,
+      "title": "4 · Finished picture",
+      "bounding": [
+       1620,
+       0,
+       500,
+       436
+      ],
+      "color": "#1d5560",
+      "flags": {}
+     }
+    ],
+    "links": [
+     {
+      "id": 47,
+      "origin_id": -10,
+      "origin_slot": 0,
+      "target_id": 30,
+      "target_slot": 0,
+      "type": "IMAGE"
+     },
+     {
+      "id": 48,
+      "origin_id": -10,
+      "origin_slot": 4,
+      "target_id": 31,
+      "target_slot": 0,
+      "type": "IMAGE"
+     },
+     {
+      "id": 49,
+      "origin_id": -10,
+      "origin_slot": 1,
+      "target_id": 33,
+      "target_slot": 0,
+      "type": "STRING"
+     },
+     {
+      "id": 50,
+      "origin_id": -10,
+      "origin_slot": 5,
+      "target_id": 35,
+      "target_slot": 0,
+      "type": "INT"
+     },
+     {
+      "id": 51,
+      "origin_id": -10,
+      "origin_slot": 7,
+      "target_id": 39,
+      "target_slot": 0,
+      "type": "INT"
+     },
+     {
+      "id": 54,
+      "origin_id": -10,
+      "origin_slot": 3,
+      "target_id": 37,
+      "target_slot": 1,
+      "type": "VAE"
+     },
+     {
+      "id": 55,
+      "origin_id": -10,
+      "origin_slot": 6,
+      "target_id": 32,
+      "target_slot": 0,
+      "type": "MODEL"
+     },
+     {
+      "id": 59,
+      "origin_id": 32,
+      "origin_slot": 0,
+      "target_id": 36,
+      "target_slot": 0,
+      "type": "MODEL"
+     },
+     {
+      "id": 60,
+      "origin_id": 34,
+      "origin_slot": 0,
+      "target_id": 36,
+      "target_slot": 1,
+      "type": "CONDITIONING"
+     },
+     {
+      "id": 61,
+      "origin_id": 34,
+      "origin_slot": 1,
+      "target_id": 36,
+      "target_slot": 2,
+      "type": "CONDITIONING"
+     },
+     {
+      "id": 62,
+      "origin_id": 34,
+      "origin_slot": 2,
+      "target_id": 36,
+      "target_slot": 3,
+      "type": "LATENT"
+     },
+     {
+      "id": 63,
+      "origin_id": 35,
+      "origin_slot": 0,
+      "target_id": 36,
+      "target_slot": 4,
+      "type": "INT"
+     },
+     {
+      "id": 64,
+      "origin_id": 39,
+      "origin_slot": 0,
+      "target_id": 36,
+      "target_slot": 5,
+      "type": "INT"
+     },
+     {
+      "id": 65,
+      "origin_id": 36,
+      "origin_slot": 0,
+      "target_id": 37,
+      "target_slot": 0,
+      "type": "LATENT"
+     },
+     {
+      "id": 66,
+      "origin_id": 37,
+      "origin_slot": 0,
+      "target_id": 38,
+      "target_slot": 0,
+      "type": "IMAGE"
+     },
+     {
+      "id": 67,
+      "origin_id": 38,
+      "origin_slot": 0,
+      "target_id": -20,
+      "target_slot": 0,
+      "type": "IMAGE"
+     },
+     {
+      "id": 68,
+      "origin_id": 30,
+      "origin_slot": 0,
+      "target_id": -20,
+      "target_slot": 1,
+      "type": "IMAGE"
+     },
+     {
+      "id": 52,
+      "origin_id": -10,
+      "origin_slot": 2,
+      "target_id": 34,
+      "target_slot": 0,
+      "type": "CLIP"
+     },
+     {
+      "id": 56,
+      "origin_id": 30,
+      "origin_slot": 0,
+      "target_id": 34,
+      "target_slot": 1,
+      "type": "IMAGE"
+     },
+     {
+      "id": 57,
+      "origin_id": 31,
+      "origin_slot": 0,
+      "target_id": 34,
+      "target_slot": 2,
+      "type": "IMAGE"
+     },
+     {
+      "id": 53,
+      "origin_id": -10,
+      "origin_slot": 3,
+      "target_id": 34,
+      "target_slot": 5,
+      "type": "VAE"
+     },
+     {
+      "id": 58,
+      "origin_id": 33,
+      "origin_slot": 0,
+      "target_id": 34,
+      "target_slot": 6,
+      "type": "STRING"
+     }
+    ],
+    "extra": {}
+   }
+  ]
+ },
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.8784600000000022,
+   "offset": [
+    338.2500227289859,
+    118.57288728922529
+   ]
+  },
+  "frontendVersion": "1.53.6"
+ },
+ "version": 0.4
+}

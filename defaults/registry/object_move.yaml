@@ -1,0 +1,51 @@
+# Ligação técnica do workflow 'object_move' (nós do ComfyUI). Cada modo é um arquivo; o Clef escolhe o modo. Raramente precisa mudar.
+
+id: object_move
+group: objetos
+images:
+- key: image_1
+  node: 5
+  label: Imagem
+  required: true
+  hint: Foto onde o objeto será movido.
+prompt:
+  node: 8
+  widget: prompt
+params:
+- key: red
+  type: box
+  image: image_1
+  label: Objeto a mover (caixa vermelha)
+  color: red
+  node: 6
+  widgets:
+  - src_x
+  - src_y
+  - src_w
+  - src_h
+- key: green
+  type: box
+  image: image_1
+  label: Destino (caixa verde)
+  color: green
+  node: 6
+  widgets:
+  - tgt_x
+  - tgt_y
+  - tgt_w
+  - tgt_h
+title: Mover ou trocar objetos
+modes:
+  turbo:
+    title: Rápido
+    file: Qwen2.1 Object Move Turbo (red-green).json
+    outputs:
+    - 38
+    when: 'Fast, 6 steps. It is the default: use it whenever the user does not ask for more quality.'
+  quality:
+    title: Qualidade
+    file: Qwen2.1 Object Move (red-green).json
+    outputs:
+    - 11
+    when: Slower and more detailed, 25 steps. Only when the user asks for top quality, more detail or says there is no 
+      rush.

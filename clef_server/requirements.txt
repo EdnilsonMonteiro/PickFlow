@@ -1,0 +1,11 @@
+# Só para rodar o Clef localmente (o PickFlow em si usa o requirements.txt da raiz).
+# torch precisa ser a build CUDA certa para a sua placa: https://pytorch.org/get-started/locally/
+torch>=2.11
+transformers>=5.10.2
+huggingface_hub
+pillow
+fastapi
+uvicorn
+bitsandbytes
+# para o /health reportar a RAM do processo; sem ele o PickFlow não sabe quanto o Clef ocupa na RAM
+psutil

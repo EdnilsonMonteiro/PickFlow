@@ -1,0 +1,25 @@
+# Prompts do workflow 'multi_bodyswap'. Use {request} onde o pedido do usuário entra.
+
+default: tres_pessoas
+presets:
+- id: tres_pessoas
+  name: Três pessoas
+  when: Cena com 3 pessoas e 3 referências.
+  text: 'body_swap: start with <image1> as the base image, keeping its lighting, environment and background. There
+    are multiple people in <image1>, ordered from LEFT to RIGHT. Replace the body of the FIRST person from the left
+    with the body from <image2>, the SECOND person from the left with the body from <image3>, and the THIRD person
+    from the left with the body from <image4>. Strictly preserve the clothing, body shape and proportions from each
+    reference image. Replicate the exact pose, arm positions, leg positions, hand gestures, head rotation, eye direction
+    and micro expressions of each corresponding person in <image1>. Do not copy tattos from <image1>. Keep every
+    person in the same position and keep the whole scene unchanged. Photorealistic, high quality, sharp details.'
+  rewrite: false
+- id: duas_pessoas
+  name: Duas pessoas
+  when: Cena com 2 pessoas e 2 referências.
+  text: 'body_swap: start with <image1> as the base image, keeping its lighting, environment and background. There
+    are two people in <image1>, ordered from LEFT to RIGHT. Replace the body of the FIRST person from the left with
+    the body from <image2>, and the SECOND person from the left with the body from <image3>. Strictly preserve the
+    clothing, body shape and proportions from each reference image. Replicate the exact pose, arm positions, leg
+    positions, hand gestures, head rotation, eye direction and micro expressions of each corresponding person in
+    <image1>. Keep every person in the same position and scale.'
+  rewrite: false

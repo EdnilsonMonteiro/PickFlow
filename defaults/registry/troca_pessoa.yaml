@@ -1,0 +1,95 @@
+# Ligação técnica do workflow 'troca_pessoa': o "Qwen Image 2.1 Person Swap" do AusBoss (nós do pacote ComfyUI-AusBoss).
+# É o fluxo PADRÃO de trocar a pessoa (corpo e cabeça, ou só a cabeça): mantém o rosto e o resto da cena e deixa dizer QUEM
+# trocar quando há mais gente na foto ("the woman on the left"). Quando ele não dá conta, o Clef manda o pedido para o
+# editor ('edit', prompt 'trocar_pessoas'), que é o fluxo antigo: veja `fallback` abaixo.
+#   prompt     o texto "Quem trocar" (a variável `quem` do prompt escolhe a frase)
+#   knobs      whole_body: liga o corpo inteiro (desligado = só a cabeça); steps: passos de difusão
+#   modes      turbo (LoRA viggle, 6 passos) e quality (sem a viggle, 25 passos): trocam as linhas das duas LoRAs
+#   fallback   quando o pedido ou a foto cai num caso em que este fluxo não serve, o Clef responde UMA pergunta
+#              (`question`) e, se uma das exceções ganhar com folga, a rota passa para `workflow` + `prompt`.
+#              `main` pesa a favor deste fluxo (clef.engine_main_weight) e a exceção só vence acima de clef.engine_min.
+
+id: troca_pessoa
+file: PickFlow Troca - Pessoa.json
+title: Trocar pessoa (corpo e cabeça)
+group: pessoas
+images:
+- key: image_1
+  node: 2
+  label: Cena
+  required: true
+  hint: 'A foto com a pessoa que será trocada: dela vêm a pose, a luz, o enquadramento e o fundo.'
+- key: image_2
+  node: 3
+  label: Personagem
+  required: true
+  hint: A pessoa que deve aparecer no lugar (corpo e cabeça, ou só a cabeça).
+prompt:
+  node: 4
+  widget: text
+knobs:
+  whole_body:
+    node: 5
+    widget: value
+  steps:
+    node: 53
+    widget: value
+    default: 6
+requires_nodes:
+- class: AUSBOSS_NODES_LoraLoader
+  pack: ComfyUI-AusBoss
+  url: https://github.com/ausboss/ComfyUI-AusBoss
+outputs:
+- 18
+modes:
+  turbo:
+    title: Rápido
+    when: 'Fast, 6 steps with the Viggle turbo LoRA. It is the default: use it whenever the user does not ask for more quality.'
+  quality:
+    title: Qualidade
+    when: Slower and more detailed, 25 steps without the turbo LoRA. Only when the user asks for top quality, more detail or says there is no rush.
+    knobs:
+      whole_body:
+        node: 5
+        widget: value
+      steps:
+        node: 53
+        widget: value
+        default: 25
+    set:
+    - node: 10
+      widget: loras
+      value: '[{"id":"r0","name":"Qwen-Image-2.1-viggle-turbo-v0.2.1-6step-lora-r128.safetensors","strength":1,"strength_clip":1,"enabled":false,"triggers":""},{"id":"r1","name":"bfs_body_swap_v1.0_qwen_2.1.safetensors","strength":1,"strength_clip":1,"enabled":true,"triggers":""}]'
+    - node: 11
+      widget: loras
+      value: '[{"id":"r0","name":"Qwen-Image-2.1-viggle-turbo-v0.2.1-6step-lora-r128.safetensors","strength":1,"strength_clip":1,"enabled":false,"triggers":""},{"id":"r1","name":"bfs_head_v1.1_qwen_2.1.safetensors","strength":1,"strength_clip":1,"enabled":true,"triggers":""}]'
+fallback:
+  workflow: edit
+  prompt: trocar_pessoas
+  question: This flow swaps ONE person of image 1 for the character of image 2 (the whole person, or only the head and hair). It
+    works well on most photos. Look at the person in image 1 and read the request. Is the situation a normal one, or one of
+    the exceptions where the classic editor does better?
+  main:
+    name: Fluxo novo (padrão)
+    when: 'Normal case: the person to replace is clearly visible, their face is free (nothing covers it or is in front of it)
+      and, if the request swaps the body or the whole person, the body shows almost fully (head to thighs or more). Also
+      the case when the request swaps ONLY the head and the body is cropped. Use the default flow.'
+  options:
+    face_busy:
+      name: Rosto ocupado ou coberto
+      when: The face or head of the person in image 1 is busy with an action or partly covered, so a new face can conflict with
+        it - drinking from a can, cup or bottle, eating, smoking, kissing, talking on a phone, hands or an object right in
+        front of the face or mouth, a mask, sunglasses with something touching them.
+    partial_body:
+      name: Corpo cortado
+      when: The request swaps the BODY or the whole person (not only the head) but the body of the person in image 1 is NOT
+        fully visible - only the lower half or the legs appear, only part of the torso, or the body is cut by the edges of
+        the photo.
+    body_only:
+      name: Só o corpo
+      when: The request swaps ONLY the body (torso, arms, legs, clothing) and keeps the face, head and hair of the person in
+        image 1 as they are.
+    several:
+      name: Várias pessoas ou lugar
+      when: The request swaps TWO or more people of image 1 at once (each with its own reference image), or an extra image
+        shows a place or setting where the result must be.

@@ -1,0 +1,182 @@
+# Biblioteca de LoRAs do PickFlow. Cada LoRA tem uma descrição que o Clef lê para decidir se a liga.
+#   file         nome do arquivo em models/loras do ComfyUI (o PickFlow aceita o arquivo em subpasta)
+#   strength     força padrão (0 desliga)
+#   description  quando usar: é o que o Clef lê. Escreva como se explicasse a uma pessoa
+#   auto         true = o Clef pode ligar a LoRA sozinho conforme o pedido
+#   prompt       instrução que sempre acompanha a LoRA (um texto, ou um por modo: turbo / quality)
+#   adjust       força de OUTRAS LoRAs enquanto esta estiver ligada
+#   settings     ajustes do grafo enquanto esta estiver ligada (resolution, negative, scene_mp, ref_mp, cfg...)
+#   group        LoRAs do mesmo grupo não são ligadas juntas pelo Clef (ex.: troca de corpo OU de cabeça)
+#   needs        mínimo de imagens anexadas para ela fazer sentido
+#   conflicts    ids de LoRAs que NÃO funcionam junto com esta (vale nos dois sentidos; a outra é desligada)
+# As suas ficam em custom/loras.yaml (mesmo id = a sua vale mais).
+
+loras:
+- id: natexp
+  title: Natural Exposure
+  file: Qwen-Image-2.1-Natural-Exposure-LoRA-4000.safetensors
+  strength: 0.6
+  catalog: natural_exposure
+  auto: false
+  description: Natural light and exposure, less of an AI look. It stays on in the base of every edit.
+- id: flymy
+  title: FlyMy Realism
+  file: flymy_realism.safetensors
+  strength: 0.5
+  catalog: flymy_realism
+  auto: false
+  description: Skin texture and realism. It stays on in the base; it is turned off when another LoRA asks.
+- id: consistency
+  title: Consistência
+  file: qwen-image-2.1-consistency.safetensors
+  strength: 0.5
+  catalog: consistency
+  auto: false
+  description: Keeps what the user did not ask to change (framing, light, face, background). It stays on in the base of 
+    every edit. It does not work together with the clothing swap LoRA.
+  conflicts:
+  - outfit_swap
+- id: bfs_body
+  title: BFS Body Swap
+  file: bfs_body_swap_v1.0_qwen_2.1.safetensors
+  strength: 1.0
+  catalog: bfs_body
+  auto: true
+  needs: 2
+  group: troca
+  description: 'Swaps the whole BODY (body and clothing) of the person in the scene for the one of the person in a reference
+    image, keeping pose, light and background. Use when the request is to swap the body, the person, or clothing and body.
+    Do NOT use it to copy the style, color, light or look of a reference ("in the same style as", "looking like"), nor to
+    draw one character as another: that swaps nobody. It needs 2 images: the scene and the reference person.'
+  prompt:
+    turbo: 'body_swap: start with <image1> as the base image, keeping its lighting, environment, and background. remove the
+      body from <image1> completely and replace it with the body from <image2> copy the body moviments and pose.'
+    quality: 'body_swap: start with <image1> as the base image, keeping its lighting, environment, and background. replace
+      the body from <image1> with the body from <image2>, strictly preserving the clothing, body shape and proportions from
+      <image2>. strictly replicate the exact pose, arm positions, leg positions, hand gestures, head rotation, eye direction
+      and micro expressions from <image1>'
+  adjust:
+    natexp: 0.6
+    flymy: 0
+    consistency: 0.5
+  settings:
+    scene_mp: 2.0
+    ref_mp: 0.59
+    resolution: 0
+    negative: ''
+    cfg: 1
+    sampler: euler
+    scheduler: simple
+- id: bfs_head
+  title: BFS Head Swap
+  file: bfs_head_v1.1_qwen_2.1.safetensors
+  strength: 1.0
+  catalog: bfs_head
+  auto: true
+  needs: 2
+  group: troca
+  description: 'Swaps only the HEAD or face of the person in the scene for a reference''s (face swap), keeping body, light
+    and background. Use when the request is to swap the face or the head, not the body. Do NOT use it to copy the style or
+    look of a reference. It needs 2 images: the body/scene and the face.'
+  prompt: 'head_swap: start with <image1> as the base image, keeping its lighting, environment, and background. remove the
+    head from <image1> completely and replace it with the head from <image2>, strictly preserving the hair, eye color, nose
+    structure from <image2>. copy the direction of the eye, head rotation, micro expressions from <image1>, high quality,
+    sharp details, 4k.'
+  adjust:
+    natexp: 0.6
+    flymy: 0.5
+    consistency: 0
+  settings:
+    scene_mp: 'off'
+    ref_mp: 'off'
+    resolution: 1024
+    negative: ''
+    cfg: 1
+    sampler: euler
+    scheduler: simple
+- id: outfit_swap
+  title: Trocar roupa ou tatuagem
+  file: qwen-image-2.1-outfit-swap.safetensors
+  strength: 1.0
+  catalog: outfit_swap
+  auto: true
+  needs: 2
+  group: troca
+  conflicts:
+  - consistency
+  description: 'Transfers the clothing from a reference image to the person in the scene, and also swaps or transfers TATTOOS
+    from a reference to the person, despite the name. Keeps face, hair, hands, pose and background. It needs 2 images: the
+    person (image 1) and the reference clothing or tattoo (image 2). It does not work together with the consistency LoRA:
+    when this one is on, the consistency one is turned off.'
+  prompt: Dress the person in <image1> in the outfit shown in <image2>. Replace everything they wear. Keep their face, 
+    hair, hands, pose and the background exactly the same.
+  adjust:
+    consistency: 0
+- id: casual_snapshot
+  title: Foto caseira de celular
+  file: casual_snapshot_realism_qwen21.safetensors
+  strength: 0.7
+  auto: true
+  description: 'Gives the image the look of a casual photo, taken with a regular phone or a compact camera with flash, not
+    a professional camera: grain, low-light noise, direct flash, spontaneous framing. Use when the request talks about an
+    amateur, casual, phone or spontaneous photo, or "without the AI look".'
+  prompt: candid_snap, harsh ambient lighting, direct flash lighting, casual smartphone photo.
+  adjust:
+    flymy: 0.2
+- id: viewpoint_orbit
+  title: Girar o ponto de vista (órbita)
+  file: Qwen2.1_viewpoint_orbit.safetensors
+  strength: 1.0
+  catalog: viewpoint_orbit
+  auto: false
+  adjust:
+    consistency: 0
+  description: Orbits the camera around an object or person (works best with objects) by 45, 90, 135 or 180 degrees, to 
+    the left or right, at a low, normal or high height. PickFlow reads the angle from the request; if it does not say, 
+    it opens a screen for the user to choose. It is used by the "Girar o ponto de vista" prompt.
+- id: restore
+  title: Restaurar foto
+  file: qwen-image-2.1-restore.safetensors
+  strength: 1.0
+  catalog: restore
+  auto: false
+  conflicts:
+  - consistency
+  adjust:
+    natexp: 0
+    flymy: 0
+  settings:
+    scene_mp: 2.0
+    ref_mp: 'off'
+    resolution: 0
+    negative: ''
+    cfg: 1
+    sampler: euler
+    scheduler: simple
+  description: 'Restores and improves the quality of a small, compressed, blurry, phone, video frame or old (scratched, faded)
+    photo: removes noise and artifacts and recovers sharpness and natural detail, keeping the same person, composition and
+    colors. Redraws the image at about 2 MP and changes the content very little. Strength 1.0; for an out-of-focus photo,
+    0.5. It is not for editing the content and does not work together with the consistency LoRA (when this one is on, the
+    consistency one is turned off). It is used by the "melhorar" prompt of edit, when it decides to restore the photo.'
+- id: outpaint
+  title: Outpaint (expandir e completar áreas cinza)
+  file: qwen-image-2.1-outpaint-v2.safetensors
+  strength: 1.0
+  catalog: outpaint
+  auto: true
+  description: 'Fills solid GRAY areas of the image with the natural continuation of the scene, without touching the rest.
+    Used to EXPAND the photo to the sides, up or down (PickFlow first enlarges the canvas with gray) and to fill the gray
+    holes of a 3D render. Use when the request is to enlarge, expand, open the framing, show more of the scene beyond the
+    edges or fill the gray parts. It is used by the "Expandir ou completar áreas cinza" prompt.'
+  prompt: 'Outpaint the image: replace the solid gray areas with a seamless continuation of the scene, keeping the
+    existing composition unchanged.'
+  settings:
+    resolution: 0
+- id: anyangle
+  title: AnyAngle (mudar a câmera com 3D)
+  file: QI2.1_AnyAngle.safetensors
+  strength: 1.0
+  catalog: anyangle
+  auto: false
+  description: Redraws the photo at a new camera angle from a rough render (from the 3D) at that angle. It already comes
+    inside the "Mudar a câmera (AnyAngle)" workflow; do not turn it on in other workflows.

@@ -1,0 +1,22 @@
+# Ligação técnica do workflow 'headswap_quality' (nós do ComfyUI). Raramente precisa mudar.
+
+id: headswap_quality
+file: Qwen2.1 HeadSwap Quality BFS.json
+title: Trocar a cabeça (Quality)
+group: troca de pessoa
+images:
+- key: image_1
+  node: 26
+  label: Corpo/cena
+  required: true
+  hint: Foto que mantém corpo, luz e fundo.
+- key: image_2
+  node: 27
+  label: Cabeça/rosto de referência
+  required: true
+  hint: Rosto que será colado na imagem 1.
+prompt:
+  node: 6
+  widget: value
+outputs:
+- 25

@@ -1,0 +1,50 @@
+# Mudar a câmera com a LoRA AnyAngle: recebe a foto original e o render grosseiro do 3D no ângulo novo (coarse) e
+# refaz a foto naquele ângulo. Ordem: image1 = original (define o tamanho), image2 = coarse, com o prompt
+# "Change the camera angle from <image1> to <image2>." (testada: a ordem inversa, do card do autor, devolvia quase a
+# foto original). O cinza do render (o que o 3D não viu) é refeito a partir da original.
+
+id: anyangle
+file: PickFlow 3D - AnyAngle (mudar camera).json
+title: Mudar a câmera (AnyAngle)
+group: câmera
+internal: true
+images:
+- key: image_1
+  node: 6
+  label: Foto original
+  required: true
+  hint: A foto de onde o 3D saiu; dela vêm o estilo, as cores e os detalhes.
+- key: image_2
+  node: 11
+  label: Render do 3D no ângulo novo
+  required: true
+  hint: O PNG do splat no ângulo escolhido (resultado do passo 3D).
+prompt:
+  node: 15
+  widget: prompt
+lora_chain:
+  nodes:
+  - 19
+  - 20
+  model: 2
+  clip: 4
+lora_base:
+- id: natexp
+  strength: 0.6
+- id: flymy
+  strength: 0.5
+knobs:
+  resolution:
+    node: 15
+    widget: resolution
+  negative:
+    node: 15
+    widget: negative_prompt
+  steps:
+    node: 16
+    widget: steps
+  cfg:
+    node: 16
+    widget: cfg
+outputs:
+- 18

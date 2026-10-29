@@ -1,0 +1,724 @@
+{
+ "revision": 0,
+ "last_node_id": 15,
+ "last_link_id": 7,
+ "nodes": [
+  {
+   "id": 2,
+   "type": "LoadImage",
+   "pos": [
+    560,
+    0
+   ],
+   "size": [
+    320,
+    330
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "imagem",
+     "name": "image",
+     "type": "COMBO",
+     "widget": {
+      "name": "image"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "escolher arquivo para enviar",
+     "name": "upload",
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGEM",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      1
+     ]
+    },
+    {
+     "localized_name": "MÁSCARA",
+     "name": "MASK",
+     "type": "MASK",
+     "links": []
+    }
+   ],
+   "title": "Image 1 - FUNDO",
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "example.png",
+    "image"
+   ],
+   "widgets_values_named": {
+    "image": "example.png",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 3,
+   "type": "LoadImage",
+   "pos": [
+    560,
+    360
+   ],
+   "size": [
+    320,
+    330
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "imagem",
+     "name": "image",
+     "type": "COMBO",
+     "widget": {
+      "name": "image"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "escolher arquivo para enviar",
+     "name": "upload",
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGEM",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      2
+     ]
+    },
+    {
+     "localized_name": "MÁSCARA",
+     "name": "MASK",
+     "type": "MASK",
+     "links": [
+      3
+     ]
+    }
+   ],
+   "title": "Image 2 - Recorte (PNG com transparência)",
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "example.png",
+    "image"
+   ],
+   "widgets_values_named": {
+    "image": "example.png",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 12,
+   "type": "AddLayer",
+   "pos": [
+    1560,
+    0
+   ],
+   "size": [
+    360,
+    338
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "imagem",
+     "name": "image",
+     "type": "IMAGE",
+     "link": 1
+    },
+    {
+     "localized_name": "camadas",
+     "name": "layers",
+     "shape": 7,
+     "type": "LAYERS",
+     "link": null
+    },
+    {
+     "localized_name": "máscara",
+     "name": "mask",
+     "shape": 7,
+     "type": "MASK",
+     "link": null
+    },
+    {
+     "localized_name": "nome",
+     "name": "name",
+     "shape": 7,
+     "type": "STRING",
+     "widget": {
+      "name": "name"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "x",
+     "name": "x",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "x"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "y",
+     "name": "y",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "y"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "opacidade",
+     "name": "opacity",
+     "shape": 7,
+     "type": "FLOAT",
+     "widget": {
+      "name": "opacity"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "modo_de_mesclagem",
+     "name": "blend_mode",
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "blend_mode"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "rotação",
+     "name": "rotation",
+     "shape": 7,
+     "type": "FLOAT",
+     "widget": {
+      "name": "rotation"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "largura",
+     "name": "width",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "width"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "altura",
+     "name": "height",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "height"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "z_index",
+     "name": "z_index",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "z_index"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "inverter_h",
+     "name": "flip_h",
+     "shape": 7,
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "flip_h"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "inverter_v",
+     "name": "flip_v",
+     "shape": 7,
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "flip_v"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "CAMADAS",
+     "name": "LAYERS",
+     "type": "LAYERS",
+     "links": [
+      4
+     ]
+    }
+   ],
+   "title": "Add Layer (Fundo = Base)",
+   "properties": {
+    "Node name for S&R": "AddLayer"
+   },
+   "widgets_values": [
+    "Base",
+    0,
+    0,
+    1,
+    "normal",
+    0,
+    0,
+    0,
+    0,
+    false,
+    false
+   ],
+   "widgets_values_named": {
+    "name": "Base",
+    "x": 0,
+    "y": 0,
+    "opacity": 1,
+    "blend_mode": "normal",
+    "rotation": 0,
+    "width": 0,
+    "height": 0,
+    "z_index": 0,
+    "flip_h": false,
+    "flip_v": false
+   }
+  },
+  {
+   "id": 13,
+   "type": "AddLayer",
+   "pos": [
+    1558.6835303096354,
+    418.30686218984425
+   ],
+   "size": [
+    360,
+    338
+   ],
+   "flags": {},
+   "order": 11,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "imagem",
+     "name": "image",
+     "type": "IMAGE",
+     "link": 2
+    },
+    {
+     "localized_name": "camadas",
+     "name": "layers",
+     "shape": 7,
+     "type": "LAYERS",
+     "link": 4
+    },
+    {
+     "localized_name": "máscara",
+     "name": "mask",
+     "shape": 7,
+     "type": "MASK",
+     "link": 3
+    },
+    {
+     "localized_name": "nome",
+     "name": "name",
+     "shape": 7,
+     "type": "STRING",
+     "widget": {
+      "name": "name"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "x",
+     "name": "x",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "x"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "y",
+     "name": "y",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "y"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "opacidade",
+     "name": "opacity",
+     "shape": 7,
+     "type": "FLOAT",
+     "widget": {
+      "name": "opacity"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "modo_de_mesclagem",
+     "name": "blend_mode",
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "blend_mode"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "rotação",
+     "name": "rotation",
+     "shape": 7,
+     "type": "FLOAT",
+     "widget": {
+      "name": "rotation"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "largura",
+     "name": "width",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "width"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "altura",
+     "name": "height",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "height"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "z_index",
+     "name": "z_index",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "z_index"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "inverter_h",
+     "name": "flip_h",
+     "shape": 7,
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "flip_h"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "inverter_v",
+     "name": "flip_v",
+     "shape": 7,
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "flip_v"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "CAMADAS",
+     "name": "LAYERS",
+     "type": "LAYERS",
+     "links": [
+      5
+     ]
+    }
+   ],
+   "title": "Add Layer (Pessoa: posição e tamanho vêm do chat)",
+   "properties": {
+    "Node name for S&R": "AddLayer"
+   },
+   "widgets_values": [
+    "Pessoa",
+    0,
+    0,
+    1,
+    "normal",
+    0,
+    0,
+    0,
+    1,
+    false,
+    false
+   ],
+   "widgets_values_named": {
+    "name": "Pessoa",
+    "x": 0,
+    "y": 0,
+    "opacity": 1,
+    "blend_mode": "normal",
+    "rotation": 0,
+    "width": 0,
+    "height": 0,
+    "z_index": 1,
+    "flip_h": false,
+    "flip_v": false
+   }
+  },
+  {
+   "id": 10,
+   "type": "ImageCompositor",
+   "pos": [
+    1966.3190545137495,
+    -37.38773920635427
+   ],
+   "size": [
+    640,
+    660
+   ],
+   "flags": {},
+   "order": 12,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "layers",
+     "name": "layers",
+     "type": "LAYERS",
+     "link": 5
+    },
+    {
+     "localized_name": "compositor",
+     "name": "compositor",
+     "type": "COMPOSITOR",
+     "widget": {
+      "name": "compositor"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGEM",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      6,
+      7
+     ]
+    },
+    {
+     "localized_name": "MÁSCARA",
+     "name": "MASK",
+     "type": "MASK",
+     "links": []
+    }
+   ],
+   "title": "Create Layered Image (colagem)",
+   "properties": {
+    "Node name for S&R": "ImageCompositor"
+   },
+   "widgets_values": [
+    {}
+   ],
+   "widgets_values_named": {
+    "compositor": {}
+   }
+  },
+  {
+   "id": 14,
+   "type": "SaveImage",
+   "pos": [
+    2640,
+    0
+   ],
+   "size": [
+    320,
+    300
+   ],
+   "flags": {},
+   "order": 13,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "imagens",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 6
+    },
+    {
+     "localized_name": "prefixo_do_arquivo",
+     "name": "filename_prefix",
+     "type": "STRING",
+     "widget": {
+      "name": "filename_prefix"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "imagens",
+     "name": "images",
+     "type": "IMAGE",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "qwen21_blend/colado"
+   ],
+   "widgets_values_named": {
+    "filename_prefix": "qwen21_blend/colado"
+   }
+  },
+  {
+   "id": 15,
+   "type": "PreviewImage",
+   "pos": [
+    2640,
+    340
+   ],
+   "size": [
+    320,
+    300
+   ],
+   "flags": {},
+   "order": 14,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "imagens",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 7
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "imagens",
+     "name": "images",
+     "type": "IMAGE",
+     "links": []
+    }
+   ],
+   "title": "Preview: colado",
+   "properties": {
+    "Node name for S&R": "PreviewImage"
+   },
+   "widgets_values": [],
+   "widgets_values_named": {}
+  }
+ ],
+ "links": [
+  [
+   1,
+   2,
+   0,
+   12,
+   0,
+   "IMAGE"
+  ],
+  [
+   2,
+   3,
+   0,
+   13,
+   0,
+   "IMAGE"
+  ],
+  [
+   3,
+   3,
+   1,
+   13,
+   2,
+   "MASK"
+  ],
+  [
+   4,
+   12,
+   0,
+   13,
+   1,
+   "LAYERS"
+  ],
+  [
+   5,
+   13,
+   0,
+   10,
+   0,
+   "LAYERS"
+  ],
+  [
+   6,
+   10,
+   0,
+   14,
+   0,
+   "IMAGE"
+  ],
+  [
+   7,
+   10,
+   0,
+   15,
+   0,
+   "IMAGE"
+  ]
+ ],
+ "groups": [],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.9191248449213445,
+   "offset": [
+    -1151.5304115257086,
+    -6.0805159619697715
+   ]
+  }
+ },
+ "version": 0.4
+}

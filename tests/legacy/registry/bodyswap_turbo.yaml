@@ -1,0 +1,27 @@
+# Ligação técnica do workflow 'bodyswap_turbo' (nós do ComfyUI). Raramente precisa mudar.
+
+id: bodyswap_turbo
+file: Qwen2.1 BodySwap Turbo.json
+title: Trocar o corpo (Turbo)
+group: troca de pessoa
+images:
+- key: image_1
+  node: 26
+  label: Cena
+  required: true
+  hint: Foto cuja pose, enquadramento, luz e fundo serão mantidos.
+- key: image_2
+  node: 27
+  label: Pessoa de referência
+  required: true
+  hint: 'Pessoa cujo corpo, roupa e proporções entram na cena. Ideal: corpo inteiro, de frente.'
+- key: image_3
+  node: 42
+  label: Lugar de referência
+  required: false
+  hint: Cenário onde a pessoa deve ficar (opcional). Sem ele, o fundo da cena é mantido.
+prompt:
+  node: 6
+  widget: value
+outputs:
+- 25

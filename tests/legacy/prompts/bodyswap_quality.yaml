@@ -1,0 +1,19 @@
+# Prompts do workflow 'bodyswap_quality'. Use {request} onde o pedido do usuário entra.
+
+default: bfs
+presets:
+- id: bfs
+  name: BFS Body Swap
+  when: Troca simples do corpo, sem instruções extras.
+  text: 'body_swap: start with <image1> as the base image, keeping its lighting, environment, and background. replace
+    the body from <image1> with the body from <image2>, strictly preserving the clothing, body shape and proportions
+    from <image2>. strictly replicate the exact pose, arm positions, leg positions, hand gestures, head rotation,
+    eye direction and micro expressions from <image1>'
+  rewrite: false
+- id: bfs_extra
+  name: BFS Body Swap + instruções
+  when: Quando o usuário dá instruções extras (roupa, pose, detalhes).
+  text: |-
+    body_swap: start with <image1> as the base image, keeping its lighting, environment, and background. replace the body from <image1> with the body from <image2>, strictly preserving the clothing, body shape and proportions from <image2>. strictly replicate the exact pose, arm positions, leg positions, hand gestures, head rotation, eye direction and micro expressions from <image1>
+    Extra instructions: {request}
+  rewrite: false

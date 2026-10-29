@@ -1,0 +1,20 @@
+# Fluxo feito em Python (sem ComfyUI): kind: action. A função está em addon.py (@ctx.action("girar")).
+id: __ID___girar
+kind: action
+action: __NAME__.girar
+title: Girar a imagem (addon __NAME__)
+group: addons
+images:
+- key: image_1
+  label: Imagem
+  required: true
+  hint: A imagem que será girada.
+# Parâmetros de desenho funcionam como nos outros fluxos e chegam em call.drawings; exemplo (caixa verde):
+# params:
+# - key: area
+#   type: box
+#   image: image_1
+#   color: green
+#   label: Marque a área
+#   hint: ...
+note: Exemplo de addon. Gira a imagem pelos graus do pedido (90 por padrão).

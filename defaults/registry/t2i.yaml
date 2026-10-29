@@ -1,0 +1,67 @@
+# Ligação técnica do workflow 't2i' (nós do ComfyUI). Cada modo é um arquivo; o Clef escolhe o modo. Raramente precisa mudar.
+
+id: t2i
+title: Gerar imagem do zero
+group: geração
+images: []
+modes:
+  turbo:
+    title: Rápido
+    when: 'Fast, 6 steps. It is the default: use it whenever the user does not ask for more quality.'
+    file: PickFlow Editar - Turbo.json
+    prompt:
+      node: 6
+      widget: value
+    drop:
+    - 26
+    - 27
+    - 50
+    - 52
+    - 54
+    - 56
+    - 58
+    - 60
+    set:
+    - node: 30
+      widget: value
+      value: true
+    outputs:
+    - 25
+    lora_chain:
+      nodes:
+      - 45
+      - 49
+      - 46
+      model: 2
+      clip: 4
+    lora_base:
+    - id: natexp
+      strength: 0.8
+    - id: flymy
+      strength: 0
+    - id: consistency
+      strength: 0.82
+      strength_clip: 0.8
+    note: Usa o grafo de edição sem imagens, ligando 'Custom output size'. O tamanho vem do nó 'Output size' 
+      (ResolutionSelector).
+  quality:
+    title: Qualidade
+    when: Slower and more detailed, 25 steps. Only when the user asks for top quality, more detail or says there is no 
+      rush.
+    file: image_qwen_image_2_1_t2i.json
+    prompt:
+      node: 459
+      widget: prompt
+    set:
+    - node: 459:458
+      widget: seed
+      value: random
+    drop:
+    - 459:471
+    - 459:473
+    - 459:475
+    outputs:
+    - 461
+    note: Workflow oficial do ComfyUI (Qwen-Image 2.1, texto para imagem, 25 passos). O reescritor de prompt embutido 
+      (nós 471, 473 e 475) é descartado para não exigir o modelo de texto extra; o PickFlow já escreve o prompt. O 
+      tamanho vem do nó ResolutionSelector salvo no workflow.

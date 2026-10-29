@@ -1,0 +1,15 @@
+# Identidade do addon. Só `title` é usado de verdade; o resto aparece em Ajustes > Addons.
+title: __NAME__
+description: Addon de exemplo (gira imagens). Troque pelo que o seu faz.
+version: 0.1.0
+# Configuração padrão: o usuário muda em settings.yaml > addons.config.__NAME__ (ctx.config no Python, PickFlow.config no JS).
+config:
+  graus_padrao: 90
+# Quando houver um LLM só para este addon (se faltar, vale o "Redator de prompt" de Ajustes):
+# llm:
+#   url: http://127.0.0.1:8123/v1
+#   model: ""
+# Arquivos de interface: por padrão todo web/*.js e web/*.css é carregado (main.js primeiro). Para escolher:
+# web:
+#   scripts: [main.js]
+#   styles: [style.css]

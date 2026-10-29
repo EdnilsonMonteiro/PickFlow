@@ -1,0 +1,23 @@
+# Ligação técnica do workflow 'bodyswap_quality' (nós do ComfyUI). Raramente precisa mudar.
+
+id: bodyswap_quality
+file: Qwen2.1 BodySwap Quality.json
+title: Trocar o corpo (Quality)
+group: troca de pessoa
+images:
+- key: image_1
+  node: 26
+  label: Cena
+  required: true
+  hint: Foto cuja pose, enquadramento, luz e fundo serão mantidos.
+- key: image_2
+  node: 27
+  label: Pessoa de referência
+  required: true
+  hint: 'Pessoa cujo corpo, roupa e proporções entram na cena. Ideal: corpo inteiro, de frente.'
+prompt:
+  node: 6
+  widget: value
+drop: []
+outputs:
+- 25

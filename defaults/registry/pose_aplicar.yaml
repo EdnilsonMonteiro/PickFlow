@@ -1,0 +1,42 @@
+# Foto original + mapa de pose editado -> a mesma foto com as pessoas na nova pose (ControlNet Union do Qwen-Image 2.1, modo Pose,
+# com a foto como referência). Passo do caso de uso "Mudar a pose". O prompt descreve em palavras o que mudou, porque só o mapa
+# de pose, com a foto como referência, quase não move ninguém (testado no ComfyUI real).
+
+id: pose_aplicar
+file: PickFlow Pose - Aplicar (Union).json
+title: Pose (aplicar a nova pose)
+group: pose
+internal: true
+images:
+- key: image_1
+  node: 14
+  label: Foto original
+  required: true
+  hint: A foto cujas pessoas mudam de pose; o resultado tem o tamanho dela.
+- key: image_2
+  node: 5
+  label: Mapa de pose
+  required: true
+  hint: O esqueleto de todas as pessoas (as que você mexeu e as que ficam como estão), vindo do passo anterior.
+pose_blend: true          # fora dos membros que mexeram o resultado volta a ser a foto original (nitidez das mãos e do rosto de quem ficou)
+pose_reference: image_1      # a foto de referência é a do passo anterior sem os membros que mexeram (senão o modelo copia o membro antigo e ele aparece duplicado)
+prompt:
+  node: 6
+  widget: prompt
+set:
+- node: 8
+  widget: seed
+  value: random
+- node: 8
+  widget: steps
+  value: 30
+outputs:
+- 10
+requires_nodes:
+- class: QwenImage21UnionLoader
+  pack: Comfyui-Qwen-Image-2.1-Fun-Controlnet-Union-T8
+- class: QwenImage21UnionApply
+  pack: Comfyui-Qwen-Image-2.1-Fun-Controlnet-Union-T8
+mem:
+  vram_gb: 16
+note: Precisa do pacote Qwen Image 2.1 Fun ControlNet Union (T8) e do arquivo Qwen-Image-2.1-Fun-Controlnet-Union-ComfyUI.safetensors em models/controlnet.

@@ -1,0 +1,120 @@
+# Ligação técnica do workflow 'transfer_multi' (nós do ComfyUI): levar VÁRIOS objetos para uma imagem.
+# As caixas não são nós do ComfyUI: o PickFlow desenha na imagem antes de enviar (caixas verdes numeradas no destino,
+# uma caixa vermelha em cada imagem de objeto). Na tela, você diz para cada caixa verde qual imagem enviada vai nela.
+# Cada modo é um arquivo; o Clef escolhe o modo.
+
+id: transfer_multi
+group: objetos
+title: Transferir vários objetos para uma imagem
+images:
+- key: image_1
+  node: 5
+  label: Destino (cena)
+  required: true
+  hint: A imagem que recebe os objetos; as caixas verdes (numeradas) marcam onde cada um fica.
+- key: image_2
+  node: 6
+  label: Objeto 1
+  required: true
+  hint: Imagem com um objeto, pessoa ou parte do corpo; a caixa vermelha marca ele.
+- key: image_3
+  node: 41
+  label: Objeto 2
+  required: false
+  hint: Outra imagem com outro objeto (opcional).
+- key: image_4
+  node: 42
+  label: Objeto 3
+  required: false
+  hint: Outra imagem com outro objeto (opcional).
+- key: image_5
+  node: 43
+  label: Objeto 4
+  required: false
+  hint: Outra imagem com outro objeto (opcional).
+prompt:
+  node: 11
+  widget: prompt
+set:
+- node: 11
+  widget: resolution
+  value: 1024      # cada referência (e a saída) com ~1 MP; com 0 cada uma fica no tamanho original e fica lentíssimo
+params:
+- key: green
+  type: box
+  image: image_1
+  color: green
+  multiple: true
+  numbered: true
+  refs: [image_2, image_3, image_4, image_5]
+  label: Onde cada objeto vai ficar (caixas verdes)
+  hint: Desenhe uma caixa para cada objeto e escolha, em cada uma, qual imagem enviada vai ali (1, 2, 3… na ordem em que
+    você anexou). A mesma imagem pode ir em mais de uma caixa.
+- key: red_2
+  type: box
+  image: image_2
+  color: red
+  optional: true
+  label: Marque o objeto na imagem {n} (caixa vermelha)
+  hint: Marque o objeto. Sem caixa, vale a imagem inteira.
+- key: red_3
+  type: box
+  image: image_3
+  color: red
+  optional: true
+  label: Marque o objeto na imagem {n} (caixa vermelha)
+  hint: Marque o objeto. Sem caixa, vale a imagem inteira.
+- key: red_4
+  type: box
+  image: image_4
+  color: red
+  optional: true
+  label: Marque o objeto na imagem {n} (caixa vermelha)
+  hint: Marque o objeto. Sem caixa, vale a imagem inteira.
+- key: red_5
+  type: box
+  image: image_5
+  color: red
+  optional: true
+  label: Marque o objeto na imagem {n} (caixa vermelha)
+  hint: Marque o objeto. Sem caixa, vale a imagem inteira.
+modes:
+  turbo:
+    title: Rápido
+    file: Qwen2.1 Transfer Multi Turbo (varios objetos).json
+    outputs:
+    - 38
+    when: 'Fast, 6 steps. It is the default: use it whenever the user does not ask for more quality.'
+  quality:
+    title: Qualidade
+    file: Qwen2.1 Transfer Multi (varios objetos).json
+    images:
+    - key: image_1
+      node: 5
+      label: Destino (cena)
+      required: true
+      hint: A imagem que recebe os objetos; as caixas verdes (numeradas) marcam onde cada um fica.
+    - key: image_2
+      node: 6
+      label: Objeto 1
+      required: true
+      hint: Imagem com um objeto, pessoa ou parte do corpo; a caixa vermelha marca ele.
+    - key: image_3
+      node: 17
+      label: Objeto 2
+      required: false
+      hint: Outra imagem com outro objeto (opcional).
+    - key: image_4
+      node: 18
+      label: Objeto 3
+      required: false
+      hint: Outra imagem com outro objeto (opcional).
+    - key: image_5
+      node: 19
+      label: Objeto 4
+      required: false
+      hint: Outra imagem com outro objeto (opcional).
+    outputs:
+    - 14
+    when: Slower and more detailed, 25 steps. Only when the user asks for top quality, more detail or says there is no 
+      rush.

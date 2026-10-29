@@ -1,0 +1,8 @@
+# O passo 3D não usa prompt (o TripoSplat só lê a foto).
+default: padrao
+presets:
+- id: padrao
+  name: Gerar o 3D do ambiente
+  when: Always.
+  text: '{request}'
+  rewrite: false

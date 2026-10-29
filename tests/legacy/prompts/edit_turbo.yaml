@@ -1,0 +1,19 @@
+# Prompts do workflow 'edit_turbo'. Use {request} onde o pedido do usuário entra.
+
+default: livre
+presets:
+- id: livre
+  name: Pedido do usuário
+  when: Qualquer edição descrita em texto.
+  text: '{request}'
+  rewrite: false
+- id: exposicao
+  name: Exposição neutra
+  when: Quando o pedido é só acertar luz ou exposição.
+  text: Transform the image with balanced neutral exposure. Match the body lightning with ambience lighting
+  rewrite: false
+- id: estilo
+  name: Mesmo estilo da referência
+  when: Quando o usuário quer a imagem 1 no estilo da imagem 2.
+  text: Make <image1> same style as <image2>. {request}
+  rewrite: false

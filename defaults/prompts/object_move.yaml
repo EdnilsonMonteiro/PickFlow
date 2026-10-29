@@ -1,0 +1,36 @@
+# Prompts do workflow 'object_move'. Use {request} onde o pedido do usuário entra.
+# `verify` (no "mover"): depois de gerar, o PickFlow confere pelos pixels se a caixa vermelha mudou. Se o objeto
+# ficou lá também (dois iguais), roda uma segunda passada com o fluxo `fix` (remover no quadrado vermelho).
+
+default: mover
+presets:
+- id: mover
+  name: Mover objeto
+  when: Move ONE object to another point of the image. The red box marks the object and the green one only the 
+    destination, which is empty.
+  text: Move the object inside the red box to the position and size indicated by the green box. Remove the object from 
+    its original location in the red box, filling in the background naturally. Remove the bounding boxes and seamlessly 
+    blend the repositioned object into the scene, preserving all other objects and the background exactly as they are. 
+    The object must appear ONLY at the green box, and the area of the red box must end up as plain empty background, 
+    with no copy, trace or ghost of the object left there. {request}
+  rewrite: false
+  verify:
+    kind: gone
+    box: red
+    skip: green
+    min_change: 0.08
+    fix:
+      workflow: replace_redbox
+      prompt: remover
+      request: 'the leftover duplicate of an object that was moved to another place in this image: remove only the copy inside
+        the red square and rebuild the background there'
+- id: trocar
+  name: Trocar dois objetos de lugar
+  when: Make two objects swap places (each takes the place of the other). There is one object inside the red box and 
+    another inside the green box.
+  text: Swap the positions of the two marked objects. The object inside the red box and the object inside the green box 
+    exchange places. Put the red-box object at the position, size and orientation indicated by the green box, and the 
+    green-box object at the position, size and orientation indicated by the red box, filling any exposed background 
+    naturally. Match the perspective, scale, lighting and shadows of each object to its new location. Remove both boxes 
+    and preserve everything else in the image exactly as it is. {request}
+  rewrite: false

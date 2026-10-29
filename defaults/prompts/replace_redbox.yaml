@@ -1,0 +1,32 @@
+# Prompts do workflow 'replace_redbox' (UM quadrado vermelho). Use {request} onde o pedido do usuário entra.
+# O Clef escolhe entre eles pelo campo 'when'. Escreva o 'when' dizendo QUANDO usar, como o usuário falaria.
+
+default: substituir
+presets:
+- id: substituir
+  name: Substituir o que está no quadrado
+  when: Replace, swap for something else or erase something that IS ALREADY inside the red square. There is an object, 
+    person or piece there that must go and make room for what the user described.
+  text: 'Replace the red square in the image with: {request}. Remove the red square completely and render the object exactly
+    in its place, matching the lighting, perspective, scale and style of the surroundings. Keep everything outside the red
+    square unchanged. Photorealistic, sharp, detailed.'
+  rewrite: false
+- id: adicionar
+  name: Adicionar um objeto no quadrado
+  when: Add, put, place, insert or include a NEW object at the spot marked by the red square. The spot is empty or just 
+    background, there is nothing there to remove, and the rest of the image stays the same.
+  text: 'Add the following to the image, inside the red square: {request}. The red square only marks where the new object
+    goes; the area is empty background, so do not remove or replace anything that is already in the scene. Place the new object
+    inside the red square, at the size, position and orientation the square indicates, and remove the red square completely.
+    Match the lighting, perspective, scale, shadows, reflections and style of the surroundings, with natural contact shadows
+    where it touches a surface. Keep everything outside the red square unchanged. Photorealistic, sharp, detailed.'
+  rewrite: false
+- id: remover
+  name: Remover um objeto no quadrado
+  when: Remove, take out or erase an object at the spot marked by the red square, without putting anything in its place 
+    (the background rebuilds itself).
+  text: 'Remove the following from the image, inside the red square: {request}. The red square only marks where the object
+    to be removed is. Remove that object, remove the red square completely and rebuild the background behind it, matching
+    the lighting, perspective, scale, shadows, reflections and style of the surroundings. Keep everything outside the red
+    square unchanged. Photorealistic, sharp, detailed.'
+  rewrite: false

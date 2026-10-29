@@ -1,0 +1,9 @@
+# Prompts do workflow 't2i_turbo'. Use {request} onde o pedido do usuário entra.
+
+default: livre
+presets:
+- id: livre
+  name: Pedido do usuário
+  when: Descrição da imagem a criar.
+  text: '{request}'
+  rewrite: true

@@ -1,0 +1,1309 @@
+{
+ "id": "c6d7e8f9-9999-4a2b-9c3d-0123456789ab",
+ "revision": 0,
+ "last_node_id": 20,
+ "last_link_id": 32,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "MarkdownNote",
+   "pos": [
+    0,
+    720
+   ],
+   "size": [
+    700,
+    420
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [],
+   "title": "PickFlow: AnyAngle",
+   "properties": {
+    "Node name for S&R": "MarkdownNote"
+   },
+   "widgets_values": [
+    "## PickFlow 3D - AnyAngle (mudar a camera)\n\nCopia do *Qwen2.1 AnyAngle Camera* sem a etapa de coarse automatico: o **Original** e o **Coarse** (render do Gaussian Splat no angulo que a pessoa escolheu no PickFlow) entram direto.\n\nPrompt fixo: `Change the camera angle from <image1> to <image2>.` (image1 = original, image2 = coarse). Nos testes esta ordem segue o angulo do coarse; a do card do autor (render como image1) devolvia quase a foto original. LoRA AnyAngle 1.0, CFG 3, 25 passos."
+   ],
+   "widgets_values_named": {
+    "text": "## Qwen-Image-2.1 AnyAngle (mudar o angulo/pose da camera) -\n\nMuda o angulo de camera de uma imagem mantendo o estilo, usando o LoRA **QI_2.1_AnyAngle**.\n\n### Como funciona (2 etapas, no mesmo grafo)\n1. **Etapa COARSE (opcional, gerada no Comfy)**: a partir da **Image 1 (original)**, gera uma\n   imagem grosseira no ANGULO desejado (instrucao no node \"Angle prompt\").\n2. **Etapa FINAL (AnyAngle)**: recebe a **Image 1 (original)** + o **coarse** (imagem 2) e o prompt\n   fixo `Change the camera angle from <image2> to <image1>.` -> gera a imagem final limpia.\n\n### Controles\n- **Angle prompt**: descreva o novo angulo (ex.: \"three-quarter left, lower angle\", \"from behind\",\n  \"top-down\", \"slightly from the right\"). So mudar isso ja cria a pose/angulo.\n- **Usar coarse manual** (switch): LIGUE se voce ja tem um render/coarse de fora\n  (Blender + Gaussian Splat tipo Tripo Splat/Trellis2, ou uma foto do angulo desejado).\n  Nesse caso ligue a imagem em **Coarse manual (image2)** e desligue a etapa COARSE (Ctrl+B).\n  DESLIGADO = usa o coarse gerado automaticamente.\n\n### Config do autor do LoRA\n- LoRA **AnyAngle = 1.0** · **CFG 3.0** · **20+ passos** (aqui 25, euler/simple).\n- A etapa coarse usa o modelo puro (sem o LoRA), cfg 1, 25 passos.\n\n### Observacao\n- O ideal do autor e um coarse vindo de 3D/Gaussian Splat (mais fiel ao espaco). O coarse gerado\n  aqui pelo Qwen e uma aproximacao boa e pratica; poses com anatomia/rosto deformados podem sair\n  errados (como o proprio autor alerta).\n\n### Memoria (16 GB)\n- int8 + `--disable-fast-disk`. Dois passes (coarse + final) = mais tempo.\n"
+   },
+   "color": "#432",
+   "bgcolor": "#653"
+  },
+  {
+   "id": 2,
+   "type": "UNETLoader",
+   "pos": [
+    700,
+    0
+   ],
+   "size": [
+    320,
+    82
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "unet_name",
+     "locked": null,
+     "name": "unet_name",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "unet_name"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "tipo_peso",
+     "locked": null,
+     "name": "weight_dtype",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "weight_dtype"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "MODELO",
+     "locked": null,
+     "name": "MODEL",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MODEL",
+     "pos": null,
+     "links": [
+      27
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "UNETLoader"
+   },
+   "widgets_values": [
+    "qwen_image_2.1_int8_convrot.safetensors",
+    "default"
+   ],
+   "widgets_values_named": {
+    "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+    "weight_dtype": "default"
+   }
+  },
+  {
+   "id": 3,
+   "type": "LoraLoaderModelOnly",
+   "pos": [
+    1090,
+    -140
+   ],
+   "size": [
+    356.9,
+    90
+   ],
+   "flags": {},
+   "order": 10,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "modelo",
+     "locked": null,
+     "name": "model",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MODEL",
+     "pos": null,
+     "link": 1
+    },
+    {
+     "localized_name": "nome_do_lora",
+     "name": "lora_name",
+     "type": "COMBO",
+     "widget": {
+      "name": "lora_name"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "força_modelo",
+     "name": "strength_model",
+     "type": "FLOAT",
+     "widget": {
+      "name": "strength_model"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "MODELO",
+     "locked": null,
+     "name": "MODEL",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MODEL",
+     "pos": null,
+     "links": [
+      21
+     ]
+    }
+   ],
+   "title": "AnyAngle LoRA (1.0)",
+   "properties": {
+    "Node name for S&R": "LoraLoaderModelOnly"
+   },
+   "widgets_values": [
+    "QI2.1_AnyAngle.safetensors",
+    1
+   ],
+   "widgets_values_named": {
+    "lora_name": "QI2.1_AnyAngle.safetensors",
+    "strength_model": 1
+   }
+  },
+  {
+   "id": 4,
+   "type": "CLIPLoader",
+   "pos": [
+    700,
+    200
+   ],
+   "size": [
+    320,
+    106
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "clip_name",
+     "locked": null,
+     "name": "clip_name",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "clip_name"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "type",
+     "locked": null,
+     "name": "type",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "type"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "device",
+     "locked": null,
+     "name": "device",
+     "nameLocked": null,
+     "removable": null,
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "device"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "clip",
+     "locked": null,
+     "name": "CLIP",
+     "nameLocked": null,
+     "removable": null,
+     "type": "CLIP",
+     "pos": null,
+     "links": [
+      29
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "CLIPLoader"
+   },
+   "widgets_values": [
+    "qwen3vl_8b_fp8_heretic.safetensors",
+    "qwen_image",
+    "default"
+   ],
+   "widgets_values_named": {
+    "clip_name": "qwen3vl_8b_fp8_heretic.safetensors",
+    "type": "qwen_image",
+    "device": "default"
+   }
+  },
+  {
+   "id": 5,
+   "type": "VAELoader",
+   "pos": [
+    700,
+    340
+   ],
+   "size": [
+    320,
+    58
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "vae_name",
+     "locked": null,
+     "name": "vae_name",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "vae_name"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "vae",
+     "locked": null,
+     "name": "VAE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "VAE",
+     "pos": null,
+     "links": [
+      8,
+      6
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAELoader"
+   },
+   "widgets_values": [
+    "qwen_image_2.1_vae_bf16.safetensors"
+   ],
+   "widgets_values_named": {
+    "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+   }
+  },
+  {
+   "id": 6,
+   "type": "LoadImage",
+   "pos": [
+    0,
+    0
+   ],
+   "size": [
+    330,
+    360
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "image"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "escolher arquivo para enviar",
+     "locked": null,
+     "name": "upload",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "links": [
+      31
+     ]
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "MÁSCARA",
+     "locked": null,
+     "name": "MASK",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MASK",
+     "pos": null,
+     "links": null
+    }
+   ],
+   "title": "Original",
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "example.png",
+    "image"
+   ],
+   "widgets_values_named": {
+    "image": "example.png",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 11,
+   "type": "LoadImage",
+   "pos": [
+    1400.7026877689086,
+    517.4576202445649
+   ],
+   "size": [
+    330,
+    360
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "image"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "escolher arquivo para enviar",
+     "locked": null,
+     "name": "upload",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "links": [
+      32
+     ]
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "MÁSCARA",
+     "locked": null,
+     "name": "MASK",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MASK",
+     "pos": null,
+     "links": null
+    }
+   ],
+   "title": "Coarse (render do 3D no angulo escolhido)",
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "example.png",
+    "image"
+   ],
+   "widgets_values_named": {
+    "image": "example.png",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 15,
+   "type": "TextEncodeQwenImage21",
+   "pos": [
+    1900,
+    0
+   ],
+   "size": [
+    420,
+    266
+   ],
+   "flags": {},
+   "order": 16,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "clip",
+     "locked": null,
+     "name": "clip",
+     "nameLocked": null,
+     "removable": null,
+     "type": "CLIP",
+     "pos": null,
+     "link": 4
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "image_1",
+     "locked": null,
+     "name": "images.image_1",
+     "nameLocked": null,
+     "removable": null,
+     "shape": 7,
+     "type": "IMAGE",
+     "pos": null,
+     "link": 31
+    },
+    {
+     "localized_name": "image_2",
+     "name": "images.image_2",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": 32
+    },
+    {
+     "localized_name": "image_3",
+     "name": "images.image_3",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "vae",
+     "locked": null,
+     "name": "vae",
+     "nameLocked": null,
+     "removable": null,
+     "shape": 7,
+     "type": "VAE",
+     "pos": null,
+     "link": 6
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "prompt",
+     "locked": null,
+     "name": "prompt",
+     "nameLocked": null,
+     "removable": null,
+     "type": "STRING",
+     "widget": {
+      "name": "prompt"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "negative_prompt",
+     "locked": null,
+     "name": "negative_prompt",
+     "nameLocked": null,
+     "removable": null,
+     "type": "STRING",
+     "widget": {
+      "name": "negative_prompt"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "resolution",
+     "locked": null,
+     "name": "resolution",
+     "nameLocked": null,
+     "removable": null,
+     "type": "INT",
+     "widget": {
+      "name": "resolution"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "positive",
+     "locked": null,
+     "name": "positive",
+     "nameLocked": null,
+     "removable": null,
+     "type": "CONDITIONING",
+     "pos": null,
+     "links": [
+      22
+     ]
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "negative",
+     "locked": null,
+     "name": "negative",
+     "nameLocked": null,
+     "removable": null,
+     "type": "CONDITIONING",
+     "pos": null,
+     "links": [
+      23
+     ]
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "latent",
+     "locked": null,
+     "name": "latent",
+     "nameLocked": null,
+     "removable": null,
+     "type": "LATENT",
+     "pos": null,
+     "links": [
+      24
+     ]
+    }
+   ],
+   "title": "Encode FINAL (AnyAngle)",
+   "properties": {
+    "Node name for S&R": "TextEncodeQwenImage21"
+   },
+   "widgets_values": [
+    "Change the camera angle from <image1> to <image2>.",
+    "distorted, warped, blurry, low quality, extra limbs, watermark, text",
+    0
+   ],
+   "widgets_values_named": {
+    "prompt": "Change the camera angle from <image1> to <image2>.",
+    "negative_prompt": "distorted, warped, blurry, low quality, extra limbs, watermark, text",
+    "resolution": 0
+   }
+  },
+  {
+   "id": 16,
+   "type": "KSampler",
+   "pos": [
+    2380,
+    0
+   ],
+   "size": [
+    270,
+    270
+   ],
+   "flags": {},
+   "order": 17,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "modelo",
+     "name": "model",
+     "type": "MODEL",
+     "link": 21
+    },
+    {
+     "localized_name": "positivo",
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 22
+    },
+    {
+     "localized_name": "negativo",
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 23
+    },
+    {
+     "localized_name": "imagem_latente",
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 24
+    },
+    {
+     "localized_name": "semente",
+     "name": "seed",
+     "type": "INT",
+     "widget": {
+      "name": "seed"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "passos",
+     "name": "steps",
+     "type": "INT",
+     "widget": {
+      "name": "steps"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "cfg",
+     "name": "cfg",
+     "type": "FLOAT",
+     "widget": {
+      "name": "cfg"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "nome_do_sampler",
+     "name": "sampler_name",
+     "type": "COMBO",
+     "widget": {
+      "name": "sampler_name"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "agendador",
+     "name": "scheduler",
+     "type": "COMBO",
+     "widget": {
+      "name": "scheduler"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "denoise",
+     "name": "denoise",
+     "type": "FLOAT",
+     "widget": {
+      "name": "denoise"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "LATENT",
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      25
+     ]
+    }
+   ],
+   "title": "KSampler FINAL (25, cfg 3)",
+   "properties": {
+    "Node name for S&R": "KSampler"
+   },
+   "widgets_values": [
+    785863382921954,
+    "randomize",
+    25,
+    3,
+    "euler",
+    "simple",
+    1
+   ],
+   "widgets_values_named": {
+    "seed": 785863382921954,
+    "control_after_generate": "randomize",
+    "steps": 25,
+    "cfg": 3,
+    "sampler_name": "euler",
+    "scheduler": "simple",
+    "denoise": 1
+   }
+  },
+  {
+   "id": 17,
+   "type": "VAEDecode",
+   "pos": [
+    2769.6134998640564,
+    140.99603247251065
+   ],
+   "size": [
+    320,
+    60
+   ],
+   "flags": {},
+   "order": 18,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "amostras",
+     "locked": null,
+     "name": "samples",
+     "nameLocked": null,
+     "removable": null,
+     "type": "LATENT",
+     "pos": null,
+     "link": 25
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "vae",
+     "locked": null,
+     "name": "vae",
+     "nameLocked": null,
+     "removable": null,
+     "type": "VAE",
+     "pos": null,
+     "link": 8
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "links": [
+      26
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode"
+   }
+  },
+  {
+   "id": 18,
+   "type": "SaveImage",
+   "pos": [
+    2736.520703219354,
+    314.5150661043176
+   ],
+   "size": [
+    400,
+    450
+   ],
+   "flags": {},
+   "order": 19,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagens",
+     "locked": null,
+     "name": "images",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "link": 26
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "prefixo_do_arquivo",
+     "locked": null,
+     "name": "filename_prefix",
+     "nameLocked": null,
+     "removable": null,
+     "type": "STRING",
+     "widget": {
+      "name": "filename_prefix"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagens",
+     "locked": null,
+     "name": "images",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "links": null
+    }
+   ],
+   "title": "Save",
+   "properties": {
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "pickflow/anyangle"
+   ],
+   "widgets_values_named": {
+    "filename_prefix": "pickflow/anyangle"
+   }
+  },
+  {
+   "id": 19,
+   "type": "LoraLoader",
+   "pos": [
+    787.8721461187214,
+    541.4611872146119
+   ],
+   "size": [
+    320,
+    130
+   ],
+   "flags": {},
+   "order": 8,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "modelo",
+     "name": "model",
+     "type": "MODEL",
+     "link": 27
+    },
+    {
+     "localized_name": "clip",
+     "name": "clip",
+     "type": "CLIP",
+     "link": 29
+    },
+    {
+     "localized_name": "nome_do_lora",
+     "name": "lora_name",
+     "type": "COMBO",
+     "widget": {
+      "name": "lora_name"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "força_modelo",
+     "name": "strength_model",
+     "type": "FLOAT",
+     "widget": {
+      "name": "strength_model"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "força_clip",
+     "name": "strength_clip",
+     "type": "FLOAT",
+     "widget": {
+      "name": "strength_clip"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "MODELO",
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      28
+     ]
+    },
+    {
+     "localized_name": "clip",
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      30
+     ]
+    }
+   ],
+   "title": "Realism: Natural-Exposure 0.6",
+   "properties": {
+    "Node name for S&R": "LoraLoader"
+   },
+   "widgets_values": [
+    "Qwen-Image-2.1-Natural-Exposure-LoRA-4000.safetensors",
+    0.6,
+    0.6
+   ],
+   "widgets_values_named": {
+    "lora_name": "Qwen-Image-2.1-Natural-Exposure-LoRA-4000.safetensors",
+    "strength_model": 0.6,
+    "strength_clip": 0.6
+   }
+  },
+  {
+   "id": 20,
+   "type": "LoraLoader",
+   "pos": [
+    792.7305936073059,
+    849.6438356164383
+   ],
+   "size": [
+    320,
+    130
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "modelo",
+     "name": "model",
+     "type": "MODEL",
+     "link": 28
+    },
+    {
+     "localized_name": "clip",
+     "name": "clip",
+     "type": "CLIP",
+     "link": 30
+    },
+    {
+     "localized_name": "nome_do_lora",
+     "name": "lora_name",
+     "type": "COMBO",
+     "widget": {
+      "name": "lora_name"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "força_modelo",
+     "name": "strength_model",
+     "type": "FLOAT",
+     "widget": {
+      "name": "strength_model"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "força_clip",
+     "name": "strength_clip",
+     "type": "FLOAT",
+     "widget": {
+      "name": "strength_clip"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "MODELO",
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      1
+     ]
+    },
+    {
+     "localized_name": "clip",
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      4
+     ]
+    }
+   ],
+   "title": "Realism: Skin/Realism 0.5",
+   "properties": {
+    "Node name for S&R": "LoraLoader"
+   },
+   "widgets_values": [
+    "flymy_realism.safetensors",
+    0.5,
+    0.5
+   ],
+   "widgets_values_named": {
+    "lora_name": "flymy_realism.safetensors",
+    "strength_model": 0.5,
+    "strength_clip": 0.5
+   }
+  }
+ ],
+ "links": [
+  [
+   1,
+   20,
+   0,
+   3,
+   0,
+   "MODEL"
+  ],
+  [
+   8,
+   5,
+   0,
+   17,
+   1,
+   "VAE"
+  ],
+  [
+   21,
+   3,
+   0,
+   16,
+   0,
+   "MODEL"
+  ],
+  [
+   22,
+   15,
+   0,
+   16,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   23,
+   15,
+   1,
+   16,
+   2,
+   "CONDITIONING"
+  ],
+  [
+   24,
+   15,
+   2,
+   16,
+   3,
+   "LATENT"
+  ],
+  [
+   25,
+   16,
+   0,
+   17,
+   0,
+   "LATENT"
+  ],
+  [
+   26,
+   17,
+   0,
+   18,
+   0,
+   "IMAGE"
+  ],
+  [
+   27,
+   2,
+   0,
+   19,
+   0,
+   "MODEL"
+  ],
+  [
+   28,
+   19,
+   0,
+   20,
+   0,
+   "MODEL"
+  ],
+  [
+   29,
+   4,
+   0,
+   19,
+   1,
+   "CLIP"
+  ],
+  [
+   30,
+   19,
+   1,
+   20,
+   1,
+   "CLIP"
+  ],
+  [
+   4,
+   20,
+   1,
+   15,
+   0,
+   "CLIP"
+  ],
+  [
+   6,
+   5,
+   0,
+   15,
+   4,
+   "VAE"
+  ],
+  [
+   31,
+   6,
+   0,
+   15,
+   1,
+   "IMAGE"
+  ],
+  [
+   32,
+   11,
+   0,
+   15,
+   2,
+   "IMAGE"
+  ]
+ ],
+ "groups": [],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.7292704116541366,
+   "offset": [
+    208.29106146065592,
+    -15.478348451094536
+   ]
+  }
+ },
+ "version": 0.4
+}

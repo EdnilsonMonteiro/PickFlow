@@ -1,0 +1,32 @@
+# Ligação técnica do workflow 'colar_fundir' (nós do ComfyUI). Raramente precisa mudar.
+# Etapa 2 do "Colar + Fundir": o Qwen 2.1 com a LoRA pysj666 ajusta perspectiva, luz e sombra para a colagem
+# parecer uma foto só. É o seu workflow "Colar+Fusao - Etapa 2 (Fundir)" sem alterações.
+
+id: colar_fundir
+file: Qwen2.1 Colar+Fusao - Etapa 2 (Fundir).json
+title: Fundir a colagem no ambiente
+group: colagem
+images:
+- key: image_1
+  node: 2
+  label: Colagem
+  required: true
+  hint: A imagem com a pessoa ou objeto já colado no fundo.
+prompt:
+  node: 15
+  widget: prompt
+# Ajustes das LoRAs fixas do arquivo (nós 11 e 13). A opção "completar o corpo" do prompt desliga a Consistency (ela segura
+# tanto o que já existe que a pessoa substituída ficava por baixo da colada) e baixa a pysj666 para 0,5; testado no ComfyUI.
+knobs:
+  consistency:
+    node: 13
+    widget: strength_model
+    bypass: true
+  pysj:
+    node: 11
+    widget: strength_model
+  pysj_clip:
+    node: 11
+    widget: strength_clip
+outputs:
+- 18

@@ -1,0 +1,506 @@
+# Prompt do Clef: o que cada workflow faz, quais prompts ele pode usar
+# e os casos de uso (sequências de workflows). Editável aqui ou na interface.
+# O texto que o Clef lê (instructions, description, about) é em inglês; name e label são texto de tela, em
+# português, traduzidos pelo catálogo web/locales/en.json.
+
+instructions: 'You route image editing requests to ComfyUI workflows (Qwen-Image 2.1). Pick the most specific
+  workflow for the request. The ''edit'' workflow does general editing, tattoo transfers and turning the point of view: the
+  kind is decided next by the prompt and the LoRAs. To SWAP A PERSON (the whole person, or only the head or face) for the person
+  of another image use troca_pessoa: it is the DEFAULT for any person, face, head or body swap, it can single out WHICH person
+  of a group to replace (''the woman on the left'') and keeps the rest of the scene. A separate check hands the request to the
+  classic editor (edit with the ''trocar_pessoas'' prompt) only in special cases: the face is busy or covered (drinking from a
+  can, eating, a hand or object in front of the face), the body is not fully visible and the request swaps the body, only the
+  body is swapped, or several people or a place image are involved. To change the CLOTHING of a person for the clothing of
+  another image use troca_roupa (the default) — the reference may be the clothing WORN by someone or the piece ALONE (nobody
+  wearing it), which is the normal case, so "make her wear the clothes of image 2" is this flow. If the request also takes
+  her to a place of a third image, use the use case ''Vestir a pessoa e levar para outro lugar''; a real person SWAP (the
+  person becomes someone else) plus a new place is the other use case; tattoo transfers use edit with the ''trocar_roupa'' prompt.
+  When the request is a PERSON SWAP that also names the CLOTHING of the reference ("a pessoa da imagem 2 com a roupa dela",
+  "swap her wearing that outfit"), use the use case ''Vestir com a roupa da referência e trocar a pessoa'': it puts the
+  outfit on the base image first and swaps the person after, which keeps the clothing sharp. Without the clothing in the
+  words — and always for a face-only swap — the plain person swap is the right choice.
+  Requests to restore, improve the quality, sharpen or recover a photo (without changing anything in it) go to ''edit''
+  with the ''melhorar'' prompt, which then chooses between improving the photo in place (keeping its size) and restoring
+  it by redrawing it at about 2 MP. Each workflow''s mode (turbo or quality) is also a separate decision: prefer turbo,
+  unless the user asks for top quality, more detail or says there is no rush. Attached image 1 is usually the base
+  scene and image 2 the reference (person, face, object), unless the user says otherwise in the text.
+  If no image is attached and the user wants to create something, use generation from scratch. To move or swap objects
+  inside ONE image (red and green boxes), use object_move. The ''mover'' prompt takes one object to an empty
+  destination and ''trocar'' makes two objects swap places. These two flows need TWO boxes (red and green) and only
+  touch objects that already exist in the image. When the request is to add, put or insert a NEW object that is not in
+  the image, with ONE red square only where it should appear, use replace_redbox with the ''adicionar'' prompt; to
+  replace what is inside the square with something else, replace_redbox with ''substituir''; to just take the object
+  out of the square, replace_redbox with ''remover''.
+  In short: an object that exists and goes somewhere else is ''mover''; two existing objects that swap with each other
+  is ''trocar''; an object that does not exist and starts to exist is ''adicionar''. To bring SEVERAL objects from
+  different images into one image (3 or more images), use transfer_multi.
+  With TWO images, a person or object from one of them going into the other, the choice is between transfer_object and
+  the ''Colar e fundir'' (paste and blend) use case, and the rule comes from tests: (1) if the thing goes IN PLACE OF
+  something or someone already in the scene ("in place of", "replace", "swap X for Y", "instead of") use
+  transfer_object, because only it removes what was there; pasting leaves the old one underneath. (2) If the person or
+  object must HOLD, WEAR or touch something from the other image ("make her hold these scissors") use transfer_object.
+  (3) To ADD a person or character somewhere ("put batman sitting on the bench", "put her on the beach", "him behind
+  the family"), even with a new pose, use ''Colar e fundir'': the user picks the place and size, the cutout keeps the
+  identity and the blend completes the body and the pose. (4) To put an OBJECT on a surface or in a scene ("the
+  scissors on the table", "the pawn on the board") use ''Colar e fundir'' (it stays identical and the user controls
+  the size); use transfer_object only if the object must change angle or be redrawn. ''edit'' is NOT for putting
+  someone in another setting. To swap ONE specific person in a group use troca_pessoa, which names who to replace. If the user already has a finished collage and only wants to fix light, shadow and
+  perspective, use colar_fundir. To CHANGE THE CAMERA ANGLE of a photo of a PLACE (bedroom, living room, room,
+  kitchen, shop, landscape, a place without a person in focus: "see it from another angle", "more to the left", "from
+  above"), use ambiente_3d, which turns the photo into 3D so the user picks the angle with the mouse. To change the camera angle of a photo of a PERSON (see
+  them from the side, from above, from below, three-quarter, from behind), use the use case ''Mudar o ângulo da pessoa
+  (3D)''. The ''girar'' prompt of edit is for orbiting around an OBJECT. To expand the photo (widen the framing to the
+  sides, up or down) or fill gray areas, use edit with the ''expandir'' prompt. If the request changes the person''s
+  angle AND sends a second image with their face or body, use the use case ''Mudar o ângulo da pessoa e corrigir o
+  rosto (3D + troca)''. To change the POSE of the people in a photo (raise an arm, cross the legs, open the arms, make them
+  stand, turn the body, "put them in another pose", "let me pose them") with ONE image, use the use case ''Mudar a pose'':
+  the user moves the body points of each person on screen and the photo is redrawn with the new pose. It is not for changing
+  the camera angle, nor for making two people kiss or hug by a text instruction alone (edit does that). Only ask for a second
+  step when the request really needs two workflows in a row: one request, however long, is usually ONE workflow.'
+workflows:
+  edit:
+    enabled: true
+    description: 'General image editor with up to 8 images. Used to: edit by text instruction (color, object, light,
+      style, with or without a reference), copy the style of a reference, TRANSFER TATTOOS from a reference to the person
+      (swapping people and clothing has its own flows, troca_pessoa and troca_roupa; the classic people swap that lives here,
+      up to 7 people left to right, is only the reserve a separate check picks for special cases), give the image a casual phone photo look, IMPROVE
+      or RESTORE the quality of a photo (small, compressed, blurry, phone or old: removes noise and blur and recovers
+      sharpness, without changing the content) with the ''melhorar'' prompt, which internally decides between improving the
+      photo in place (keeping its megapixels) and restoring it by redrawing it at about 2 MP, and turn
+      the point of view around an object. It also edits the people inside one photo (make two people hug, kiss, look
+      at each other, change their pose or expression). Clef picks the prompt and turns on the right LoRAs for the
+      request. The references go in the order they were attached.'
+  troca_pessoa:
+    enabled: true
+    description: 'DEFAULT flow to SWAP A PERSON: the person in the scene (image 1) becomes the person of the reference (image 2),
+      the whole person (body and head) or only the head and hair (face swap). It keeps the face, the light, the pose and the rest of the
+      scene, and it can single out WHICH person to replace when there are several people ("the woman on the left"). Use it for any
+      request to swap, replace or change a person, face, head or body between two images. A separate check hands the request to the
+      classic editor in special cases (face busy with an action, body not fully visible, body only, several people).
+      ONE exception: if the request explicitly asks for the CLOTHING of the reference image ("wearing her clothes", "com a
+      roupa dela", "with that outfit"), the use case "Vestir com a roupa da referência e trocar a pessoa" does it in two
+      steps and keeps the clothing sharper; when the request does not mention clothes, this flow is the right one.'
+  troca_roupa:
+    enabled: true
+    description: 'DEFAULT flow to SWAP CLOTHING: dresses the person of image 1 in the clothing of image 2 (the outfit, a garment, the
+      look), keeping their face, hair, hands, pose and the background. It can single out WHO to dress when there are several people
+      ("the woman on the left"). Image 2 may show the clothing WORN BY SOMEBODY or the piece ALONE (a garment, a dress, a shirt on a
+      hanger or laid out) — both work the same way, so "make her wear the clothes of image 2" is this flow even when nobody is wearing
+      them there. Tattoo transfers are not done here (they are edit with the trocar_roupa prompt).'
+  background_removal:
+    enabled: true
+    description: Removes the BACKGROUND of an image and leaves only the subject (PNG with transparency, or a white
+      background if the user asks). Does not change the subject. Use for "remove the background", "cut out", "isolate".
+  colar_recortar:
+    enabled: true
+    description: INTERNAL STEP of the Paste use case. Cuts out ONLY the person (SAM3) or the object (RMBG) from an image
+      and returns a PNG with a transparent background; the user checks it and can redo it with a box. Do not pick this
+      flow on its own.
+  colar_posicionar:
+    enabled: true
+    description: INTERNAL STEP of the Paste use case. The user drags and resizes the cutout over the background image
+      and the flow builds the collage. Do not pick this flow on its own.
+  colar_fundir:
+    enabled: true
+    description: Blends a collage that is already done (a person or object pasted into another setting) and fixes
+      perspective, light, shadow and color temperature so it looks like a single photo, without changing position or
+      size (if the pasted person is cut off or the request asks for a pose or action, it completes the body and the
+      scene). Use when the user sends ONE image that is already a collage and asks to "blend", "integrate" or "make the
+      collage look natural".
+  ambiente_3d:
+    enabled: true
+    description: Changes the CAMERA ANGLE of a photo of a PLACE (bedroom, living room, room, kitchen, shop, street,
+      landscape) without a person in focus. The photo becomes a 3D model (Gaussian Splat) that the user turns with the
+      mouse to the sides, up and down. It does NOT widen or extend a photo (that is edit with the expandir prompt). Use for "see the room from another angle", "change the camera", "more from
+      the left", "seen from above" in a place. One image only.
+  pessoa_3d:
+    enabled: true
+    description: INTERNAL STEP of the use case 'Mudar o ângulo da pessoa (3D)'. Turns the person (without the background)
+      into 3D for the user to pick the angle. Do not pick this flow on its own.
+  anyangle:
+    enabled: true
+    description: INTERNAL STEP. Redraws the photo at a new camera angle from the 3D render at that angle and the
+      original photo (AnyAngle LoRA). Do not pick this flow on its own.
+  pose_detectar:
+    enabled: true
+    description: INTERNAL STEP of the use case 'Mudar a pose'. Finds the people in the photo (DWPose), shows the user a screen to
+      move the body points of each one and returns the pose map. Do not pick this flow on its own.
+  pose_aplicar:
+    enabled: true
+    description: INTERNAL STEP of the use case 'Mudar a pose'. Redraws the photo with the people in the new pose, from the original
+      photo and the pose map (Qwen-Image Union ControlNet). Do not pick this flow on its own.
+  t2i:
+    enabled: true
+    description: Generates a NEW image from text, without any input image. Use only when the user asks to create or draw
+      something and did not attach an image.
+  object_move:
+    enabled: true
+    description: 'Moves an object or makes two objects swap places, inside the SAME image: the user draws a red box on
+      an object and a green one on the destination (empty, to move) or on the other object (to swap). It only
+      repositions objects that already exist; it does not add a new object (use replace_redbox).'
+  replace_redbox:
+    enabled: true
+    description: Works with red squares on a single image. ADDS a new object in the marked spot (empty place, nothing to
+      remove), REPLACES what is already inside the square with something else, or REMOVES the object there. The user can
+      mark SEVERAL squares, but only when it is the SAME object in all of them (add 5 identical vases, erase 3 chairs);
+      different objects need one edit at a time. It does not move or swap objects and does not use a green box. It works on ONE image
+      and never brings anything from a second image; with two images where one holds the thing to bring in, use Colar e fundir or
+      transfer_object.
+  transfer_object:
+    enabled: true
+    description: 'Two images. REDRAWS a person, character or object from one image (red box) inside a green box in the
+      other, adapting pose, perspective, light and style. It is the right one to REPLACE someone or something already in
+      the scene ("put the joker in place of the guy in red", "swap the white horse for the black pawn", "replace the
+      crouching man"), because what was in the green box goes away entirely, and to make someone HOLD or WEAR an object
+      from the other image. To just add someone or an object in a chosen place, prefer the Colar e fundir use case. It is not for swapping only the
+      face, head or clothing of a person (that is edit with the people swap prompt).'
+  transfer_multi:
+    enabled: true
+    description: Brings SEVERAL objects, people or body parts, each coming from a different image, into one destination
+      image. 3 or more images are sent - one is the destination (the scene that receives them) and the others are the
+      objects. The user draws a numbered green box on the destination for each object and says which image goes in each
+      one, and marks the object with a red box in each source image. Clef decides how many objects to bring and which
+      image is the destination.
+recipes:
+- id: trocar_pessoa_e_fundo
+  name: Trocar a pessoa e o fundo
+  enabled: true
+  images: 3
+  description: 'Exactly 3 images and the request swaps one person for another AND takes the result to another place.
+    One image has the SCENE with the person to be swapped (pose, clothing and framing come from it), another has the
+    REFERENCE PERSON (the face and/or body that must appear instead) and the third shows the PLACE, setting, scenery
+    or background where the final result must be. The user may just say "the setting is image 3" or "the person from
+    image 3 in the pose of image 2"; they do not need to use the words scene or new background. A face or body swap plus
+    a new place is always this case. Without a new place, use the person swap flow (troca_pessoa); with 2 images, it does not apply. If the request also says that the CLOTHING of the scene photo must stay on the new person (for example "using the clothes of image 1"), it is trocar_pessoa_roupa_e_fundo instead.'
+  roles:
+  - key: scene
+    label: 'Cena'
+    about: 'The photo with the person to be swapped: the pose, clothing and framing come from it. May be called "the pose of image N" or "the person to be swapped".'
+    default: 1
+  - key: person
+    label: 'Pessoa de referência'
+    about: 'Who must appear instead (face, body and/or clothing): the identity comes from it. May be called "the person from image N" or "the face from image N".'
+    default: 2
+  - key: background
+    label: 'Ambiente'
+    about: 'The place, setting or background where the final result must be; usually almost without people. May be called "the setting is image N", "the place" or "the background".'
+    default: 3
+  steps:
+  - workflow: troca_pessoa
+    mode: turbo
+    inputs:
+      image_1: role:scene
+      image_2: role:person
+    vars:
+      corpo: both
+      quem: person
+  - workflow: transfer_object
+    mode: turbo
+    inputs:
+      image_1: role:background
+      image_2: previous
+    vars:
+      relacao: adicionar
+- id: vestir_e_levar
+  name: Vestir a pessoa e levar para outro lugar
+  enabled: true
+  images: 3
+  description: 'Exactly 3 images and the SAME person is DRESSED in the clothing of another image and then taken to the
+    place of a third one: nobody is swapped. One image has the PERSON (the one that must be dressed; her face, hair and
+    pose come from it), another shows only the CLOTHING or OUTFIT (a garment, a dress, a shirt on a hanger, laid on the
+    bed, a product photo: there may be NOBODY wearing it, which is the normal case), and the third shows the PLACE where
+    she must end up. The request usually says "the woman wearing the clothes of image 2", "dress her in the outfit of
+    image N", "put her in this outfit at this place", "use this clothing on her", "make her wear it here". It is the right
+    choice whenever one of the images is clothing alone, even if the request says "wearing" or names a person. It is NOT
+    for swapping the person for someone else (that is trocar_pessoa_e_fundo) and not for 2 images (that is troca_roupa).'
+  roles:
+  - key: person
+    label: Pessoa que vai vestir
+    about: 'The PERSON that must be dressed: her face, hair, body and pose come from it. May be called "the woman", "her",
+      "the person from image N".'
+    default: 1
+  - key: outfit
+    label: Roupa de referência
+    about: 'The CLOTHING/OUTFIT that must be put on the person: a garment, a dress, a shirt on a hanger or laid on a bed,
+      a product photo. It may be a person wearing it, but usually it is the piece alone. May be called "the clothes of
+      image N", "this outfit", "the dress".'
+    default: 2
+  - key: background
+    label: Ambiente
+    about: 'The place, setting or background where the final result must be; usually almost without people. May be called
+      "the setting is image N", "the place", "the background", "here".'
+    default: 3
+  steps:
+  - workflow: troca_roupa
+    mode: turbo
+    inputs:
+      image_1: role:person
+      image_2: role:outfit
+  - workflow: colar_recortar
+    prompt: padrao
+    mode: pessoa
+    inputs:
+      image_1: previous
+  - workflow: colar_posicionar
+    prompt: padrao
+    inputs:
+      image_1: role:background
+      image_2: previous
+  - workflow: colar_fundir
+    prompt: pessoa
+    inputs:
+      image_1: previous
+- id: vestir_e_trocar
+  name: Vestir com a roupa da referência e trocar a pessoa
+  enabled: true
+  images: 2
+  description: 'Exactly 2 images and the request swaps the person of the base image for the person of the reference AND
+    EXPLICITLY asks for the CLOTHING of the reference to be used: "troque a pessoa pela da imagem 2 com a roupa dela",
+    "swap her for the woman of image 2 wearing that outfit", "put the person of image 2 here with her clothes", "usar a
+    roupa da imagem 2 no swap". It dresses first (the outfit from the reference goes onto the base image) and only then
+    swaps the person over it — that is what keeps the clothing sharp, which a single person swap loses. This flow ONLY
+    applies when the clothing is explicit in the request; "troque a pessoa da imagem 2 na imagem 1" without any mention of
+    clothes is the plain person swap (troca_pessoa). A FACE-only swap ("só o rosto", "só a cabeça", "face swap") never
+    comes here either: that is troca_pessoa with the head only.'
+  roles:
+  - key: scene
+    label: Imagem base
+    about: 'The photo that provides the pose, the framing and the body — the outfit is put on it first and the person is
+      swapped after. May be called "image 1", "the base", "this photo", "a foto de fundo".'
+    default: 1
+  - key: person
+    label: Pessoa de referência
+    about: 'The reference: the face/body that must appear instead AND the clothing that must be used — usually a photo of
+      somebody wearing the outfit. May be called "the person from image 2", "her", "the woman of image 2", "a roupa dela".'
+    default: 2
+  steps:
+  - workflow: troca_roupa
+    mode: turbo
+    inputs:
+      image_1: role:scene
+      image_2: role:person
+    vars:
+      quem: person
+  - workflow: troca_pessoa
+    mode: turbo
+    inputs:
+      image_1: previous
+      image_2: role:person
+    vars:
+      corpo: both
+      quem: person
+- id: trocar_pessoa_roupa_e_fundo
+  name: Trocar a pessoa, manter a roupa da cena e levar para outro lugar
+  enabled: true
+  images: 3
+  description: 'Exactly 3 images: the SCENE photo gives the POSE and the CLOTHING, a REFERENCE PERSON gives only the face and body, and a
+    third image is the PLACE where the result must end up. The request swaps the person of the scene for the reference person AND explicitly
+    says that the CLOTHING of the scene photo must be worn by the new person, for example "swap the person of image 2 to make the same pose of
+    image 1, using the clothes of image 1, taking a selfie at the mirror of image 3". It swaps body and head first (which brings the reference
+    person own clothes), then dresses her again with the clothing of the scene photo, and finally cuts her out and blends her into the place.
+    It only applies when the request cites the clothing of the scene or pose image. Without any mention of clothes, a swap plus a new place is
+    trocar_pessoa_e_fundo; when one image is clothing ALONE (nobody wearing it), it is vestir_e_levar; with 2 images it does not apply.'
+  roles:
+  - key: scene
+    label: Cena (pose e roupa)
+    about: 'The photo that gives the POSE and the CLOTHING that the new person must wear. May be called "the pose of image N", "the clothes of
+      image N" or "the person to be swapped".'
+    default: 1
+  - key: person
+    label: Pessoa de referência
+    about: 'Who must appear instead: only her face and body count, her own clothing is NOT used. May be called "the person of image N", "her"
+      or "the woman of image N".'
+    default: 2
+  - key: background
+    label: Ambiente
+    about: The place, setting or background where the final result must be; usually almost without people. May be called "the setting is image
+      N", "the place", "the background", "the mirror of image N" or "here".
+    default: 3
+  steps:
+  - workflow: troca_pessoa
+    mode: turbo
+    inputs:
+      image_1: role:scene
+      image_2: role:person
+    vars:
+      corpo: both
+      quem: person
+  - workflow: troca_roupa
+    mode: turbo
+    inputs:
+      image_1: previous
+      image_2: role:scene
+    vars:
+      quem: person
+  - workflow: colar_recortar
+    prompt: padrao
+    mode: pessoa
+    inputs:
+      image_1: previous
+  - workflow: colar_posicionar
+    prompt: padrao
+    inputs:
+      image_1: role:background
+      image_2: previous
+  - workflow: colar_fundir
+    prompt: pessoa
+    inputs:
+      image_1: previous
+- id: colar_e_fundir
+  name: Colar e fundir
+  enabled: true
+  images: 2
+  description: Exactly 2 images and NO face or body swap. One image is the setting (the place) and the other has the
+    person or object the request says to paste, insert, put or fit into the setting, in any upload order. The cutout is
+    automatic (the person, or the object the request named, with a transparent background) and the user checks it on
+    screen and can redo it with a box; then picks where it goes and its size; then the result is blended into the place
+    (perspective, light and shadow); if the pasted person is cut off or the request asks for a pose or action (sitting
+    on the chair, holding something), the blend completes the body and the scene. It is not for putting the thing IN
+    PLACE OF something or someone already in the scene (that is transfer_object, which removes what was there), nor for
+    making someone hold an object, nor for moving objects inside a single image, nor for swapping the person of a scene
+    for another, nor for 3 images.
+  roles:
+  - key: background
+    label: Ambiente
+    about: The place, setting or background that RECEIVES the collage and where the final result stays. It may have
+      objects similar to the one being pasted; even so it is the place, not the source. May be called "the setting is
+      image N", "the room", "the scene", "the background", "here".
+    default: 1
+  - key: subject
+    label: Pessoa ou objeto a colar
+    about: 'The image the person or object the request says to paste COMES FROM: look in it for the thing the user
+      NAMED in the request ("the chair", "the dog", "her"). It may have other things around; the cutout takes only the
+      named one.'
+    default: 2
+  steps:
+  - workflow: colar_recortar
+    inputs:
+      image_1: role:subject
+  - workflow: colar_posicionar
+    inputs:
+      image_1: role:background
+      image_2: previous
+  - workflow: colar_fundir
+    inputs:
+      image_1: previous
+- id: colar_sem_fundir
+  name: Só colar (sem fundir)
+  enabled: true
+  images: 2
+  description: 'Same as Colar e fundir (2 images: the setting and the person or object, in any order), but the user
+    wants only the collage, without the perspective and light adjustment: says "just paste", "without blending" or
+    "don''t touch the rest".'
+  roles:
+  - key: background
+    label: Ambiente
+    about: The place, setting or background that RECEIVES the collage and where the final result stays. It may have
+      objects similar to the one being pasted; even so it is the place, not the source. May be called "the setting is
+      image N", "the room", "the scene", "the background", "here".
+    default: 1
+  - key: subject
+    label: Pessoa ou objeto a colar
+    about: 'The image the person or object the request says to paste COMES FROM: look in it for the thing the user
+      NAMED in the request ("the chair", "the dog", "her"). It may have other things around; the cutout takes only the
+      named one.'
+    default: 2
+  steps:
+  - workflow: colar_recortar
+    inputs:
+      image_1: role:subject
+  - workflow: colar_posicionar
+    inputs:
+      image_1: role:background
+      image_2: previous
+- id: pessoa_angulo
+  name: Mudar o ângulo da pessoa (3D)
+  enabled: true
+  images: 1
+  description: 'One photo of a PERSON and the request is to see that same person and scene from another CAMERA ANGLE:
+    from the side, three-quarter, from above, from below, more to the left or right, from behind. The person becomes
+    3D, the user picks the angle with the mouse and the photo is redrawn at that angle keeping the person, the clothing
+    and the style. It is not for swapping the person, the clothing or the background, nor for places without a person
+    (use ambiente_3d), nor for objects or animals (use edit with the girar prompt).'
+  steps:
+  - workflow: pessoa_3d
+    inputs:
+      image_1: user:1
+  - workflow: anyangle
+    loras: []
+    inputs:
+      image_1: user:1
+      image_2: previous
+- id: pessoa_angulo_troca
+  name: Mudar o ângulo da pessoa e corrigir o rosto (3D + troca)
+  enabled: true
+  images: 2
+  description: 'Exactly 2 images: the photo of a PERSON to see from another CAMERA ANGLE (from the side, from above,
+    from below, three-quarter, from behind) and a REFERENCE image with that person''s face, head or body, to keep the
+    identity sharp after the angle change (the 3D loses detail in the face). The person becomes 3D, the user picks the
+    angle, the photo is redrawn at that angle and at the end the head (or the body) is swapped for the reference''s.
+    Use when the request talks about changing the angle and also about using the face, head or body from the other
+    image. Without changing the angle, it is the person swap flow; with a single image, it is Mudar o ângulo da
+    pessoa (3D).'
+  roles:
+  - key: person
+    label: Foto da pessoa
+    about: The photo that will change angle (the whole person in the scene). May be called "the photo", "image N",
+      "her", "him".
+    default: 1
+  - key: reference
+    label: Referência (rosto ou corpo)
+    about: The face, head or body that must appear in the result; usually a close-up of the face or another photo of the
+      same person.
+    default: 2
+  steps:
+  - workflow: pessoa_3d
+    inputs:
+      image_1: role:person
+  - workflow: anyangle
+    loras: []
+    inputs:
+      image_1: role:person
+      image_2: previous
+  - workflow: troca_pessoa
+    inputs:
+      image_1: previous
+      image_2: role:reference
+    vars:
+      quem: person
+    request: '{request}
+
+      The reference image only restores the identity after the camera angle change: if it shows just a face or a head,
+      swap only the head; keep the new camera angle, pose and background of <image1>.'
+- id: mudar_pose
+  name: Mudar a pose
+  enabled: true
+  images: 1
+  description: 'One photo with one or more PEOPLE (or characters) and the request is to change their POSE: raise or lower an arm,
+    open the arms, cross the legs, stand up, turn the body, make them pose differently, or "let me pose them". The people are
+    found in the photo and each one gets a skeleton of body points; the user drags the points on screen to model the new pose
+    (only the people moved change, the others stay as they are) and the photo is redrawn with the new pose, keeping the identity,
+    clothing, style and background. It is not for changing the camera angle (use Mudar o ângulo da pessoa), not for swapping
+    people, clothing or backgrounds, and not for editing the people by text alone without choosing the pose.'
+  steps:
+  - workflow: pose_detectar
+    inputs:
+      image_1: user:1
+  - workflow: pose_aplicar
+    inputs:
+      image_1: user:1
+      image_2: previous
+    request: '{pose_change} {request}'
+- id: expandir_imagem
+  name: Expandir a imagem (outpaint)
+  enabled: true
+  images: 1
+  description: 'Exactly 1 image and the request is to EXPAND or EXTEND the picture beyond its edges: "outpaint", "expand this image",
+    "extend the canvas", "extend the background", "zoom out", "widen the shot", "make it wider or taller", "add more space on the left",
+    "show more of the scene around it", or to fill the solid GRAY areas the image already has (for example a render with gray holes).
+    The canvas is enlarged with gray and the Outpaint LoRA continues the scene seamlessly, keeping the original pixels untouched.
+    It is the right choice for any request whose point is to make the picture bigger or reveal more around it. It is NOT for changing
+    something INSIDE the photo (that is edit), not for cropping and not for generating a new image from scratch.'
+  steps:
+  - workflow: edit
+    prompt: expandir
+    inputs:
+      image_1: user:1

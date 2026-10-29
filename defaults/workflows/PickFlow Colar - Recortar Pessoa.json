@@ -1,0 +1,575 @@
+{
+ "revision": 0,
+ "last_node_id": 15,
+ "last_link_id": 4,
+ "nodes": [
+  {
+   "id": 3,
+   "type": "LoadImage",
+   "pos": [
+    300,
+    100
+   ],
+   "size": [
+    320,
+    330
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "imagem",
+     "name": "image",
+     "type": "COMBO",
+     "widget": {
+      "name": "image"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "escolher arquivo para enviar",
+     "name": "upload",
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGEM",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      1,
+      3
+     ]
+    },
+    {
+     "localized_name": "MÁSCARA",
+     "name": "MASK",
+     "type": "MASK",
+     "links": []
+    }
+   ],
+   "title": "Imagem - pessoa",
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "example.png",
+    "image"
+   ],
+   "widgets_values_named": {
+    "image": "example.png",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 4,
+   "type": "SAM3Segment",
+   "pos": [
+    680,
+    100
+   ],
+   "size": [
+    320,
+    360
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "image",
+     "name": "image",
+     "type": "IMAGE",
+     "link": 1
+    },
+    {
+     "localized_name": "prompt",
+     "name": "prompt",
+     "type": "STRING",
+     "widget": {
+      "name": "prompt"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "output_mode",
+     "name": "output_mode",
+     "type": "COMBO",
+     "widget": {
+      "name": "output_mode"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "confidence_threshold",
+     "name": "confidence_threshold",
+     "type": "FLOAT",
+     "widget": {
+      "name": "confidence_threshold"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "max_segments",
+     "name": "max_segments",
+     "type": "INT",
+     "shape": 7,
+     "widget": {
+      "name": "max_segments"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "segment_pick",
+     "name": "segment_pick",
+     "type": "INT",
+     "shape": 7,
+     "widget": {
+      "name": "segment_pick"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "mask_blur",
+     "name": "mask_blur",
+     "type": "INT",
+     "shape": 7,
+     "widget": {
+      "name": "mask_blur"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "mask_offset",
+     "name": "mask_offset",
+     "type": "INT",
+     "shape": 7,
+     "widget": {
+      "name": "mask_offset"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "device",
+     "name": "device",
+     "type": "COMBO",
+     "shape": 7,
+     "widget": {
+      "name": "device"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "invert_output",
+     "name": "invert_output",
+     "type": "BOOLEAN",
+     "shape": 7,
+     "widget": {
+      "name": "invert_output"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "unload_model",
+     "name": "unload_model",
+     "type": "BOOLEAN",
+     "shape": 7,
+     "widget": {
+      "name": "unload_model"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "background",
+     "name": "background",
+     "type": "COMBO",
+     "shape": 7,
+     "widget": {
+      "name": "background"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "background_color",
+     "name": "background_color",
+     "type": "COLORCODE",
+     "shape": 7,
+     "widget": {
+      "name": "background_color"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGE",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      2
+     ]
+    },
+    {
+     "localized_name": "MASK",
+     "name": "MASK",
+     "type": "MASK",
+     "links": []
+    },
+    {
+     "localized_name": "MASK_IMAGE",
+     "name": "MASK_IMAGE",
+     "type": "IMAGE",
+     "links": []
+    }
+   ],
+   "title": "Recorta a pessoa (SAM3)",
+   "properties": {
+    "Node name for S&R": "SAM3Segment"
+   },
+   "widgets_values": [
+    "person",
+    "Merged",
+    0.35,
+    0,
+    0,
+    0,
+    0,
+    "Auto",
+    false,
+    false,
+    "Alpha",
+    "#222222"
+   ],
+   "widgets_values_named": {
+    "prompt": "person",
+    "output_mode": "Merged",
+    "confidence_threshold": 0.35,
+    "max_segments": 0,
+    "segment_pick": 0,
+    "mask_blur": 0,
+    "mask_offset": 0,
+    "device": "Auto",
+    "invert_output": false,
+    "unload_model": false,
+    "background": "Alpha",
+    "background_color": "#222222"
+   },
+   "color": "#222e40",
+   "bgcolor": "#364254"
+  },
+  {
+   "id": 14,
+   "type": "SaveImage",
+   "pos": [
+    1000,
+    100
+   ],
+   "size": [
+    320,
+    300
+   ],
+   "flags": {},
+   "order": 13,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "imagens",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 2
+    },
+    {
+     "localized_name": "prefixo_do_arquivo",
+     "name": "filename_prefix",
+     "type": "STRING",
+     "widget": {
+      "name": "filename_prefix"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "imagens",
+     "name": "images",
+     "type": "IMAGE",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "qwen21_blend/recorte"
+   ],
+   "widgets_values_named": {
+    "filename_prefix": "qwen21_blend/recorte"
+   },
+   "title": "Recorte (PNG com transparência)"
+  },
+  {
+   "id": 5,
+   "type": "RMBG",
+   "pos": [
+    680,
+    520
+   ],
+   "size": [
+    320,
+    292
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "image",
+     "name": "image",
+     "type": "IMAGE",
+     "link": 3
+    },
+    {
+     "localized_name": "model",
+     "name": "model",
+     "type": "COMBO",
+     "widget": {
+      "name": "model"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "sensitivity",
+     "name": "sensitivity",
+     "shape": 7,
+     "type": "FLOAT",
+     "widget": {
+      "name": "sensitivity"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "process_res",
+     "name": "process_res",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "process_res"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "mask_blur",
+     "name": "mask_blur",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "mask_blur"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "mask_offset",
+     "name": "mask_offset",
+     "shape": 7,
+     "type": "INT",
+     "widget": {
+      "name": "mask_offset"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "invert_output",
+     "name": "invert_output",
+     "shape": 7,
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "invert_output"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "refine_foreground",
+     "name": "refine_foreground",
+     "shape": 7,
+     "type": "BOOLEAN",
+     "widget": {
+      "name": "refine_foreground"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "background",
+     "name": "background",
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "background"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "background_color",
+     "name": "background_color",
+     "shape": 7,
+     "type": "COLORCODE",
+     "widget": {
+      "name": "background_color"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGEM",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      4
+     ]
+    },
+    {
+     "localized_name": "MÁSCARA",
+     "name": "MASK",
+     "type": "MASK",
+     "links": []
+    },
+    {
+     "localized_name": "MASK_IMAGE",
+     "name": "MASK_IMAGE",
+     "type": "IMAGE",
+     "links": []
+    }
+   ],
+   "title": "Recorta o fundo (RMBG) - completa o corpo",
+   "properties": {
+    "Node name for S&R": "RMBG"
+   },
+   "widgets_values": [
+    "RMBG-2.0",
+    1,
+    1024,
+    0,
+    0,
+    false,
+    false,
+    "Alpha",
+    "#222222"
+   ],
+   "widgets_values_named": {
+    "model": "RMBG-2.0",
+    "sensitivity": 1,
+    "process_res": 1024,
+    "mask_blur": 0,
+    "mask_offset": 0,
+    "invert_output": false,
+    "refine_foreground": false,
+    "background": "Alpha",
+    "background_color": "#222222"
+   },
+   "color": "#222e40",
+   "bgcolor": "#364254"
+  },
+  {
+   "id": 15,
+   "type": "SaveImage",
+   "pos": [
+    1000,
+    520
+   ],
+   "size": [
+    320,
+    300
+   ],
+   "flags": {},
+   "order": 14,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "imagens",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 4
+    },
+    {
+     "localized_name": "prefixo_do_arquivo",
+     "name": "filename_prefix",
+     "type": "STRING",
+     "widget": {
+      "name": "filename_prefix"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "imagens",
+     "name": "images",
+     "type": "IMAGE",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "qwen21_blend/recorte_rmbg"
+   ],
+   "widgets_values_named": {
+    "filename_prefix": "qwen21_blend/recorte_rmbg"
+   },
+   "title": "Recorte do RMBG (o PickFlow junta com o do SAM3)"
+  }
+ ],
+ "links": [
+  [
+   1,
+   3,
+   0,
+   4,
+   0,
+   "IMAGE"
+  ],
+  [
+   2,
+   4,
+   0,
+   14,
+   0,
+   "IMAGE"
+  ],
+  [
+   3,
+   3,
+   0,
+   5,
+   0,
+   "IMAGE"
+  ],
+  [
+   4,
+   5,
+   0,
+   15,
+   0,
+   "IMAGE"
+  ]
+ ],
+ "groups": [],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.9191248449213445,
+   "offset": [
+    -1151.5304115257086,
+    -6.0805159619697715
+   ]
+  }
+ },
+ "version": 0.4
+}

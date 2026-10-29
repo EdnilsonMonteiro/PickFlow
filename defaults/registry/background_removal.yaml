@@ -1,0 +1,25 @@
+# Ligação técnica do workflow 'background_removal' (nós do ComfyUI). Raramente precisa mudar.
+# Os ids "459:458" são nós de dentro do subgraph (formato <subgraph>:<nó>).
+
+id: background_removal
+file: image_qwen_image_2_1_background_removal.json
+title: Remover fundo
+group: edição
+images:
+- key: image_1
+  node: 470
+  label: Imagem
+  required: true
+  hint: A foto cujo fundo será removido.
+prompt:
+  node: 459
+  widget: prompt
+set:
+- node: "459:458"
+  widget: seed
+  value: random
+drop:
+- 472
+note: Workflow oficial do ComfyUI (Qwen-Image 2.1, Image Edit) com o prompt de remover o fundo. O nó de comparação (472) não é usado pelo PickFlow.
+outputs:
+- 461

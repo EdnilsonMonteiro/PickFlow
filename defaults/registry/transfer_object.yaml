@@ -1,0 +1,56 @@
+# Ligação técnica do workflow 'transfer_object' (nós do ComfyUI). Cada modo é um arquivo; o Clef escolhe o modo. Raramente precisa mudar.
+
+id: transfer_object
+group: objetos
+images:
+- key: image_1
+  node: 5
+  label: Destino (cena)
+  required: true
+  hint: Imagem que recebe o objeto/pessoa; a caixa verde marca onde ele fica.
+- key: image_2
+  node: 6
+  label: Fonte (objeto)
+  required: true
+  hint: Imagem que tem o objeto, pessoa ou parte do corpo; a caixa vermelha marca ele.
+prompt:
+  node: 11
+  widget: prompt
+params:
+- key: green
+  type: box
+  image: image_1
+  label: Onde vai ficar (caixa verde)
+  color: green
+  node: 7
+  widgets:
+  - box_x
+  - box_y
+  - box_w
+  - box_h
+- key: red
+  type: box
+  image: image_2
+  label: O que levar (caixa vermelha)
+  color: red
+  node: 8
+  widgets:
+  - box_x
+  - box_y
+  - box_w
+  - box_h
+title: Transferir objeto entre imagens
+modes:
+  turbo:
+    title: Rápido
+    file: Qwen2.1 Transfer Object Turbo (2 imagens).json
+    outputs:
+    - 38
+    when: 'Fast, 6 steps. It is the default: use it whenever the user does not ask for more quality.'
+  quality:
+    title: Qualidade
+    file: Qwen2.1 Transfer Object (2 imagens).json
+    outputs:
+    - 14
+    when: Slower and more detailed, 25 steps. Only when the user asks for top quality, more detail or says there is no 
+      rush.

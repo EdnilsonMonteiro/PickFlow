@@ -1,0 +1,29 @@
+# Foto de uma PESSOA (ou objeto) -> Gaussian Splat (TripoSplat com o fundo removido pelo BiRefNet).
+# Passo do caso de uso "Mudar o ângulo da pessoa (3D)": a pessoa escolhe o ângulo no 3D e o render vai para o AnyAngle.
+
+id: pessoa_3d
+file: PickFlow 3D - Gerar Splat (TripoSplat).json
+title: Pessoa em 3D (escolher o ângulo)
+group: câmera
+internal: true
+images:
+- key: image_1
+  node: 99
+  label: Foto da pessoa
+  required: true
+  hint: A pessoa (ou objeto) que vai virar 3D; o fundo é removido.
+set:
+- node: 88
+  widget: switch
+  value: true
+splat:
+  node: 51
+  kind: pessoa
+  then:
+    workflow: anyangle
+    inputs:
+      image_1: origin
+      image_2: previous
+outputs: []
+mem:
+  vram_gb: 10

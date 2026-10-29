@@ -1,0 +1,9 @@
+# Este workflow não usa prompt de texto. O arquivo existe só porque todo workflow tem um.
+
+default: padrao
+presets:
+- id: padrao
+  name: Posicionar
+  when: Place the cutout on the background.
+  text: '{request}'
+  rewrite: false

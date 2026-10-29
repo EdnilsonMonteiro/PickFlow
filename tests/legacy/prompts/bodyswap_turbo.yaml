@@ -1,0 +1,24 @@
+# Prompts do workflow 'bodyswap_turbo'. Use {request} onde o pedido do usuário entra.
+
+default: bfs
+presets:
+- id: bfs
+  name: BFS Body Swap
+  when: Troca simples do corpo, sem instruções extras.
+  text: 'body_swap: start with <image1> as the base image, keeping its lighting, environment, and background. remove
+    the body from <image1> completely and replace it with the body from <image2. copy the body moviments and pose.'
+  rewrite: false
+- id: bfs_extra
+  name: BFS Body Swap + instruções
+  when: Quando o usuário dá instruções extras (roupa, pose, detalhes).
+  text: |-
+    body_swap: start with <image1> as the base image, keeping its lighting, environment, and background. remove the body from <image1> completely and replace it with the body from <image2. copy the body moviments and pose.
+    Extra instructions: {request}
+  rewrite: false
+- id: bfs_lugar
+  name: BFS Body Swap + lugar de referência
+  when: Quando o usuário envia uma terceira imagem com o cenário onde a pessoa deve ficar.
+  text: |-
+    body_swap: start with <image1> as the base image, keeping its pose and camera framing. remove the body from <image1> completely and replace it with the body from <image2>. copy the body moviments and pose. place the result in the location shown in <image3>, matching its lighting, perspective and color.
+    Extra instructions: {request}
+  rewrite: false

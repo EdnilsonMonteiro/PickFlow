@@ -1,0 +1,9 @@
+# O que o Clef precisa saber para escolher os seus fluxos. Soma-se ao prompt do Clef; não substitui nada.
+workflows:
+  __ID___girar:
+    enabled: true
+    description: 'Gira a imagem inteira em 2D (rotaciona no plano, como virar uma foto de lado), por exemplo "gire 90
+      graus" ou "deixe de cabeça para baixo". NÃO muda o ponto de vista da cena (para isso use o edit).'
+# Casos de uso (sequências de fluxos) e frases extras para as instruções gerais do Clef:
+# recipes: []
+# instructions_append: 'Quando o usuário pedir para virar a foto de lado, use __ID___girar.'

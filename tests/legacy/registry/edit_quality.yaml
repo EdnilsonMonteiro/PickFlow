@@ -1,0 +1,27 @@
+# Ligação técnica do workflow 'edit_quality' (nós do ComfyUI). Raramente precisa mudar.
+
+id: edit_quality
+file: Qwen2.1 Image Edit Quality.json
+title: Edição de imagem (Quality)
+group: edição
+images:
+- key: image_1
+  node: 26
+  label: Imagem a editar
+  required: true
+  hint: A foto que será editada.
+- key: image_2
+  node: 27
+  label: Imagem de referência
+  required: false
+  hint: Estilo, roupa ou assunto a copiar. Opcional.
+- key: image_3
+  node: 33
+  label: Segunda referência
+  required: false
+  hint: Outra referência (opcional). Sem ela, o fluxo roda como se esta entrada não existisse.
+prompt:
+  node: 6
+  widget: value
+outputs:
+- 25

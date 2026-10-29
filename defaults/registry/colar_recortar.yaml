@@ -1,0 +1,84 @@
+# Ligação técnica do workflow 'colar_recortar' (nós do ComfyUI). Raramente precisa mudar.
+# Etapa 1 do "Colar + Fundir": recorta SÓ a pessoa ou o objeto e devolve um PNG com fundo transparente.
+# O Clef escolhe o modo pelo pedido (e você pode trocar na tela de revisão):
+#   pessoa  SAM3 com o texto "person" (nó SAM3Segment do pacote ComfyUI-RMBG): isola a pessoa mesmo em cena cheia.
+#           O RMBG-2.0 roda junto e o PickFlow soma as duas máscaras (pickflow/cutout.py): partes do corpo que o SAM3
+#           deixou de fora (pele à mostra, mãos, pés, um braço) voltam, sem levar móveis ou objetos ao redor
+#   objeto  SAM3 com o NOME do objeto (e a cor, se o pedido disser), em inglês: o Clef escolhe numa lista (prompt
+#           "Recortar", variáveis `alvo` e `cor`). Recorta só aquela coisa mesmo com outras em volta; fica só com o
+#           segmento mais provável (max_segments 1: um reflexo no espelho ou outra cadeira não vêm junto)
+#   fundo   RMBG-2.0: tira o fundo da imagem inteira (foto de produto, um objeto só num fundo liso)
+# O modo vem da opção escolhida em `alvo` (pessoa -> pessoa; um objeto da lista -> objeto; "sozinho" -> fundo).
+# Depois do recorte o PickFlow mostra o resultado: você aceita, ou desenha uma caixa no original para refazer só ali.
+# É um passo interno: o Clef só o usa dentro dos casos de uso "Colar...". Veja clef_prompt.yaml.
+
+id: colar_recortar
+file: PickFlow Colar - Recortar Pessoa.json
+title: Colar - recortar a pessoa ou o objeto
+group: colagem
+internal: true
+review: cutout
+images:
+- key: image_1
+  node: 3
+  label: Pessoa ou objeto a recortar
+  required: true
+  hint: A imagem de onde sai a pessoa ou o objeto.
+prompt:
+  node: 4
+  widget: prompt
+params:
+- key: recorte
+  type: crop
+  image: image_1
+  ask: false
+  optional: true
+  label: Caixa para refazer o recorte
+  color: white
+trim_alpha: true
+# Recorte de pessoa cortado pela foto (encosta na borda de baixo ou dos lados: um busto, sem pernas): a fusão completa o corpo.
+on_partial:
+  var: corpo
+  value: completar
+  modes:
+  - pessoa
+note: Usa nós do pacote ComfyUI-RMBG (RMBG e SAM3Segment; o SAM3 baixa o modelo sam3.pt sozinho na primeira vez). Depois
+  do recorte o PickFlow corta as bordas transparentes, para o tamanho que você ajusta no chat ser o da própria pessoa.
+requires_nodes:
+- class: RMBG
+  pack: ComfyUI-RMBG
+  url: https://github.com/1038lab/ComfyUI-RMBG
+- class: SAM3Segment
+  pack: ComfyUI-RMBG
+  url: https://github.com/1038lab/ComfyUI-RMBG
+outputs:
+- 14
+modes:
+  pessoa:
+    title: Pessoa
+    file: PickFlow Colar - Recortar Pessoa.json
+    outputs:
+    - 14
+    - 15
+    merge: person
+    when: 'Cut out a PERSON (or more than one) from the photo. It is the default: use it when the request talks about a person,
+      woman, man, model, she, he.'
+  objeto:
+    title: Objeto
+    file: PickFlow Colar - Recortar Pessoa.json
+    drop:
+    - 5
+    - 15
+    outputs:
+    - 14
+    set:
+    - node: 4
+      widget: max_segments
+      value: 1
+    when: Cut out an OBJECT, furniture, animal or thing by NAME (SAM3 finds the thing the request mentioned, even with 
+      others around).
+  fundo:
+    title: Tirar o fundo
+    file: PickFlow Colar - Recortar.json
+    prompt:
+    when: 'The image is just the object on a plain background (product photo): removes the whole background with RMBG.'

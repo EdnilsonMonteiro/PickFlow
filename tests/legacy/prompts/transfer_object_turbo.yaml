@@ -1,0 +1,22 @@
+# Prompts do workflow 'transfer_object_turbo'. Use {request} onde o pedido do usuário entra.
+
+default: objeto
+presets:
+- id: objeto
+  name: Transferir objeto
+  when: Transferir qualquer objeto ou parte do corpo entre imagens.
+  text: Transfer the object (or body part) inside the red box in <image2> into <image1>, placing it at the position
+    and size indicated by the green box in <image1>. Match the perspective, scale, orientation, lighting, shadows,
+    color and overall style of <image1> so the transferred element blends in naturally, as if it were originally
+    part of <image1>. Preserve everything else in <image1> exactly (background, other objects, identity). Remove
+    the red and green boxes and any borders. {request}
+  rewrite: false
+- id: pessoa
+  name: Transferir pessoa (mesma pose)
+  when: Quando é uma pessoa inteira que vai para a cena, mantendo a pose.
+  text: Transfer the person inside the red box in <image2> into <image1>, placing it at the position and size indicated
+    by the green box in <image1>. DO NOT change the person anatomy. The person in <image2> does the same pose in
+    <image1>. Match the perspective, scale, orientation, lighting, shadows, color and overall style of <image1>
+    so the transferred element blends in naturally. Preserve everything else in <image1> exactly. Remove the red
+    and green boxes and any borders.
+  rewrite: false

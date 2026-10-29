@@ -1,0 +1,76 @@
+# O texto do prompt é o que o SAM3 procura na imagem (em inglês): "person" ou o nome do objeto que o pedido citou,
+# com a cor quando o pedido diz ("blue chair"). O Clef escolhe nas listas abaixo lendo o pedido e a imagem; a opção
+# escolhida em `alvo` também diz o modo do recorte (pessoa, objeto ou tirar o fundo inteiro).
+# Para um objeto que não está na lista, acrescente uma opção (id, name, when, text em inglês, mode: objeto).
+
+default: padrao
+presets:
+- id: padrao
+  name: Recortar
+  when: Cut out the person or object the request says to paste.
+  text: '{cor}{alvo}'
+  rewrite: false
+  vars:
+  - key: alvo
+    kind: choice
+    label: O que recortar
+    default: person
+    question: 'What should be cut out of this image to paste into the setting? Read the request: the user usually says the
+      name of the thing ("the chair", "the dog", "her", "the vase"). Choose the option with that name, even if the image has
+      other things around. A person (she, he, the model, the woman, the man) is "Pessoa".'
+    options:
+    - {id: person, name: Pessoa, when: 'A person (she, he, woman, man, child, model).', text: person, mode: pessoa, 
+        fallback: true}
+    - {id: chair, name: Cadeira ou poltrona, when: Chair or armchair., poltrona: null, banqueta.: null, text: chair, 
+        mode: objeto}
+    - {id: sofa, name: Sofá, when: Sofa or couch., text: sofa, mode: objeto}
+    - {id: table, name: Mesa, when: Table., mesinha: null, escrivaninha: null, penteadeira.: null, text: table, mode: 
+        objeto}
+    - {id: bed, name: Cama, when: Bed., text: bed, mode: objeto}
+    - {id: lamp, name: Luminária, when: Lamp., abajur: null, lustre.: null, text: lamp, mode: objeto}
+    - {id: plant, name: Planta, when: Plant or potted plant., text: potted plant, mode: objeto}
+    - {id: vase, name: Vaso, when: Decorative vase (without a plant)., text: vase, mode: objeto}
+    - {id: tv, name: Televisão ou tela, when: TV or screen., monitor.: null, text: television, mode: objeto}
+    - {id: picture, name: Quadro, when: Picture or painting on the wall., pôster: null, moldura.: null, text: picture 
+        frame, mode: objeto}
+    - {id: rug, name: Tapete, when: Rug., text: rug, mode: objeto}
+    - {id: pillow, name: Almofada ou travesseiro, when: Cushion or pillow., travesseiro.: null, text: pillow, mode: 
+        objeto}
+    - {id: teddy, name: Bicho de pelúcia, when: Teddy bear or stuffed animal., boneco.: null, text: teddy bear, mode: 
+        objeto}
+    - {id: car, name: Carro, when: Car., caminhonete.: null, text: car, mode: objeto}
+    - {id: bike, name: Bicicleta ou moto, when: Bicycle or motorcycle., moto: null, patinete.: null, text: bicycle, mode: 
+        objeto}
+    - {id: dog, name: Cachorro, when: Dog., text: dog, mode: objeto}
+    - {id: cat, name: Gato, when: Cat., text: cat, mode: objeto}
+    - {id: bag, name: Bolsa ou mochila, when: Bag or backpack., mochila: null, mala.: null, text: bag, mode: objeto}
+    - {id: shoe, name: Sapato ou tênis, when: Shoe or sneaker., tênis: null, bota.: null, text: shoe, mode: objeto}
+    - {id: hat, name: Chapéu ou boné, when: Hat or cap., boné.: null, text: hat, mode: objeto}
+    - {id: bottle, name: Garrafa, when: Bottle., perfume.: null, text: bottle, mode: objeto}
+    - {id: cup, name: Copo ou xícara, when: 'Glass, cup or mug.', xícara: null, caneca.: null, text: cup, mode: objeto}
+    - {id: laptop, name: Notebook ou celular, when: Laptop or phone., celular: null, tablet.: null, text: laptop, mode: 
+        objeto}
+    - {id: other, name: Outro objeto, when: 'An object that is NOT on this list, among other things.', text: object, 
+        mode: objeto, fallback: true}
+    - {id: alone, name: Objeto sozinho num fundo liso, when: 'The image shows only the object, alone, on a plain background
+        (product photo).', text: object, mode: fundo, fallback: true}
+  - key: cor
+    kind: choice
+    label: Cor
+    default: none
+    question: Does the request say the COLOR of the object to cut out (for example "the blue chair")? If it does not, or
+      if it is a person, choose "sem cor".
+    options:
+    - {id: none, name: Sem cor, when: The request does not say the color., ou é uma pessoa.: null, text: ''}
+    - {id: white, name: Branco, when: White., text: 'white '}
+    - {id: black, name: Preto, when: Black., text: 'black '}
+    - {id: gray, name: Cinza, when: Gray., text: 'gray '}
+    - {id: red, name: Vermelho, when: Red., text: 'red '}
+    - {id: blue, name: Azul, when: Blue., text: 'blue '}
+    - {id: green, name: Verde, when: Green., text: 'green '}
+    - {id: yellow, name: Amarelo, when: Yellow., text: 'yellow '}
+    - {id: pink, name: Rosa, when: Pink., text: 'pink '}
+    - {id: purple, name: Roxo ou lilás, when: Purple or lilac., roxa: null, lilás.: null, text: 'purple '}
+    - {id: brown, name: Marrom, when: Brown or wooden., text: 'brown '}
+    - {id: beige, name: Bege, when: Beige or cream., text: 'beige '}
+    - {id: orange, name: Laranja, when: Orange., text: 'orange '}

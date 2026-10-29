@@ -1,0 +1,14 @@
+# Prompts do workflow 'edit_quality'. Use {request} onde o pedido do usuário entra.
+
+default: livre
+presets:
+- id: livre
+  name: Pedido do usuário
+  when: Edição descrita em texto, com ou sem referência.
+  text: '{request}'
+  rewrite: false
+- id: estilo
+  name: Mesmo estilo da referência
+  when: Quando o usuário quer a imagem 1 no estilo da imagem 2.
+  text: Make <image1> same style as <image2>. {request}
+  rewrite: false

@@ -1,0 +1,21 @@
+# Prompts do workflow 'object_move'. Use {request} onde o pedido do usuário entra.
+
+default: mover
+presets:
+- id: mover
+  name: Mover objeto
+  when: Mover UM objeto para outro ponto da imagem. A caixa vermelha marca o objeto e a verde só o destino, que está vazio.
+  text: Move the object inside the red box to the position and size indicated by the green box. Remove the object
+    from its original location in the red box, filling in the background naturally. Remove the bounding boxes and
+    seamlessly blend the repositioned object into the scene, preserving all other objects and the background exactly
+    as they are. {request}
+  rewrite: false
+- id: trocar
+  name: Trocar dois objetos de lugar
+  when: Trocar dois objetos de lugar entre si (um assume o lugar do outro). Há um objeto dentro da caixa vermelha e outro dentro da caixa verde.
+  text: Swap the positions of the two marked objects. The object inside the red box and the object inside the green
+    box exchange places. Put the red-box object at the position, size and orientation indicated by the green box,
+    and the green-box object at the position, size and orientation indicated by the red box, filling any exposed
+    background naturally. Match the perspective, scale, lighting and shadows of each object to its new location.
+    Remove both boxes and preserve everything else in the image exactly as it is. {request}
+  rewrite: false

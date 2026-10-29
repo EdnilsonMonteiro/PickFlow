@@ -1,0 +1,66 @@
+# ---------------------------------------------------------------------------
+# O que é SEU não vai para o repositório.
+#
+# custom/ guarda tudo que você cria ou edita: seus workflows (.json), registros, prompts,
+# o prompt do Clef e as configurações (custom/settings.yaml). Como a pasta inteira é ignorada,
+# não precisa listar arquivo por arquivo, e subpastas como custom/workflows/NSFW/ ficam de fora também.
+# O README da pasta é a única exceção, para ela existir depois do clone.
+# ---------------------------------------------------------------------------
+/custom/*
+!/custom/README.md
+
+# addons/ guarda as extensões que você cria (código, workflows, telas). Também fica só na sua máquina.
+/addons/*
+!/addons/README.md
+
+# Chaves (ex.: HF_TOKEN do Hugging Face, chaves de API dos LLMs). Copie .env.example para .env e preencha.
+.env
+.env.*
+!.env.example
+
+# Claude Code: só a skill do projeto vai para o repositório; permissões e ajustes locais (settings.local.json) ficam de fora.
+/.claude/*
+!/.claude/skills/
+
+# Imagens enviadas, resultados e conversas
+/data/
+
+# Ambientes virtuais e caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Pacotes e builds
+*.egg-info/
+dist/
+build/
+
+# Arquivos temporários e de backup
+*.tmp
+*.bak
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Lixeira que a migração cria (nada é apagado, só movido para cá)
+/_to_delete/
+
+# Editores
+.idea/
+.vscode/
+*.swp
+
+# Pesos e dumps pesados do Clef, se alguém baixar para dentro da pasta
+/clef_server/.venv/
+/clef_server/models/
+*.safetensors
+*.gguf
+*.ckpt

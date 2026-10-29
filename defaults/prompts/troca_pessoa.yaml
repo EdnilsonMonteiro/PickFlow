@@ -1,0 +1,83 @@
+# Prompts do workflow 'troca_pessoa' (Person Swap do AusBoss). O texto do prompt vai para o nó "Quem trocar": a frase que diz
+# QUEM da foto 1 é trocado ("the woman on the left"). Sem dizer quem, é "the person". O corpo inteiro ou só a cabeça é um ajuste
+# do grafo (`settings: whole_body`). Não há campo de instruções extras: o fluxo monta o pedido sozinho.
+
+default: padrao
+presets:
+- id: padrao
+  name: Trocar a pessoa
+  when: 'Swap the person in the scene (image 1) for the person of the reference (image 2): the whole person (body and head)
+    or only the head and hair. It can single out WHO to replace when there are several people ("the woman on the left").'
+  text: '{quem}'
+  needs: 2
+  slots: order
+  rewrite: false
+  auto_loras: false
+  vars:
+  - key: corpo
+    kind: choice
+    label: O que trocar
+    default: both
+    question: Does the user want to swap the whole person (body and head) or only the head and hair (a face swap)? If they do
+      not say, it is the whole person.
+    options:
+    - id: both
+      name: Corpo e cabeça
+      when: Swap the whole person (body and head together), or the request does not say what to swap. It is the default.
+      text: ''
+      settings:
+        whole_body: true
+    - id: head
+      name: Só a cabeça
+      when: Swap ONLY the head or the face and hair (face swap, head swap); the body, clothing and pose stay as they are.
+      text: ''
+      settings:
+        whole_body: false
+  - key: quem
+    kind: choice
+    label: Quem trocar
+    default: person
+    question: Which person of image 1 does the request single out? If the photo has only one person, or the request does not say
+      which one, choose "the person". When there are several people, use where each one stands (left, right, middle) and
+      whether the request says woman or man. Do NOT use clothing to name the person.
+    options:
+    - id: person
+      name: A pessoa
+      when: There is only one person in image 1, or the request does not single anyone out. It is the default.
+      text: the person
+    - id: woman
+      name: A mulher
+      when: The request says "the woman" (or the girl) and there is only one woman in image 1.
+      text: the woman
+    - id: man
+      name: O homem
+      when: The request says "the man" (or the boy) and there is only one man in image 1.
+      text: the man
+    - id: person_left
+      name: A pessoa da esquerda
+      when: Several people; the request singles out the one on the left (image 1 seen from the front), without saying woman or man.
+      text: the person on the left
+    - id: person_right
+      name: A pessoa da direita
+      when: Several people; the request singles out the one on the right, without saying woman or man.
+      text: the person on the right
+    - id: person_center
+      name: A pessoa do meio
+      when: Several people; the request singles out the one in the middle, without saying woman or man.
+      text: the person in the middle
+    - id: woman_left
+      name: A mulher da esquerda
+      when: Several people; the request singles out the woman on the left.
+      text: the woman on the left
+    - id: woman_right
+      name: A mulher da direita
+      when: Several people; the request singles out the woman on the right.
+      text: the woman on the right
+    - id: man_left
+      name: O homem da esquerda
+      when: Several people; the request singles out the man on the left.
+      text: the man on the left
+    - id: man_right
+      name: O homem da direita
+      when: Several people; the request singles out the man on the right.
+      text: the man on the right

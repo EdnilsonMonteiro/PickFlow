@@ -1,0 +1,32 @@
+# Ligação técnica do workflow 'replace_redbox' (nós do ComfyUI). Raramente precisa mudar.
+
+id: replace_redbox
+file: Qwen2.1 Substituir por Quadrado Vermelho.json
+title: Adicionar ou substituir numa área (quadrado vermelho)
+group: objetos
+images:
+- key: image_1
+  node: 5
+  label: Imagem
+  required: true
+  hint: Foto onde o quadrado vermelho marca o lugar (onde adicionar ou o que substituir).
+prompt:
+  node: 8
+  widget: prompt
+params:
+- key: red
+  type: box
+  image: image_1
+  label: Lugar do objeto (quadrado vermelho)
+  multiple: true
+  hint: Pode desenhar vários quadrados, mas só para objetos IGUAIS (o mesmo pedido vale para todos). Para objetos diferentes, faça uma edição de cada vez.
+  multi_prompt: There are {n} red squares in the image. Apply the instruction above to EACH of the {n} red squares, one separate and identical result per square, and remove every red square completely.
+  color: red
+  node: 6
+  widgets:
+  - box_x
+  - box_y
+  - box_w
+  - box_h
+outputs:
+- 11

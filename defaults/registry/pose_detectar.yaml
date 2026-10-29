@@ -1,0 +1,32 @@
+# Foto com pessoas -> pontos do corpo de cada pessoa (DWPose). Passo do caso de uso "Mudar a pose": o PickFlow lê os pontos
+# (`openpose_json` do nó DWPreprocessor), mostra uma tela para a pessoa mexer neles e devolve o mapa de pose (esqueleto) como imagem.
+# Gente colada ou uma na frente da outra confunde o DWPose na foto inteira (ele mistura os corpos num esqueleto só), então o SAM 3
+# separa cada pessoa numa imagem e o DWPose roda em cada uma; o DWPose na foto inteira fica de reserva (`pose.nodes`).
+#   pose   nodes: DWPreprocessors de onde sai o `openpose_json` (1º: lote, uma pessoa por quadro; 2º: foto inteira)
+
+id: pose_detectar
+file: PickFlow Pose - Detectar (DWPose).json
+title: Pose (achar as pessoas e modelar a pose)
+group: pose
+internal: true
+images:
+- key: image_1
+  node: 1
+  label: Foto com as pessoas
+  required: true
+  hint: A foto cujas pessoas vão mudar de pose.
+pose:
+  nodes: [3, 5]
+outputs:
+- 4
+- 6
+requires_nodes:
+- class: DWPreprocessor
+  pack: comfyui_controlnet_aux
+  url: https://github.com/Fannovel16/comfyui_controlnet_aux
+- class: SAM3Segment
+  pack: ComfyUI-RMBG
+  url: https://github.com/1038lab/ComfyUI-RMBG
+mem:
+  vram_gb: 2
+note: Separa cada pessoa (SAM3), detecta o corpo de cada uma (DWPose) e abre uma tela com o esqueleto de cada uma; você arrasta os pontos para montar a nova pose.

@@ -1,0 +1,29 @@
+# Ligação técnica do workflow 'multi_bodyswap' (nós do ComfyUI). Raramente precisa mudar.
+
+id: multi_bodyswap
+file: Qwen2.1 Multi BodySwap.json
+title: Trocar vários corpos
+group: troca de pessoa
+images:
+- key: image_1
+  node: 8
+  label: Cena com várias pessoas
+  required: true
+  hint: Foto com 2 ou 3 pessoas.
+- key: image_2
+  node: 9
+  label: Pessoa 1 (mais à esquerda)
+  required: true
+- key: image_3
+  node: 10
+  label: Pessoa 2
+  required: false
+- key: image_4
+  node: 11
+  label: Pessoa 3
+  required: false
+prompt:
+  node: 6
+  widget: value
+outputs:
+- 20

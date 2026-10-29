@@ -1,0 +1,27 @@
+# Ligação técnica do workflow 'edit_turbo' (nós do ComfyUI). Raramente precisa mudar.
+
+id: edit_turbo
+file: Qwen2.1 Image Edit Turbo.json
+title: Edição de imagem (Turbo)
+group: edição
+images:
+- key: image_1
+  node: 26
+  label: Imagem a editar
+  required: true
+  hint: A foto que será editada.
+- key: image_2
+  node: 27
+  label: Imagem de referência
+  required: false
+  hint: Estilo, roupa ou assunto a copiar. Opcional.
+- key: image_3
+  node: 33
+  label: Segunda referência
+  required: false
+  hint: Outra referência (opcional).
+prompt:
+  node: 6
+  widget: value
+outputs:
+- 25

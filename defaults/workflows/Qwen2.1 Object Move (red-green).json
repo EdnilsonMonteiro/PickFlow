@@ -1,0 +1,1460 @@
+{
+  "id": "e8f9a0b1-bbbb-4a2b-9c3d-0123456789ab",
+  "revision": 0,
+  "last_node_id": 15,
+  "last_link_id": 18,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "MarkdownNote",
+      "pos": [
+        0,
+        460
+      ],
+      "size": [
+        700,
+        420
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Instrucoes",
+      "properties": {
+        "Node name for S&R": "MarkdownNote"
+      },
+      "widgets_values": [
+        "## Qwen-Image-2.1 Object Move (caixas vermelha/verde)\n\nMova um objeto desenhando as caixas DIRETO NA IMAGEM com o mouse.\n\n### Como usar (bem intuitivo)\n1. **Load Image**: sua imagem.\n2. No node **\"Move Boxes (draw red+green on image)\"**, aparece a imagem com um canvas:\n   - **Arraste** no canvas -> desenha a caixa **VERMELHA** = o objeto que voce quer mover.\n   - **Shift + arraste** -> desenha a caixa **VERDE** = o destino (onde ele deve ficar).\n   - **Arraste por dentro** de uma caixa -> move; **canto inferior direito** -> redimensiona.\n   - (Os numeros src_x/tgt_x... embaixo sao so um fallback; voce pode digitar tambem.)\n3. Rode **Queue** -> o objeto e movido e as caixas somem.\n\n### Motor\n- Modelo base Qwen 2.1 (estilo do Space do linoyts: prompt + caixas, sem LoRA de move).\n- Prompt fixo: \"Move the object inside the red box to the ... green box ...\".\n- **KSampler**: 25 passos, cfg 2.5, euler/simple. (cfg mais alto = segue mais o prompt.)\n- Quer acelerar? Troque por um caminho com Viggle Turbo (6 passos).\n\n### Dicas\n- Caixas justas no objeto (vermelha) e no destino (verde).\n- Objetos nitidos e fundo simples funcionam melhor.\n\n### Memoria\n- int8 + `--disable-fast-disk`.\n"
+      ],
+      "widgets_values_named": {
+        "text": "## Qwen-Image-2.1 Object Move (caixas vermelha/verde)\n\nMova um objeto desenhando as caixas DIRETO NA IMAGEM com o mouse.\n\n### Como usar (bem intuitivo)\n1. **Load Image**: sua imagem.\n2. No node **\"Move Boxes (draw red+green on image)\"**, aparece a imagem com um canvas:\n   - **Arraste** no canvas -> desenha a caixa **VERMELHA** = o objeto que voce quer mover.\n   - **Shift + arraste** -> desenha a caixa **VERDE** = o destino (onde ele deve ficar).\n   - **Arraste por dentro** de uma caixa -> move; **canto inferior direito** -> redimensiona.\n   - (Os numeros src_x/tgt_x... embaixo sao so um fallback; voce pode digitar tambem.)\n3. Rode **Queue** -> o objeto e movido e as caixas somem.\n\n### Motor\n- Modelo base Qwen 2.1 (estilo do Space do linoyts: prompt + caixas, sem LoRA de move).\n- Prompt fixo: \"Move the object inside the red box to the ... green box ...\".\n- **KSampler**: 25 passos, cfg 2.5, euler/simple. (cfg mais alto = segue mais o prompt.)\n- Quer acelerar? Troque por um caminho com Viggle Turbo (6 passos).\n\n### Dicas\n- Caixas justas no objeto (vermelha) e no destino (verde).\n- Objetos nitidos e fundo simples funcionam melhor.\n\n### Memoria\n- int8 + `--disable-fast-disk`.\n"
+      },
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 2,
+      "type": "UNETLoader",
+      "pos": [
+        700,
+        0
+      ],
+      "size": [
+        320,
+        82
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "unet_name",
+          "locked": null,
+          "name": "unet_name",
+          "nameLocked": null,
+          "removable": null,
+          "type": "COMBO",
+          "widget": {
+            "name": "unet_name"
+          },
+          "link": null
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "tipo_peso",
+          "locked": null,
+          "name": "weight_dtype",
+          "nameLocked": null,
+          "removable": null,
+          "type": "COMBO",
+          "widget": {
+            "name": "weight_dtype"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "MODELO",
+          "locked": null,
+          "name": "MODEL",
+          "nameLocked": null,
+          "removable": null,
+          "type": "MODEL",
+          "pos": null,
+          "links": [
+            15
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "qwen_image_2.1_int8_convrot.safetensors",
+        "default"
+      ],
+      "widgets_values_named": {
+        "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+        "weight_dtype": "default"
+      }
+    },
+    {
+      "id": 3,
+      "type": "CLIPLoader",
+      "pos": [
+        700,
+        140
+      ],
+      "size": [
+        320,
+        106
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "clip_name",
+          "locked": null,
+          "name": "clip_name",
+          "nameLocked": null,
+          "removable": null,
+          "type": "COMBO",
+          "widget": {
+            "name": "clip_name"
+          },
+          "link": null
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "type",
+          "locked": null,
+          "name": "type",
+          "nameLocked": null,
+          "removable": null,
+          "type": "COMBO",
+          "widget": {
+            "name": "type"
+          },
+          "link": null
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "device",
+          "locked": null,
+          "name": "device",
+          "nameLocked": null,
+          "removable": null,
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "device"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "clip",
+          "locked": null,
+          "name": "CLIP",
+          "nameLocked": null,
+          "removable": null,
+          "type": "CLIP",
+          "pos": null,
+          "links": [
+            17
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "qwen3vl_8b_fp8_heretic.safetensors",
+        "qwen_image",
+        "default"
+      ],
+      "widgets_values_named": {
+        "clip_name": "qwen3vl_8b_fp8_heretic.safetensors",
+        "type": "qwen_image",
+        "device": "default"
+      }
+    },
+    {
+      "id": 4,
+      "type": "VAELoader",
+      "pos": [
+        700,
+        280
+      ],
+      "size": [
+        320,
+        58
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "vae_name",
+          "locked": null,
+          "name": "vae_name",
+          "nameLocked": null,
+          "removable": null,
+          "type": "COMBO",
+          "widget": {
+            "name": "vae_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "vae",
+          "locked": null,
+          "name": "VAE",
+          "nameLocked": null,
+          "removable": null,
+          "type": "VAE",
+          "pos": null,
+          "links": [
+            6,
+            7
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "qwen_image_2.1_vae_bf16.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+      }
+    },
+    {
+      "id": 5,
+      "type": "LoadImage",
+      "pos": [
+        -109.95481762505872,
+        11.642274807359152
+      ],
+      "size": [
+        330,
+        360
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "imagem",
+          "locked": null,
+          "name": "image",
+          "nameLocked": null,
+          "removable": null,
+          "type": "COMBO",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "escolher arquivo para enviar",
+          "locked": null,
+          "name": "upload",
+          "nameLocked": null,
+          "removable": null,
+          "type": "IMAGEUPLOAD",
+          "widget": {
+            "name": "upload"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "IMAGEM",
+          "locked": null,
+          "name": "IMAGE",
+          "nameLocked": null,
+          "removable": null,
+          "type": "IMAGE",
+          "pos": null,
+          "links": [
+            2
+          ]
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "MÁSCARA",
+          "locked": null,
+          "name": "MASK",
+          "nameLocked": null,
+          "removable": null,
+          "type": "MASK",
+          "pos": null,
+          "links": null
+        }
+      ],
+      "title": "Load Image",
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "example.png",
+        "upload": "image"
+      }
+    },
+    {
+      "id": 6,
+      "type": "MoveBoxes",
+      "pos": [
+        280.21212759238693,
+        -185.60287688756844
+      ],
+      "size": [
+        380,
+        430
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "image",
+          "locked": null,
+          "name": "image",
+          "nameLocked": null,
+          "removable": null,
+          "type": "IMAGE",
+          "pos": null,
+          "link": 2
+        },
+        {
+          "localized_name": "src_x",
+          "name": "src_x",
+          "type": "FLOAT",
+          "widget": {
+            "name": "src_x"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "src_y",
+          "name": "src_y",
+          "type": "FLOAT",
+          "widget": {
+            "name": "src_y"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "src_w",
+          "name": "src_w",
+          "type": "FLOAT",
+          "widget": {
+            "name": "src_w"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "src_h",
+          "name": "src_h",
+          "type": "FLOAT",
+          "widget": {
+            "name": "src_h"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "tgt_x",
+          "name": "tgt_x",
+          "type": "FLOAT",
+          "widget": {
+            "name": "tgt_x"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "tgt_y",
+          "name": "tgt_y",
+          "type": "FLOAT",
+          "widget": {
+            "name": "tgt_y"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "tgt_w",
+          "name": "tgt_w",
+          "type": "FLOAT",
+          "widget": {
+            "name": "tgt_w"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "tgt_h",
+          "name": "tgt_h",
+          "type": "FLOAT",
+          "widget": {
+            "name": "tgt_h"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "thickness",
+          "name": "thickness",
+          "type": "INT",
+          "widget": {
+            "name": "thickness"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "src_color",
+          "name": "src_color",
+          "type": "COMBO",
+          "widget": {
+            "name": "src_color"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "tgt_color",
+          "name": "tgt_color",
+          "type": "COMBO",
+          "widget": {
+            "name": "tgt_color"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "IMAGEM",
+          "locked": null,
+          "name": "IMAGE",
+          "nameLocked": null,
+          "removable": null,
+          "type": "IMAGE",
+          "pos": null,
+          "links": [
+            3,
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MoveBoxes"
+      },
+      "widgets_values": [
+        0.323,
+        0.912,
+        0.148,
+        0.088,
+        0.236,
+        0.901,
+        0.146,
+        0.096,
+        8,
+        "red",
+        "green",
+        ""
+      ],
+      "widgets_values_named": {
+        "src_x": 0.323,
+        "src_y": 0.912,
+        "src_w": 0.148,
+        "src_h": 0.088,
+        "tgt_x": 0.236,
+        "tgt_y": 0.901,
+        "tgt_w": 0.146,
+        "tgt_h": 0.096,
+        "thickness": 8,
+        "src_color": "red",
+        "tgt_color": "green",
+        "boxes": ""
+      }
+    },
+    {
+      "id": 7,
+      "type": "PreviewImage",
+      "pos": [
+        380,
+        460
+      ],
+      "size": [
+        322.265234375,
+        246
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "imagens",
+          "locked": null,
+          "name": "images",
+          "nameLocked": null,
+          "removable": null,
+          "type": "IMAGE",
+          "pos": null,
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "imagens",
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "title": "Preview (vermelho=objeto, verde=destino)",
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": [],
+      "widgets_values_named": {}
+    },
+    {
+      "id": 8,
+      "type": "TextEncodeQwenImage21",
+      "pos": [
+        1120,
+        0
+      ],
+      "size": [
+        420,
+        266
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "clip",
+          "locked": null,
+          "name": "clip",
+          "nameLocked": null,
+          "removable": null,
+          "type": "CLIP",
+          "pos": null,
+          "link": 5
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "image_1",
+          "locked": null,
+          "name": "images.image_1",
+          "nameLocked": null,
+          "removable": null,
+          "shape": 7,
+          "type": "IMAGE",
+          "pos": null,
+          "link": 4
+        },
+        {
+          "localized_name": "image_2",
+          "name": "images.image_2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_3",
+          "name": "images.image_3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "vae",
+          "locked": null,
+          "name": "vae",
+          "nameLocked": null,
+          "removable": null,
+          "shape": 7,
+          "type": "VAE",
+          "pos": null,
+          "link": 6
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "prompt",
+          "locked": null,
+          "name": "prompt",
+          "nameLocked": null,
+          "removable": null,
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "negative_prompt",
+          "locked": null,
+          "name": "negative_prompt",
+          "nameLocked": null,
+          "removable": null,
+          "type": "STRING",
+          "widget": {
+            "name": "negative_prompt"
+          },
+          "link": null
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "resolution",
+          "locked": null,
+          "name": "resolution",
+          "nameLocked": null,
+          "removable": null,
+          "type": "INT",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "positive",
+          "locked": null,
+          "name": "positive",
+          "nameLocked": null,
+          "removable": null,
+          "type": "CONDITIONING",
+          "pos": null,
+          "links": [
+            8
+          ]
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "negative",
+          "locked": null,
+          "name": "negative",
+          "nameLocked": null,
+          "removable": null,
+          "type": "CONDITIONING",
+          "pos": null,
+          "links": [
+            9
+          ]
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "latent",
+          "locked": null,
+          "name": "latent",
+          "nameLocked": null,
+          "removable": null,
+          "type": "LATENT",
+          "pos": null,
+          "links": [
+            10
+          ]
+        }
+      ],
+      "title": "Prompt (mover objeto)",
+      "properties": {
+        "Node name for S&R": "TextEncodeQwenImage21"
+      },
+      "widgets_values": [
+        "Move the object inside the red box to the position and size indicated by the green box. Remove the object from its original location in the red box, filling in the background naturally. Remove the bounding boxes and seamlessly blend the repositioned object into the scene, preserving all other objects and the background exactly as they are.",
+        "bounding boxes, rectangle, colored frame, blurry, low quality, deformed, extra objects, watermark, text",
+        0
+      ],
+      "widgets_values_named": {
+        "prompt": "Move the object inside the red box to the position and size indicated by the green box. Remove the object from its original location in the red box, filling in the background naturally. Remove the bounding boxes and seamlessly blend the repositioned object into the scene, preserving all other objects and the background exactly as they are.",
+        "negative_prompt": "bounding boxes, rectangle, colored frame, blurry, low quality, deformed, extra objects, watermark, text",
+        "resolution": 0
+      }
+    },
+    {
+      "id": 9,
+      "type": "KSampler",
+      "pos": [
+        1580,
+        0
+      ],
+      "size": [
+        270,
+        270
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "modelo",
+          "name": "model",
+          "type": "MODEL",
+          "link": 14
+        },
+        {
+          "localized_name": "positivo",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 8
+        },
+        {
+          "localized_name": "negativo",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 9
+        },
+        {
+          "localized_name": "imagem_latente",
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 10
+        },
+        {
+          "localized_name": "semente",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "passos",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cfg",
+          "name": "cfg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "nome_do_sampler",
+          "name": "sampler_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "sampler_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "agendador",
+          "name": "scheduler",
+          "type": "COMBO",
+          "widget": {
+            "name": "scheduler"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "denoise",
+          "name": "denoise",
+          "type": "FLOAT",
+          "widget": {
+            "name": "denoise"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "LATENT",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            11
+          ]
+        }
+      ],
+      "title": "KSampler (25 passos, cfg 2.5)",
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        359171908312624,
+        "randomize",
+        25,
+        2.5,
+        "euler",
+        "simple",
+        1
+      ],
+      "widgets_values_named": {
+        "seed": 359171908312624,
+        "control_after_generate": "randomize",
+        "steps": 25,
+        "cfg": 2.5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "denoise": 1
+      }
+    },
+    {
+      "id": 10,
+      "type": "VAEDecode",
+      "pos": [
+        1580,
+        260
+      ],
+      "size": [
+        320,
+        60
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "amostras",
+          "locked": null,
+          "name": "samples",
+          "nameLocked": null,
+          "removable": null,
+          "type": "LATENT",
+          "pos": null,
+          "link": 11
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "vae",
+          "locked": null,
+          "name": "vae",
+          "nameLocked": null,
+          "removable": null,
+          "type": "VAE",
+          "pos": null,
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "IMAGEM",
+          "locked": null,
+          "name": "IMAGE",
+          "nameLocked": null,
+          "removable": null,
+          "type": "IMAGE",
+          "pos": null,
+          "links": [
+            12
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      }
+    },
+    {
+      "id": 11,
+      "type": "SaveImage",
+      "pos": [
+        1580,
+        360
+      ],
+      "size": [
+        400,
+        450
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "imagens",
+          "locked": null,
+          "name": "images",
+          "nameLocked": null,
+          "removable": null,
+          "type": "IMAGE",
+          "pos": null,
+          "link": 12
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "prefixo_do_arquivo",
+          "locked": null,
+          "name": "filename_prefix",
+          "nameLocked": null,
+          "removable": null,
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "imagens",
+          "locked": null,
+          "name": "images",
+          "nameLocked": null,
+          "removable": null,
+          "type": "IMAGE",
+          "pos": null,
+          "links": null
+        }
+      ],
+      "title": "Save",
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "qwen21_objectmove/move"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "qwen21_objectmove/move"
+      }
+    },
+    {
+      "id": 13,
+      "type": "ViggleTurboLora",
+      "pos": [
+        957.7326978877331,
+        -133.02963594206673
+      ],
+      "size": [
+        357.128515625,
+        82
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "model",
+          "locked": null,
+          "name": "model",
+          "nameLocked": null,
+          "removable": null,
+          "type": "MODEL",
+          "pos": null,
+          "link": 13
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "lora_name",
+          "locked": null,
+          "name": "lora_name",
+          "nameLocked": null,
+          "removable": null,
+          "type": "COMBO",
+          "widget": {
+            "name": "lora_name"
+          },
+          "link": null
+        },
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "strength",
+          "locked": null,
+          "name": "strength",
+          "nameLocked": null,
+          "removable": null,
+          "type": "FLOAT",
+          "widget": {
+            "name": "strength"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "color_off": null,
+          "color_on": null,
+          "dir": null,
+          "label": null,
+          "localized_name": "MODELO",
+          "locked": null,
+          "name": "MODEL",
+          "nameLocked": null,
+          "removable": null,
+          "type": "MODEL",
+          "pos": null,
+          "slot_index": null,
+          "links": [
+            14
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ViggleTurboLora",
+        "models": [
+          {
+            "name": "Qwen-Image-2.1-viggle-turbo-v0.2.1-6step-lora-r128.safetensors",
+            "url": "https://huggingface.co/Viggle/Qwen-Image-2.1-viggle-turbo/resolve/main/Qwen-Image-2.1-viggle-turbo-v0.2.1-6step-lora-r128.safetensors",
+            "directory": "loras"
+          }
+        ]
+      },
+      "widgets_values": [
+        "Qwen-Image-2.1-viggle-turbo-v0.2.1-6step-lora-r128.safetensors",
+        1
+      ],
+      "widgets_values_named": {
+        "lora_name": "Qwen-Image-2.1-viggle-turbo-v0.2.1-6step-lora-r128.safetensors",
+        "strength": 1
+      }
+    },
+    {
+      "id": 14,
+      "type": "LoraLoader",
+      "pos": [
+        200,
+        420
+      ],
+      "size": [
+        320,
+        130
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 15
+        },
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 17
+        },
+        {
+          "name": "lora_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "lora_name"
+          },
+          "link": null
+        },
+        {
+          "name": "strength_model",
+          "type": "FLOAT",
+          "widget": {
+            "name": "strength_model"
+          },
+          "link": null
+        },
+        {
+          "name": "strength_clip",
+          "type": "FLOAT",
+          "widget": {
+            "name": "strength_clip"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            16
+          ],
+          "localized_name": "MODEL"
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            18
+          ],
+          "localized_name": "CLIP"
+        }
+      ],
+      "title": "Realism: Natural-Exposure 0.6",
+      "properties": {
+        "Node name for S&R": "LoraLoader"
+      },
+      "widgets_values": [
+        "Qwen-Image-2.1-Natural-Exposure-LoRA-4000.safetensors",
+        0.6,
+        0.6
+      ],
+      "widgets_values_named": {
+        "lora_name": "Qwen-Image-2.1-Natural-Exposure-LoRA-4000.safetensors",
+        "strength_model": 0.6,
+        "strength_clip": 0.6
+      }
+    },
+    {
+      "id": 15,
+      "type": "LoraLoader",
+      "pos": [
+        200,
+        580
+      ],
+      "size": [
+        320,
+        130
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 16
+        },
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 18
+        },
+        {
+          "name": "lora_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "lora_name"
+          },
+          "link": null
+        },
+        {
+          "name": "strength_model",
+          "type": "FLOAT",
+          "widget": {
+            "name": "strength_model"
+          },
+          "link": null
+        },
+        {
+          "name": "strength_clip",
+          "type": "FLOAT",
+          "widget": {
+            "name": "strength_clip"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            13
+          ],
+          "localized_name": "MODEL"
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            5
+          ],
+          "localized_name": "CLIP"
+        }
+      ],
+      "title": "Realism: Skin/Realism 0.5",
+      "properties": {
+        "Node name for S&R": "LoraLoader"
+      },
+      "widgets_values": [
+        "flymy_realism.safetensors",
+        0.5,
+        0.5
+      ],
+      "widgets_values_named": {
+        "lora_name": "flymy_realism.safetensors",
+        "strength_model": 0.5,
+        "strength_clip": 0.5
+      }
+    }
+  ],
+  "links": [
+    [
+      2,
+      5,
+      0,
+      6,
+      0,
+      "IMAGE"
+    ],
+    [
+      3,
+      6,
+      0,
+      7,
+      0,
+      "IMAGE"
+    ],
+    [
+      7,
+      4,
+      0,
+      10,
+      1,
+      "VAE"
+    ],
+    [
+      8,
+      8,
+      0,
+      9,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      9,
+      8,
+      1,
+      9,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      10,
+      8,
+      2,
+      9,
+      3,
+      "LATENT"
+    ],
+    [
+      11,
+      9,
+      0,
+      10,
+      0,
+      "LATENT"
+    ],
+    [
+      12,
+      10,
+      0,
+      11,
+      0,
+      "IMAGE"
+    ],
+    [
+      5,
+      15,
+      1,
+      8,
+      0,
+      "CLIP"
+    ],
+    [
+      4,
+      6,
+      0,
+      8,
+      1,
+      "IMAGE"
+    ],
+    [
+      6,
+      4,
+      0,
+      8,
+      4,
+      "VAE"
+    ],
+    [
+      13,
+      15,
+      0,
+      13,
+      0,
+      "MODEL"
+    ],
+    [
+      14,
+      13,
+      0,
+      9,
+      0,
+      "MODEL"
+    ],
+    [
+      15,
+      2,
+      0,
+      14,
+      0,
+      "MODEL"
+    ],
+    [
+      16,
+      14,
+      0,
+      15,
+      0,
+      "MODEL"
+    ],
+    [
+      17,
+      3,
+      0,
+      14,
+      1,
+      "CLIP"
+    ],
+    [
+      18,
+      14,
+      1,
+      15,
+      1,
+      "CLIP"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.7730448000000022,
+      "offset": [
+        628.4242613811618,
+        517.4018974613774
+      ]
+    }
+  },
+  "version": 0.4
+}

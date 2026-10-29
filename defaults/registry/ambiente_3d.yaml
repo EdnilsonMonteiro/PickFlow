@@ -1,0 +1,41 @@
+# Foto de um AMBIENTE -> Gaussian Splat (TripoSplat, foto inteira). O PickFlow mostra o 3D no navegador; a pessoa gira
+# a câmera com o mouse, baixa o PNG do ângulo e escolhe se fica com o render ou se completa as partes cinza do render
+# (Editar com a LoRA de Outpaint).
+#   splat   o passo devolve um arquivo 3D (nó SaveGLB), não uma imagem: kind diz como mostrar; then é o workflow que
+#           gera a foto final a partir do render (o original entra junto)
+
+id: ambiente_3d
+file: PickFlow 3D - Gerar Splat (TripoSplat).json
+title: Ambiente em 3D (mudar o ângulo)
+group: câmera
+images:
+- key: image_1
+  node: 99
+  label: Foto do ambiente
+  required: true
+  hint: O quarto, sala, cômodo ou lugar que vai virar 3D.
+set:
+- node: 88
+  widget: switch
+  value: false
+splat:
+  node: 51
+  kind: ambiente
+  then:                       # o render no ângulo novo tem cinza #808080 onde a foto não mostrava nada: o Outpaint completa
+    workflow: edit
+    prompt: expandir
+    vars:
+      expand: gray            # só completar o cinza, sem aumentar a tela
+    inputs:
+      image_1: previous
+      image_2: none
+      image_3: none
+      image_4: none
+      image_5: none
+      image_6: none
+      image_7: none
+      image_8: none
+outputs: []
+mem:
+  vram_gb: 10
+note: O TripoSplat gera o 3D em cerca de 30 s (o resultado fica guardado; a mesma foto não é gerada de novo).

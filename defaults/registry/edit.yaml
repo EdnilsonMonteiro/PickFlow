@@ -1,0 +1,119 @@
+# Ligação técnica do workflow unificado 'edit' (edição, trocar pessoas, trocar roupa, girar o ponto de vista).
+#   modes       cada modo é um arquivo do ComfyUI (turbo, quality); o Clef escolhe o modo
+#   lora_chain  nós de LoRA do arquivo que o PickFlow substitui a cada execução pela pilha de LoRAs
+#   lora_base   LoRAs sempre ligadas (realismo); os prompts e o Clef acrescentam ou ajustam
+#   knobs       ajustes do grafo que prompts e LoRAs podem mudar (bypass: valor 'off' ignora o nó)
+
+id: edit
+title: Editar imagem
+group: edição
+images:
+- key: image_1
+  node: 26
+  label: Imagem base
+  required: true
+  hint: 'A foto principal: a que será editada, ou a cena cuja pose, luz e fundo ficam.'
+- key: image_2
+  node: 27
+  label: Referência 1
+  required: false
+  hint: Pessoa, rosto, roupa, tatuagem, objeto ou estilo a copiar (opcional). Ao trocar pessoas, as referências entram 
+    na ordem em que você as anexou.
+- key: image_3
+  node: 50
+  label: Referência 2
+  required: false
+  hint: Outra pessoa, objeto ou o lugar onde a pessoa deve ficar (opcional). Sem ela, a entrada sai do grafo.
+- key: image_4
+  node: 52
+  label: Referência 3
+  required: false
+  hint: Outra pessoa, objeto ou o lugar onde a pessoa deve ficar (opcional). Sem ela, a entrada sai do grafo.
+- key: image_5
+  node: 54
+  label: Referência 4
+  required: false
+  hint: Outra pessoa, objeto ou o lugar onde a pessoa deve ficar (opcional). Sem ela, a entrada sai do grafo.
+- key: image_6
+  node: 56
+  label: Referência 5
+  required: false
+  hint: Outra pessoa, objeto ou o lugar onde a pessoa deve ficar (opcional). Sem ela, a entrada sai do grafo.
+- key: image_7
+  node: 58
+  label: Referência 6
+  required: false
+  hint: Outra pessoa, objeto ou o lugar onde a pessoa deve ficar (opcional). Sem ela, a entrada sai do grafo.
+- key: image_8
+  node: 60
+  label: Referência 7
+  required: false
+  hint: Outra pessoa, objeto ou o lugar onde a pessoa deve ficar (opcional). Sem ela, a entrada sai do grafo.
+prompt:
+  node: 6
+  widget: value
+lora_chain:
+  nodes:
+  - 45
+  - 49
+  - 46
+  model: 2
+  clip: 4
+lora_base:
+- id: natexp
+  strength: 0.6
+- id: flymy
+  strength: 0.5
+- id: consistency
+  strength: 0.5
+knobs:
+  resolution:
+    node: 18
+    widget: resolution
+  negative:
+    node: 18
+    widget: negative_prompt
+  scene_mp:
+    node: 40
+    widget: megapixels
+    bypass: true
+    default: 'off'
+  ref_mp:
+    nodes:
+    - 41
+    - 51
+    - 53
+    - 55
+    - 57
+    - 59
+    - 61
+    widget: megapixels
+    bypass: true
+    default: 'off'
+modes:
+  turbo:
+    title: Rápido
+    file: PickFlow Editar - Turbo.json
+    outputs:
+    - 25
+    when: 'Fast, 6 steps. It is the default: use it whenever the user does not ask for more quality.'
+  quality:
+    title: Qualidade
+    file: PickFlow Editar - Qualidade.json
+    outputs:
+    - 25
+    when: Slower and more detailed, 25 steps. Only when the user asks for top quality, more detail or says there is no 
+      rush.
+    knobs:
+      steps:
+        node: 42
+        widget: steps
+      cfg:
+        node: 42
+        widget: cfg
+      sampler:
+        node: 42
+        widget: sampler_name
+      scheduler:
+        node: 42
+        widget: scheduler

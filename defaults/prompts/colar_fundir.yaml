@@ -1,0 +1,70 @@
+# Prompts do workflow 'colar_fundir'. 'pysj666' é a palavra de ativação da LoRA de perspectiva e fusão.
+# O pedido do usuário ("cole a moça na praia") só serviria de ruído para a fusão simples, então só entra na opção
+# "completar" (pessoa cortada ou com pose/ação pedida), onde ele diz a pose e o que a pessoa faz.
+
+default: pessoa
+presets:
+- id: pessoa
+  name: Fundir uma pessoa no ambiente
+  when: The pasted part is a person or animal. Fixes perspective, light and shadow and keeps face, body and clothing the
+    same; if the pasted person is incomplete (cut off, without legs or hands) or the request asks for a pose or action 
+    (sit, hold something), Clef switches to completing the body and the scene in a single edit.
+  text: '{corpo}'
+  rewrite: false
+  vars:
+  - key: corpo
+    kind: choice
+    label: Corpo da pessoa colada
+    default: inteiro
+    question: 'Look at the collage (the LAST image, the result of the previous step) and read the request. Does the pasted
+      person appear WHOLE and in a pose that fits the place, or is part of them missing? Choose "completar" if they are cut
+      off or incomplete (only from the waist up, without legs, feet or hands, cut by the edge of the photo or by furniture),
+      or if the request asks for a pose or action the collage does not show yet (sitting on the chair, holding an object,
+      leaning, lying down, standing next to something). If they already appear whole and the request asks for no pose or action,
+      choose "inteiro".'
+    options:
+    - id: inteiro
+      name: Pessoa inteira, só fundir
+      when: The pasted person already appears whole and the pose fits the place; the request asks for no new pose or 
+        action. Only fix perspective, light and shadow.
+      text: pysj666 keep the subject position and size unchanged, adjust the background perspective angle to align with 
+        the subject's vanishing point. seamless blending between subject and background. The person must respect the 
+        background lighting, shadows, color temperature and perspective; keep the person's face, identity, body and 
+        clothing unchanged.
+    - id: completar
+      name: Completar o corpo e a pose
+      when: The pasted person is incomplete (cut off, without legs, feet or hands) or the request asks for a pose or 
+        action the collage does not show (sit, hold an object, lean). The model draws what is missing and the action, in
+        a single edit.
+      settings:
+        consistency: 'off'
+        pysj: 0.5
+        pysj_clip: 0.5
+      rewrite: true
+      note: 'This step receives ONE image, the collage: a cut-out person was pasted onto a background and the result must
+        look like a single photo. Write the prompt so that the model finishes the person (missing body parts, the pose and
+        action asked for) and cleans up the scene around them. If the request says the person takes the place of someone or
+        something already in the scene (for example "in the place of the man in red"), say clearly what that original person
+        or object looks like (clothes, position) and that it must be removed completely, with no leftover limbs, clothes,
+        hair or props showing around the pasted person, and the background rebuilt behind it. Say that all the other people
+        and objects of the scene must stay exactly as they are. Keep the pasted person''s face, hair and visible clothing
+        identical, and keep the instruction starting with pysj666.'
+      text: 'pysj666 seamless blending between subject and background, matching the background lighting, shadows, color temperature
+        and perspective. The pasted person is incomplete or not yet in the requested pose, so complete the whole person naturally
+        inside this scene: draw the missing body parts (legs, feet, hands, arms) and make the pose and any interaction with
+        objects or furniture described below, with natural contact, scale and shadows. If the instructions say the pasted
+        person takes the place of someone or something in the scene, the one to remove is only the original person whose body
+        still shows around or below the pasted cut-out at that spot: remove it completely (no leftover body, limbs, clothing
+        or props around the pasted person) and rebuild the background behind it. Keep every OTHER person and object in the
+        scene exactly as it is (same number of people, same places, nobody removed or added besides what was asked). Keep
+        the face, hair, identity, clothing and the visible body parts of the pasted person exactly the same, and keep the
+        position and size of the visible part unchanged. The only image here is the collage, so ignore any "image 1" or "image
+        2" in the instructions. User instructions: {request}'
+- id: objeto
+  name: Fundir um objeto no ambiente
+  when: The pasted part is an object, furniture, vehicle or product, without a person. Fixes perspective, light and 
+    shadow and keeps the object's shape, color and details.
+  text: pysj666 keep the object position and size unchanged, adjust the background perspective angle to align with the 
+    object's vanishing point. seamless blending between object and background. The object must respect the background 
+    lighting, shadows, color temperature and perspective; keep the object's shape, colors and details unchanged.
+  rewrite: false

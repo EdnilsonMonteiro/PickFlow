@@ -1,0 +1,39 @@
+# Ligação técnica do workflow 'colar_posicionar' (nós do ComfyUI). Raramente precisa mudar.
+# Etapa 1 do "Colar + Fundir", parte 2: o Create Layered Image monta a colagem. No ComfyUI você arrasta a pessoa
+# no próprio node; no PickFlow a posição e o tamanho (livres, inclusive parte fora do fundo) vêm do desenho feito no chat:
+# o PickFlow corta a parte que sai da imagem e entra no Add Layer já no tamanho final.
+
+id: colar_posicionar
+file: PickFlow Colar - Posicionar.json
+title: Colar - posicionar a pessoa no fundo
+group: colagem
+internal: true
+images:
+- key: image_1
+  node: 2
+  label: Fundo
+  required: true
+  hint: O cenário onde a pessoa ou o objeto será colado.
+- key: image_2
+  node: 3
+  label: Recorte com transparência
+  required: true
+  hint: Sai do passo "recortar".
+params:
+- key: lugar
+  type: place
+  image: image_1
+  overlay: image_2
+  label: Arraste a pessoa para o lugar (pode sair da imagem). Cantos mudam o tamanho mantendo a proporção; o meio de cada lado estica
+  node: 13
+  widgets:
+  - x
+  - y
+  - width
+  - height
+set:
+- node: 10
+  widget: compositor
+  value: {}
+outputs:
+- 14

@@ -1,0 +1,12 @@
+# {request} traz o pedido e a descrição em palavras do que mudou na pose (o passo "detectar" escreve essa descrição a partir dos
+# pontos que a pessoa moveu). O ControlNet segue o mapa de pose; o texto diz quem muda, e a foto de referência mantém a identidade.
+default: pose
+presets:
+- id: pose
+  name: Aplicar a nova pose
+  when: Always.
+  text: Change the pose of the people in <image1> so that they follow the pose control map exactly. Keep every person's identity,
+    face, hair, clothing, body proportions, art style, lighting and the background of <image1>, and keep everybody whose pose
+    was not changed exactly as they are. Draw every hand sharp, with five clearly defined fingers and natural anatomy, following
+    the hand skeletons of the control map. {request}
+  rewrite: false

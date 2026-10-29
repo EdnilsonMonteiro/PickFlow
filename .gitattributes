@@ -1,0 +1,9 @@
+# Normaliza o fim de linha: .bat precisa de CRLF no Windows, .sh precisa de LF no Linux/macOS.
+* text=auto
+*.bat text eol=crlf
+*.sh text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.py text eol=lf
+*.js text eol=lf
+*.png binary

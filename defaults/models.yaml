@@ -1,0 +1,228 @@
+# Arquivos que os workflows do PickFlow usam e que ficam no ComfyUI (pastas models/<folder>/).
+# O assistente de primeiros passos (aba Ajustes) lê esta lista, mostra o que falta e só baixa o que você marcar.
+#
+# Cada autor tem a sua licença: várias são de uso não comercial. Confira a página antes de usar.
+# Para acrescentar os seus, crie custom/models.yaml com o mesmo formato (mesmo id = o seu vale mais).
+#
+#   id        nome curto (letras minúsculas, números e _)
+#   file      nome do arquivo como o workflow o chama
+#   folder    loras | diffusion_models | text_encoders | vae   (subpasta de models/)
+#   url       endereço direto do arquivo (https)
+#   page      página do autor, para conferir licença e versão
+#   size_gb   tamanho aproximado (opcional; o assistente confirma o tamanho real antes de baixar)
+
+files:
+- id: viggle_turbo
+  group: lora
+  title: Viggle Turbo (6 passos)
+  file: Qwen-Image-2.1-viggle-turbo-v0.2.1-6step-lora-r128.safetensors
+  folder: loras
+  why: Faz os workflows Turbo gerarem em 6 passos, sem CFG.
+  license: Qwen Research (uso não comercial)
+  page: https://huggingface.co/Viggle/Qwen-Image-2.1-viggle-turbo
+  url: https://huggingface.co/Viggle/Qwen-Image-2.1-viggle-turbo/resolve/main/Qwen-Image-2.1-viggle-turbo-v0.2.1-6step-lora-r128.safetensors
+  size_gb: 0.7
+- id: natural_exposure
+  group: lora
+  title: Natural Exposure
+  file: Qwen-Image-2.1-Natural-Exposure-LoRA-4000.safetensors
+  folder: loras
+  why: Luz e exposição mais naturais na edição. Está em quase todos os workflows.
+  license: Qwen Research (uso não comercial)
+  page: https://huggingface.co/prithivMLmods/Qwen-Image-2.1-Natural-Exposure-LoRA
+  url: https://huggingface.co/prithivMLmods/Qwen-Image-2.1-Natural-Exposure-LoRA/resolve/main/Qwen-Image-2.1-Natural-Exposure-LoRA-4000.safetensors
+- id: consistency
+  group: lora
+  title: Consistency
+  file: qwen-image-2.1-consistency.safetensors
+  folder: loras
+  why: Mantém o que você não pediu para mudar. Fica ligada na base do Editar e dos workflows de substituir e fundir;
+    não funciona junto com a de trocar roupa.
+  license: Qwen Research (uso não comercial)
+  page: https://huggingface.co/ausboss/Qwen-Image-2.1-Consistency-LoRA
+  url: https://huggingface.co/ausboss/Qwen-Image-2.1-Consistency-LoRA/resolve/main/qwen-image-2.1-consistency.safetensors
+- id: flymy_realism
+  group: lora
+  title: FlyMy Realism
+  file: flymy_realism.safetensors
+  folder: loras
+  why: Mais realismo de pele e textura (edição, trocar cabeça, mover e transferir objeto).
+  license: Apache-2.0
+  page: https://huggingface.co/flymy-ai/qwen-image-realism-lora
+  url: https://huggingface.co/flymy-ai/qwen-image-realism-lora/resolve/main/flymy_realism.safetensors
+- id: bfs_head
+  group: lora
+  title: BFS troca de cabeça
+  file: bfs_head_v1.1_qwen_2.1.safetensors
+  folder: loras
+  why: Trocar a cabeça ou o rosto de uma pessoa.
+  license: MIT
+  page: https://huggingface.co/Alissonerdx/BFS-Best-Face-Swap
+  url: https://huggingface.co/Alissonerdx/BFS-Best-Face-Swap/resolve/main/bfs_head_v1.1_qwen_2.1.safetensors
+  size_gb: 0.3
+- id: bfs_body
+  group: lora
+  title: BFS troca de corpo
+  file: bfs_body_swap_v1.0_qwen_2.1.safetensors
+  folder: loras
+  why: Trocar o corpo de uma pessoa, trocar vários corpos e transferir objeto (Turbo).
+  license: MIT
+  page: https://huggingface.co/Alissonerdx/BFS-Best-Face-Swap
+  url: https://huggingface.co/Alissonerdx/BFS-Best-Face-Swap/resolve/main/bfs_body_swap_v1.0_qwen_2.1.safetensors
+- id: pysj666_fusao
+  group: lora
+  title: Perspectiva e fusão (pysj666)
+  file: qwen-image-2.1纠正背景透视溶图v2.0.safetensors
+  folder: loras
+  why: Usada no passo "Fundir" do Colar + Fundir. Ajusta perspectiva, luz e sombra para a colagem parecer uma foto
+    só (palavra de ativação pysj666).
+  license: Veja a página (publicada pela RunningHub em nome do autor)
+  page: https://huggingface.co/RunningHubAI/rh-qwen-image-2.1v2.0-lora
+  url: https://huggingface.co/RunningHubAI/rh-qwen-image-2.1v2.0-lora/resolve/main/qwen-image-2.1%E7%BA%A0%E6%AD%A3%E8%83%8C%E6%99%AF%E9%80%8F%E8%A7%86%E6%BA%B6%E5%9B%BEv2.0.safetensors
+  size_gb: 0.17
+- id: outfit_swap
+  group: lora
+  title: Trocar roupa ou tatuagem
+  file: qwen-image-2.1-outfit-swap.safetensors
+  folder: loras
+  why: Passa a roupa (ou as tatuagens) de uma imagem de referência para a pessoa da cena. Não funciona junto com
+    a Consistency.
+  license: ver a página
+  page: https://huggingface.co/ausboss/Qwen-Image-2.1-Outfit-Swap-Consistency-LoRA
+  url: https://huggingface.co/ausboss/Qwen-Image-2.1-Outfit-Swap-Consistency-LoRA/resolve/main/qwen-image-2.1-outfit-swap.safetensors
+- id: viewpoint_orbit
+  group: lora
+  title: Girar o ponto de vista (órbita)
+  file: Qwen2.1_viewpoint_orbit.safetensors
+  folder: loras
+  why: Gira a câmera ao redor de um objeto ou pessoa. O arquivo do autor se chama orbit_alpha_lora_gate_up_split.safetensors;
+    o PickFlow salva como Qwen2.1_viewpoint_orbit.safetensors.
+  license: Qwen Research (uso não comercial)
+  page: https://huggingface.co/ML-Intern-lab/Qwen-Image-2.1-viewpoint-orbit-LoRA
+  url: https://huggingface.co/ML-Intern-lab/Qwen-Image-2.1-viewpoint-orbit-LoRA/resolve/main/checkpoints/steps2000res768/orbit_alpha_lora_gate_up_split.safetensors
+- id: qwen_unet
+  group: model
+  title: Qwen-Image 2.1 (modelo principal, int8)
+  file: qwen_image_2.1_int8_convrot.safetensors
+  folder: diffusion_models
+  why: O modelo que todos os workflows usam.
+  license: Qwen Research (uso não comercial)
+  page: https://huggingface.co/Comfy-Org/Qwen-Image-2.1
+  url: https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/diffusion_models/qwen_image_2.1_int8_convrot.safetensors
+- id: qwen_vae
+  group: model
+  title: Qwen-Image 2.1 VAE
+  file: qwen_image_2.1_vae_bf16.safetensors
+  folder: vae
+  why: Converte o resultado em imagem.
+  license: Qwen Research (uso não comercial)
+  page: https://huggingface.co/Comfy-Org/Qwen-Image-2.1
+  url: https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/vae/qwen_image_2.1_vae_bf16.safetensors
+- id: qwen_text_encoder
+  group: model
+  title: Codificador de texto Qwen3-VL 8B (fp8)
+  file: qwen3vl_8b_fp8_heretic.safetensors
+  folder: text_encoders
+  why: Lê o prompt e as imagens. Todos os workflows usam.
+  license: Qwen Research (uso não comercial)
+  page: https://huggingface.co/Comfy-Org/Qwen-Image-2.1
+  url: https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/text_encoders/qwen3vl_8b_fp8_heretic.safetensors
+- id: restore
+  group: lora
+  title: Restaurar foto
+  file: qwen-image-2.1-restore.safetensors
+  folder: loras
+  why: Restaura e melhora fotos pequenas, comprimidas, borradas ou antigas sem mudar a pessoa. Não funciona junto com a Consistency.
+  license: Qwen Research (uso não comercial)
+  page: https://huggingface.co/ausboss/Qwen-Image-2.1-Restore-LoRA
+  url: https://huggingface.co/ausboss/Qwen-Image-2.1-Restore-LoRA/resolve/main/qwen-image-2.1-restore.safetensors
+- id: outpaint
+  group: lora
+  title: Outpaint (completar áreas cinza)
+  file: qwen-image-2.1-outpaint-v2.safetensors
+  folder: loras
+  why: Expande a foto para os lados e completa áreas cinza (#808080), como os buracos de um render 3D.
+  license: Qwen Research (uso não comercial)
+  page: https://huggingface.co/ausboss/Qwen-Image-2.1-Outpaint-LoRA
+  url: https://huggingface.co/ausboss/Qwen-Image-2.1-Outpaint-LoRA/resolve/main/qwen-image-2.1-outpaint-v2.safetensors
+  size_gb: 0.16
+- id: anyangle
+  group: lora
+  title: AnyAngle (mudar a câmera com 3D)
+  file: QI2.1_AnyAngle.safetensors
+  folder: loras
+  why: Gera a foto no ângulo escolhido no 3D (o render do splat guia a câmera). Usada pelo workflow "Mudar a câmera (AnyAngle)".
+  license: Apache-2.0 (o modelo base é Qwen Research, uso não comercial)
+  page: https://huggingface.co/lilylilith/QI_2.1_AnyAngle
+  url: https://huggingface.co/lilylilith/QI_2.1_AnyAngle/resolve/main/QI2.1_AnyAngle.safetensors
+  size_gb: 0.12
+- id: triposplat
+  group: model
+  title: TripoSplat (foto -> 3D)
+  file: triposplat_fp16.safetensors
+  folder: diffusion_models
+  why: Transforma uma foto em Gaussian Splat (3D) para escolher o ângulo da câmera.
+  license: MIT
+  page: https://huggingface.co/VAST-AI/TripoSplat
+  url: https://huggingface.co/VAST-AI/TripoSplat/resolve/main/diffusion_models/triposplat_fp16.safetensors
+  size_gb: 0.74
+- id: triposplat_dino
+  group: model
+  title: TripoSplat - DINOv3 (visão)
+  file: dino_v3_vit_h.safetensors
+  folder: clip_vision
+  why: Lê a foto para o TripoSplat.
+  license: MIT
+  page: https://huggingface.co/VAST-AI/TripoSplat
+  url: https://huggingface.co/VAST-AI/TripoSplat/resolve/main/clip_vision/dino_v3_vit_h.safetensors
+  size_gb: 1.7
+- id: triposplat_vae
+  group: model
+  title: TripoSplat - decodificador
+  file: triposplat_vae_decoder_fp16.safetensors
+  folder: vae
+  why: Converte o resultado do TripoSplat em splat.
+  license: MIT
+  page: https://huggingface.co/VAST-AI/TripoSplat
+  url: https://huggingface.co/VAST-AI/TripoSplat/resolve/main/vae/triposplat_vae_decoder_fp16.safetensors
+  size_gb: 0.58
+- id: triposplat_flux2_vae
+  group: model
+  title: TripoSplat - VAE Flux2
+  file: flux2-vae.safetensors
+  folder: vae
+  why: Codifica a foto para o TripoSplat.
+  license: MIT
+  page: https://huggingface.co/VAST-AI/TripoSplat
+  url: https://huggingface.co/VAST-AI/TripoSplat/resolve/main/vae/flux2-vae.safetensors
+  size_gb: 0.34
+- id: birefnet
+  group: model
+  title: BiRefNet (remover fundo)
+  file: birefnet.safetensors
+  folder: background_removal
+  why: Recorta a pessoa ou o objeto antes de gerar o 3D (mudar o ângulo da pessoa).
+  license: MIT
+  page: https://huggingface.co/Comfy-Org/BiRefNet
+  url: https://huggingface.co/Comfy-Org/BiRefNet/resolve/main/background_removal/birefnet.safetensors
+  size_gb: 0.44
+- id: qwen_union_controlnet
+  group: model
+  title: Qwen-Image 2.1 Fun ControlNet Union (pose)
+  file: Qwen-Image-2.1-Fun-Controlnet-Union-ComfyUI.safetensors
+  folder: controlnet
+  why: Faz as pessoas seguirem o mapa de pose no fluxo "Mudar a pose". Precisa também do pacote Qwen Image 2.1 Fun ControlNet Union (T8) no ComfyUI.
+  license: Qwen Research (uso não comercial)
+  page: https://huggingface.co/t8star/Qwen-Image-2.1-Fun-Controlnet-Union-Comfy
+  url: https://huggingface.co/t8star/Qwen-Image-2.1-Fun-Controlnet-Union-Comfy/resolve/main/Qwen-Image-2.1-Fun-Controlnet-Union-ComfyUI.safetensors
+  size_gb: 7.0
+- id: qwen_text_encoder_int8
+  group: model
+  title: Codificador de texto Qwen3-VL 8B (int8)
+  file: qwen3vl_8b_int8_convrot.safetensors
+  folder: text_encoders
+  why: Usado pelos fluxos de trocar pessoa e trocar roupa (AusBoss). Na troca de roupa ele também descreve a roupa da foto de referência.
+  license: Qwen Research (uso não comercial)
+  page: https://huggingface.co/Comfy-Org/Qwen-Image-2.1
+  url: https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/text_encoders/qwen3vl_8b_int8_convrot.safetensors
+  size_gb: 9.4

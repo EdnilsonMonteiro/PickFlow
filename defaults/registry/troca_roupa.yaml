@@ -1,0 +1,69 @@
+# Ligação técnica do workflow 'troca_roupa': o "Qwen Image 2.1 Outfit Swap" do AusBoss (nós do pacote ComfyUI-AusBoss).
+# É o fluxo PADRÃO de trocar a roupa: um modelo de visão descreve a roupa da 2ª imagem e o Qwen veste a pessoa da 1ª, sem
+# mexer em rosto, cabelo, mãos, pose e fundo. Quem diz QUEM vestir (foto com várias pessoas) é o texto `quem` do prompt.
+# Tatuagens (e roupa + tatuagens) ficam com o editor ('edit', prompt 'trocar_roupa'): veja `fallback`.
+#   modes   turbo (LoRA viggle, 8 passos) e quality (sem a viggle, 25 passos): trocam a linha da viggle e os passos
+
+id: troca_roupa
+file: PickFlow Troca - Roupa.json
+title: Trocar roupa
+group: pessoas
+images:
+- key: image_1
+  node: 2
+  label: Pessoa
+  required: true
+  hint: A foto da pessoa que vai vestir a roupa (rosto, cabelo, mãos, pose e fundo ficam iguais).
+- key: image_2
+  node: 3
+  label: Roupa
+  required: true
+  hint: A foto com a roupa a vestir (pode ser a roupa de outra pessoa).
+prompt:
+  node: 4
+  widget: text
+knobs:
+  steps:
+    node: 71
+    widget: value
+    default: 8
+requires_nodes:
+- class: AUSBOSS_NODES_LoraLoader
+  pack: ComfyUI-AusBoss
+  url: https://github.com/ausboss/ComfyUI-AusBoss
+outputs:
+- 14
+modes:
+  turbo:
+    title: Rápido
+    when: 'Fast, 8 steps with the Viggle turbo LoRA. It is the default: use it whenever the user does not ask for more quality.'
+    set:
+    - node: 70
+      widget: loras
+      value: '[{"id":"r0","name":"qwen-image-2.1-outfit-swap.safetensors","strength":1,"strength_clip":1,"enabled":true,"triggers":""},{"id":"r1","name":"Qwen-Image-2.1-viggle-turbo-v0.2.1-6step-lora-r128.safetensors","strength":1,"strength_clip":1,"enabled":true,"triggers":""}]'
+  quality:
+    title: Qualidade
+    when: Slower and more detailed, 25 steps without the turbo LoRA. Only when the user asks for top quality, more detail or says there is no rush.
+    knobs:
+      steps:
+        node: 71
+        widget: value
+        default: 25
+    set:
+    - node: 70
+      widget: loras
+      value: '[{"id":"r0","name":"qwen-image-2.1-outfit-swap.safetensors","strength":1,"strength_clip":1,"enabled":true,"triggers":""},{"id":"r1","name":"Qwen-Image-2.1-viggle-turbo-v0.2.1-6step-lora-r128.safetensors","strength":1,"strength_clip":1,"enabled":false,"triggers":""}]'
+fallback:
+  workflow: edit
+  prompt: trocar_roupa
+  question: This flow dresses the person of image 1 in the CLOTHING of image 2. Read the request. Is it only about clothing, or is it one
+    of the exceptions where the classic editor does better?
+  main:
+    name: Fluxo novo (padrão)
+    when: Normal case - the request is to swap or put on the clothing, the outfit, a garment or the look of image 2.
+      Use the default flow.
+  options:
+    tattoos:
+      name: Tatuagens
+      when: The request is about TATTOOS - transfer, copy or apply the tattoos of image 2 to the person, alone or together
+        with the clothing.

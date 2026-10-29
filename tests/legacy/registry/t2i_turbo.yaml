@@ -1,0 +1,22 @@
+# Ligação técnica do workflow 't2i_turbo' (nós do ComfyUI). Raramente precisa mudar.
+
+id: t2i_turbo
+file: Qwen2.1 Image Edit Turbo.json
+title: Gerar imagem do zero (Turbo)
+group: geração
+images: []
+prompt:
+  node: 6
+  widget: value
+drop:
+- 26
+- 27
+- 33
+set:
+- node: 30
+  widget: value
+  value: true
+note: Reaproveita o workflow Image Edit Turbo ligando 'Custom output size'. O tamanho vem do nó 'Output size' (ResolutionSelector)
+  salvo no workflow.
+outputs:
+- 25

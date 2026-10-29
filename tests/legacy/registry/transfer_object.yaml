@@ -1,0 +1,45 @@
+# Ligação técnica do workflow 'transfer_object' (nós do ComfyUI). Raramente precisa mudar.
+
+id: transfer_object
+file: Qwen2.1 Transfer Object (2 imagens).json
+title: Transferir objeto entre imagens (Quality)
+group: objetos
+images:
+- key: image_1
+  node: 5
+  label: Destino (cena)
+  required: true
+  hint: Imagem que recebe o objeto/pessoa; a caixa verde marca onde ele fica.
+- key: image_2
+  node: 6
+  label: Fonte (objeto)
+  required: true
+  hint: Imagem que tem o objeto, pessoa ou parte do corpo; a caixa vermelha marca ele.
+prompt:
+  node: 11
+  widget: prompt
+params:
+- key: green
+  type: box
+  image: image_1
+  label: Onde vai ficar (caixa verde)
+  color: green
+  node: 7
+  widgets:
+  - box_x
+  - box_y
+  - box_w
+  - box_h
+- key: red
+  type: box
+  image: image_2
+  label: O que levar (caixa vermelha)
+  color: red
+  node: 8
+  widgets:
+  - box_x
+  - box_y
+  - box_w
+  - box_h
+outputs:
+- 14

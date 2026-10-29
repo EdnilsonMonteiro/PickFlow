@@ -1,0 +1,8 @@
+# Prompt fixo da LoRA AnyAngle (image1 = foto original, image2 = render do 3D) (não leva o pedido: o ângulo vem do render do 3D).
+default: padrao
+presets:
+- id: padrao
+  name: Mudar a câmera
+  when: Always.
+  text: Change the camera angle from <image1> to <image2>.
+  rewrite: false

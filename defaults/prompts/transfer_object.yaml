@@ -1,0 +1,50 @@
+# Prompts do workflow 'transfer_object'. Use {request} onde o pedido do usuário entra.
+# O modelo REDESENHA o que está na caixa vermelha dentro da caixa verde (adapta pose, perspectiva e estilo). A variável
+# `relacao` diz se o que já está na caixa verde SAI (substituir) ou FICA (acrescentar): testado no ComfyUI, sem ela o
+# modelo às vezes punha o novo por cima do antigo (peão em cima do cavalo) ou tirava alguém que devia ficar.
+
+default: objeto
+presets:
+- id: objeto
+  name: Transferir objeto
+  when: Transfer any object or body part between images.
+  text: Transfer the object (or body part) inside the red box in <image2> into <image1>, placing it at the position and 
+    size indicated by the green box in <image1>. Match the perspective, scale, orientation, lighting, shadows, color and
+    overall style of <image1> so the transferred element blends in naturally, as if it were originally part of <image1>.
+    {relacao} Remove the red and green boxes and any borders. {request}
+  rewrite: false
+  vars: &relacao
+  - key: relacao
+    kind: choice
+    label: O que já está no lugar
+    default: adicionar
+    question: 'Read the request: does the thing brought from the other image REPLACE something or someone already in the scene
+      ("in place of", "replace", "swap X for Y", "instead of", "take X out and put Y"), or is it ADDED and everything already
+      in the scene stays there ("put", "add", "next to", "behind", "on top of", "holding")?'
+    options:
+    - id: adicionar
+      name: Acrescentar (o que já está fica)
+      when: The request adds the thing to the scene; nobody and nothing already in the scene goes away. Put, add, place 
+        next to, behind, on top of, holding.
+      text: Nothing that is already in <image1> is removed, so every person and object stays where it is and the 
+        transferred element is added at the green box, in front of or behind them as the scene requires. Preserve 
+        everything else in <image1> exactly (background, other objects, people, identity).
+    - id: substituir
+      name: Substituir o que está lá
+      when: The request says to put the thing IN PLACE OF something or someone already in the scene (replace, swap X for
+        Y, in place of, instead of). What is inside the green box goes away.
+      text: The person or object that is inside the green box in <image1> is REPLACED, so remove it completely (no part 
+        of it, no leftover body, clothes, hair or props may stay visible around or behind the new one) and put the 
+        transferred element in its place. Preserve everything else in <image1> exactly (background, other objects, 
+        people, identity).
+- id: pessoa
+  name: Transferir pessoa
+  when: When it is a person or character going into the scene (in place of someone or added).
+  text: Transfer the person inside the red box in <image2> into <image1>, placing it at the position and size indicated 
+    by the green box in <image1>. Keep the person's identity, face, hair, body shape and clothing from <image2>, and 
+    complete any part of the body that <image2> does not show. Keep the same pose as in <image2> unless the instructions
+    below ask for another pose or action (sitting, lying, holding something). Match the perspective, scale, orientation,
+    lighting, shadows, color and overall style of <image1> so the person blends in naturally. {relacao} Remove the red 
+    and green boxes and any borders. {request}
+  rewrite: false
+  vars: *relacao

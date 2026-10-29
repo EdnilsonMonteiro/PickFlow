@@ -1,0 +1,331 @@
+# Prompts do workflow 'edit'. Use {request} onde o pedido do usuário entra e {loras} onde entram as
+# instruções padrão das LoRAs ligadas. Cada prompt pode fixar LoRAs (loras), ajustar o grafo (settings),
+# exigir um mínimo de imagens (needs), pôr as imagens nas entradas na ordem de envio (slots: order) e declarar
+# `auto_loras: false` (o Clef não acrescenta LoRAs a este prompt: copiar estilo ou girar não é trocar corpo),
+# variáveis (vars) que o Clef responde: quantas pessoas, corpo/cabeça, lugar, ângulo...
+
+default: livre
+presets:
+- id: livre
+  name: Pedido do usuário
+  when: Any edit described in text (color, clothing, object, light, style, the pose or interaction of the people in the 
+    photo), with or without a reference image.
+  text: '{request}'
+  loras: &id001
+  - id: natexp
+    strength: 0.8
+    mode: turbo
+  - id: flymy
+    strength: 0
+    mode: turbo
+  - id: consistency
+    strength: 0.82
+    strength_clip: 0.8
+    mode: turbo
+  rewrite: false
+- id: exposicao
+  name: Exposição neutra
+  when: When the request is only to fix light or exposure.
+  text: Transform the image with balanced neutral exposure. Match the body lightning with ambience lighting
+  loras: *id001
+  rewrite: false
+  auto_loras: false
+- id: estilo
+  name: Mesmo estilo da referência
+  when: When the user wants image 1 in the style of image 2.
+  text: Make <image1> same style as <image2>. {request}
+  loras: *id001
+  needs: 2
+  rewrite: false
+  auto_loras: false
+- id: trocar_pessoas
+  name: Trocar pessoas (corpo e/ou cabeça)
+  when: 'CLASSIC people swap, the reserve of the troca_pessoa flow (which is the default for swapping a person): swap one or more
+    people in the scene (image 1) with the people in the reference images: the whole person (body and head), only the body or only
+    the head/face. Works for 1 person or several (up to 7), always from left to right in image 1. There may be an extra image with
+    the place where they should be. Used when the face is busy or covered, the body is cut off, only the body is swapped, or
+    several people are swapped.'
+  text: |-
+    {loras}
+    {people_many}
+    {place}
+    Extra instructions: {request}
+  needs: 2
+  slots: order
+  rewrite: false
+  vars:
+  - key: people
+    kind: count
+    label: Quantas pessoas
+    max: 7
+    first_ref: 2
+    default: 1
+    noun: person
+    plural: people
+    noun_pt: person
+    plural_pt: people
+    each_pt: Swap {n} {noun}
+    many_text: |-
+      {people_map}
+      {scope}
+      Replicate the exact pose, arm positions, leg positions, hand gestures, head rotation, eye direction and expressions of each corresponding person in <image1>. Keep every person in the same position and scale and keep the whole scene unchanged. Photorealistic, high quality, sharp details.
+    question: How many people in image 1 does the request say to swap? Count the people the user wants to swap (from 
+      left to right). If they do not say the number, use the number of reference images sent after the first one.
+  - key: scope
+    kind: choice
+    label: O que trocar
+    default: both
+    question: Does the user want to swap the whole person (body and head), only the body or only the head/face? If they 
+      do not say, it is body and head.
+    options:
+    - id: both
+      name: Corpo e cabeça
+      when: Swap the whole person (body and head together), or the request does not say what to swap. It is the default.
+      text: 'Swap the whole person: the body, clothing, skin and head of each person come from the reference. Strictly preserve
+        the clothing, body shape, proportions, hair and facial identity from each reference image. User choice: swap BOTH
+        body and head.'
+      loras:
+      - bfs_body
+      - id: bfs_head
+        strength: 1
+      settings:
+        scene_mp: 2.0
+        ref_mp: 0.59
+        resolution: 0
+    - id: body
+      name: Só o corpo
+      when: Swap ONLY the body (torso, arms, legs, clothing, skin); the rest of the person stays as it is.
+      text: 'Swap ONLY the body (torso, arms, legs, clothing and skin) from each reference. Keep the face, head and hair of
+        each person in <image1> exactly unchanged. Strictly preserve the clothing, body shape and proportions from each reference
+        image. User choice: swap ONLY the body, NOT the head.'
+      loras:
+      - bfs_body
+    - id: head
+      name: Só a cabeça
+      when: Swap ONLY the head or the face (face swap); the rest of the person stays as it is.
+      text: 'Swap ONLY the head (face and hair) from each reference. Keep the body, clothing and pose of each person in <image1>
+        exactly unchanged. Strictly preserve the hair, eye color and nose structure from each reference image. User choice:
+        swap ONLY the head, NOT the body.'
+      loras:
+      - bfs_head
+  - key: place
+    kind: choice
+    label: Lugar de referência
+    default: none
+    question: Did the user send an extra image, after the references of the people, with only the place or setting where
+      they should be?
+    options:
+    - id: none
+      name: Sem imagem de lugar
+      when: 'There is no place image: the background stays the one of image 1. It is the default.'
+      text: ''
+    - id: place
+      name: Com imagem de lugar
+      when: There is an extra image (the last one) that shows the place where the people should be.
+      text: Place the result in the location shown in {people_next}, matching its lighting, perspective and color.
+      needs_extra: 1
+- id: trocar_roupa
+  name: Trocar roupa ou tatuagem
+  when: Transfer the TATTOOS of image 2 to the person of image 1 (with or without the clothing), or dress the person in the
+    clothing of image 2 (clothing alone has its own default flow, troca_roupa). Keeps face, hair, hands, pose and background.
+  text: |-
+    {what}
+    Extra instructions: {request}
+  needs: 2
+  slots: order
+  loras:
+  - outfit_swap
+  settings:
+    resolution: 0
+  rewrite: false
+  vars:
+  - key: what
+    kind: choice
+    label: O que passar
+    default: clothes
+    question: Does the user want to transfer the clothing, the tattoos, or both, from the reference image to the person?
+      If they do not say, it is the clothing.
+    options:
+    - id: clothes
+      name: Roupa
+      when: Swap the clothing (what the person wears) for the reference's.
+      text: Dress the person in <image1> in the outfit shown in <image2>. Replace everything they wear. Keep their face,
+        hair, hands, pose and the background exactly the same.
+    - id: tattoos
+      name: Tatuagens
+      when: Transfer the reference's tattoos to the person, without changing the clothing.
+      text: Apply the tattoos shown in <image2> onto the person in <image1>, at the same body locations, size and style.
+        Keep their clothes, face, hair, hands, pose and the background exactly the same.
+    - id: both
+      name: Roupa e tatuagens
+      when: Swap the clothing and also transfer the reference's tattoos.
+      text: Dress the person in <image1> in the outfit shown in <image2>, and apply the tattoos shown in <image2> onto 
+        them. Replace everything they wear. Keep their face, hair, hands, pose and the background exactly the same.
+- id: melhorar
+  name: Melhorar a foto
+  when: 'The request ONLY asks to improve, clean up, sharpen, denoise, fix the quality of ONE photo or to restore
+    it, WITHOUT changing what is in it (no color, clothing, object, pose or style change), and it is not only about
+    the light or the exposure (that one has its own prompt). Examples are "melhore a imagem", "deixe mais nítida",
+    "aumente a qualidade", "tire o ruído", "restaure esta foto", "recupere esta foto antiga".'
+  text: '{modo}'
+  rewrite: false
+  auto_loras: false
+  vars:
+  - key: modo
+    kind: choice
+    label: Como melhorar
+    default: sutil
+    min_confidence: 0.45
+    ask_below: 0.55
+    question: Look at the photo and at its size and sharpness (in the description of the images). How should it be
+      improved? Improving in place keeps the megapixels; restoring redraws it at about 2 MP.
+    options:
+    - id: sutil
+      name: Melhorar sem aumentar (mantém o tamanho)
+      when: The photo is already big (2 MP or more) and reasonably sharp, and the request only wants a general
+        improvement; or the user wants to keep the same size and framing. Nothing is upscaled.
+      text: 'Improve the photo: enhance the color, contrast, light and fine detail, remove small imperfections and
+        artifacts, keeping the same composition, size, people, colors and framing.
+        Extra instructions: {request}'
+      loras: *id001
+    - id: restaurar
+      name: Restaurar (redesenha em 2 MP)
+      when: The photo is small (under about 2 MP), a phone photo, a video frame, compressed, noisy or with light
+        blur, so redrawing it sharper at a bigger size gives more detail than improving it in place.
+      text: 'Restore the photo: remove blur, noise and compression artifacts and recover sharp, natural detail,
+        keeping the same composition, people and colors.
+        Extra instructions: {request}'
+      loras:
+      - restore
+    - id: focado
+      name: Desembaçar (foto fora de foco)
+      when: The photo is clearly OUT OF FOCUS or shaky, or a very soft video frame, so the normal restoration
+        would leave it soft.
+      text: 'Restore the photo that is out of focus: recover sharp, natural detail and remove the shake and the
+        softness, keeping the same composition, people and colors.
+        Extra instructions: {request}'
+      loras:
+      - id: natexp
+        strength: 0
+      - id: flymy
+        strength: 0
+      - id: restore
+        strength: 0.5
+    - id: antiga
+      name: Restaurar foto antiga (riscos e cor desbotada)
+      when: The photo is OLD, printed or scanned, with scratches, dust, grain or faded color.
+      text: 'Restore the old photo: remove scratches, dust, fading and grain and recover sharp, natural detail and
+        color, keeping the same composition and people.
+        Extra instructions: {request}'
+      loras:
+      - restore
+- id: girar
+  name: Girar o ponto de vista (órbita)
+  when: Orbit the camera around an OBJECT to show it from another side (left, right, from behind, from above or from 
+    below). People and places have their own 3D flows.
+  text: '{angle}'
+  loras:
+  - viewpoint_orbit
+  rewrite: false
+  auto_loras: false
+  vars:
+  - key: angle
+    kind: angle
+    label: Ângulo
+- id: expandir
+  name: Expandir ou completar áreas cinza (outpaint)
+  when: 'Widen the photo to the sides, up or down, showing more of the scene beyond the edges (open the framing, "outpaint",
+    "show more of the place"), or fill the solid GRAY areas the image already has (for example a 3D render with holes). Uses
+    the Outpaint LoRA.'
+  text: |-
+    {loras}
+    {expand}
+  requires:
+  - outpaint
+  loras:
+  - outpaint
+  settings:
+    resolution: 0
+  rewrite: false
+  auto_loras: false
+  # expand_edit: antes de gerar, abre a tela "Ampliar a imagem" (needs_input kind `outpaint`) com a margem que o Clef
+  # sugeriu (ou zerada, na opção `choose`); a pessoa ajusta cada lado e o PickFlow acrescenta o cinza #808080 que a LoRA completa.
+  expand_edit: true
+  # sobrou cinza (#808080) em mais de 2% da imagem: roda de novo sobre o resultado, até 2 vezes (a semente muda muito
+  # o quanto a LoRA completa: no ComfyUI real, o mesmo render de quarto saiu com 0,3% ou 19% de cinza)
+  verify:
+    kind: gray
+    max_gray: 0.02
+    tries: 2
+    vars:
+      expand: gray
+  vars:
+  - key: expand
+    kind: choice
+    label: Expandir
+    default: sides
+    question: Where should the photo grow? If the image already has gray areas to fill and the request does not talk 
+      about enlarging it, choose only filling the gray.
+    options:
+    - id: choose
+      name: Escolher na tela
+      when: The user wants to choose the area to extend themselves, or only says outpaint without saying where or how much.
+      text: ''
+      ask_expand: true
+    - id: gray
+      name: Só completar o cinza
+      when: The image already has solid gray areas (holes, gray borders of a 3D render) and the request is to fill them,
+        without enlarging the photo.
+      # O render do 3D sai macio (poucos pontos): aqui não basta completar o cinza, tem que ganhar detalhe no resto.
+      # Por isso o texto próprio (a instrução da LoRA sozinha manda "deixar a imagem como está", que congela a
+      # qualidade do render) e a resolução maior logo abaixo — é o que decide a qualidade final deste passo.
+      text: 'The solid gray areas are places the photo never showed: fill them with a natural, seamless continuation of
+        the scene (same walls, floor, furniture, colors and light). The rest of the picture comes from a 3D render and
+        is soft: redraw the whole image with more detail, sharper edges, clean texture and natural light, keeping the
+        same composition, geometry, objects and camera angle.'
+      settings:
+        resolution: 1536          # ~2,2 MP: o render de ~1 MP é redesenhado com mais detalhe (2048 = mais ainda, mais lento)
+    - id: sides
+      name: Para os lados
+      when: Widen to the left and right (wider, panoramic), or the request only says expand/enlarge.
+      text: ''
+      expand:
+        left: 0.25
+        right: 0.25
+    - id: all
+      name: Em todas as direções
+      when: Enlarge all around (pull the camera back, show more of everything, "zoom out").
+      text: ''
+      expand:
+        all: 0.2
+    - id: vertical
+      name: Para cima e para baixo
+      when: Enlarge up and down (taller, show the ceiling and the floor, the person full body).
+      text: ''
+      expand:
+        top: 0.2
+        bottom: 0.2
+    - id: left
+      name: Para a esquerda
+      when: Only to the left.
+      text: ''
+      expand:
+        left: 0.4
+    - id: right
+      name: Para a direita
+      when: Only to the right.
+      text: ''
+      expand:
+        right: 0.4
+    - id: top
+      name: Para cima
+      when: Only upward.
+      text: ''
+      expand:
+        top: 0.35
+    - id: bottom
+      name: Para baixo
+      when: Only downward (show more of the floor, of the feet).
+      text: ''
+      expand:
+        bottom: 0.35

@@ -1,0 +1,3129 @@
+{
+ "revision": 0,
+ "last_node_id": 61,
+ "last_link_id": 81,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "MarkdownNote",
+   "pos": [
+    -574.3770661157021,
+    -24.546028466482994
+   ],
+   "size": [
+    460,
+    760
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [],
+   "properties": {},
+   "widgets_values": [
+    "## PickFlow - Editar imagem (unificado)\n\nUm grafo só para editar, trocar pessoas (corpo e/ou cabeça), trocar roupas e girar o ponto de vista. O PickFlow monta o prompt e a cadeia de LoRAs (nós 45, 49 e 46) a cada execução; os valores salvos aqui são só a base de realismo.\n\n- Image 1: base (cena ou foto a editar)\n- Image 2 a 8: referências (opcionais; as vazias saem do grafo)\n- Os escaladores (nós 40, 41, 51, 53, 55, 57, 59, 61) são ligados ou ignorados pelo PickFlow (ajustes scene_mp e ref_mp).\n"
+   ],
+   "widgets_values_named": {
+    "text": "## Qwen-Image-2.1 Body Swap (BFS)\n\nTroca a PESSOA inteira (corpo + roupa) pela pessoa de uma referencia, mantendo a cena.\n\n### Como usar\n- **Image 1 (Cena)**: a foto cuja pose, enquadramento, luz e fundo serao mantidos.\n- **Image 2 (Referencia)**: a pessoa cujo corpo, roupa e proporcoes serao transferidos.\n- Mantenha esta ordem. Nao inverta.\n\n### LoRA (ja baixada)\n- `models/loras/bfs_body_swap_v1.0_qwen_2.1.safetensors` - forca 1.0.\n\n### Ajustes que o autor recomenda (ja aplicados)\n- **Cena** escalada para ~2.0 MP e **referencia** para ~0.59 MP (nodes `ImageScaleToTotalPixels`).\n- `resolution = 0` no TextEncodeQwenImage21 (o latent segue o tamanho da cena).\n- Referencia ideal: pessoa em pe, corpo inteiro, de frente, fundo claro e liso.\n  Se for um retrato fechado, normalize antes (o guia do autor traz um prompt pra isso).\n\n### Arquivos\n- **Turbo**: 6 passos (Viggle Turbo), rapido.\n- **Quality**: KSampler 25 passos, cfg 1, euler/simple.\n\n### Memoria\n- int8 + `--disable-fast-disk`. Se faltar VRAM, reduza a escala da cena para ~1.5 MP.\n\n### Dica\n- Numeros (poses exatas, maos) sao aproximados; resultados variam com a referencia.\n"
+   },
+   "color": "#432",
+   "bgcolor": "#653"
+  },
+  {
+   "id": 2,
+   "type": "UNETLoader",
+   "pos": [
+    229.49273989899024,
+    48.60113636363632
+   ],
+   "size": [
+    320,
+    82
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "unet_name",
+     "locked": null,
+     "name": "unet_name",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "unet_name"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "tipo_peso",
+     "locked": null,
+     "name": "weight_dtype",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "weight_dtype"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "MODELO",
+     "locked": null,
+     "name": "MODEL",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MODEL",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      57
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "UNETLoader",
+    "models": [
+     {
+      "name": "qwen_image_2.1_int8_convrot.safetensors",
+      "url": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/diffusion_models/qwen_image_2.1_int8_convrot.safetensors",
+      "directory": "diffusion_models"
+     }
+    ]
+   },
+   "widgets_values": [
+    "qwen_image_2.1_int8_convrot.safetensors",
+    "default"
+   ],
+   "widgets_values_named": {
+    "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+    "weight_dtype": "default"
+   }
+  },
+  {
+   "id": 4,
+   "type": "CLIPLoader",
+   "pos": [
+    229.49273989899024,
+    564.6011363636355
+   ],
+   "size": [
+    320,
+    106
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "clip_name",
+     "locked": null,
+     "name": "clip_name",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "clip_name"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "type",
+     "locked": null,
+     "name": "type",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "type"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "device",
+     "locked": null,
+     "name": "device",
+     "nameLocked": null,
+     "removable": null,
+     "shape": 7,
+     "type": "COMBO",
+     "widget": {
+      "name": "device"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "clip",
+     "locked": null,
+     "name": "CLIP",
+     "nameLocked": null,
+     "removable": null,
+     "type": "CLIP",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      59
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "CLIPLoader",
+    "models": [
+     {
+      "name": "qwen3vl_8b_fp8_heretic.safetensors",
+      "url": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/text_encoders/qwen3vl_8b_fp8_heretic.safetensors",
+      "directory": "text_encoders"
+     }
+    ]
+   },
+   "widgets_values": [
+    "qwen3vl_8b_fp8_heretic.safetensors",
+    "qwen_image",
+    "default"
+   ],
+   "widgets_values_named": {
+    "clip_name": "qwen3vl_8b_fp8_heretic.safetensors",
+    "type": "qwen_image",
+    "device": "default"
+   }
+  },
+  {
+   "id": 5,
+   "type": "VAELoader",
+   "pos": [
+    229.49273989899024,
+    760.6011363636355
+   ],
+   "size": [
+    320,
+    58
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "vae_name",
+     "locked": null,
+     "name": "vae_name",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "vae_name"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "vae",
+     "locked": null,
+     "name": "VAE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "VAE",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      4,
+      5
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAELoader",
+    "models": [
+     {
+      "name": "qwen_image_2.1_vae_bf16.safetensors",
+      "url": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/vae/qwen_image_2.1_vae_bf16.safetensors",
+      "directory": "vae"
+     }
+    ]
+   },
+   "widgets_values": [
+    "qwen_image_2.1_vae_bf16.safetensors"
+   ],
+   "widgets_values_named": {
+    "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+   }
+  },
+  {
+   "id": 6,
+   "type": "PrimitiveStringMultiline",
+   "pos": [
+    1376.9,
+    0
+   ],
+   "size": [
+    440,
+    220
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "valor",
+     "locked": null,
+     "name": "value",
+     "nameLocked": null,
+     "removable": null,
+     "type": "STRING",
+     "widget": {
+      "name": "value"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "TEXTO",
+     "locked": null,
+     "name": "STRING",
+     "nameLocked": null,
+     "removable": null,
+     "type": "STRING",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      42
+     ]
+    }
+   ],
+   "title": "Prompt (o PickFlow monta)",
+   "properties": {
+    "Node name for S&R": "PrimitiveStringMultiline"
+   },
+   "widgets_values": [
+    "body_swap: start with <image1> as the base image, keeping its lighting, environment, background and face completely unchanged. remove the body from <image1> completely and replace it with the body from <image2>. copy the exact body pose, arm position and movements from <image1>. transfer all the realistic skin details from <image2> including visible pores, natural skin texture variation, soft mottling, subtle color irregularities, natural oiliness and sheen, micro-imperfections and surface details. keep the skin looking natural, no plastic smoothness, no AI over-smoothing. photorealistic, highly detailed, sharp.\n"
+   ],
+   "widgets_values_named": {
+    "value": "body_swap: start with <image1> as the base image, keeping its lighting, environment, background and face completely unchanged. remove the body from <image1> completely and replace it with the body from <image2>. copy the exact body pose, arm position and movements from <image1>. transfer all the realistic skin details from <image2> including visible pores, natural skin texture variation, soft mottling, subtle color irregularities, natural oiliness and sheen, micro-imperfections and surface details. keep the skin looking natural, no plastic smoothness, no AI over-smoothing. photorealistic, highly detailed, sharp.\n"
+   }
+  },
+  {
+   "id": 18,
+   "type": "TextEncodeQwenImage21",
+   "pos": [
+    3336.9,
+    0
+   ],
+   "size": [
+    320,
+    286
+   ],
+   "flags": {},
+   "order": 13,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "clip",
+     "locked": null,
+     "name": "clip",
+     "nameLocked": null,
+     "removable": null,
+     "type": "CLIP",
+     "pos": null,
+     "link": 81
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "image_1",
+     "locked": null,
+     "name": "images.image_1",
+     "nameLocked": null,
+     "removable": null,
+     "shape": 7,
+     "type": "IMAGE",
+     "pos": null,
+     "link": 43
+    },
+    {
+     "localized_name": "image_2",
+     "name": "images.image_2",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": 44
+    },
+    {
+     "localized_name": "image_3",
+     "name": "images.image_3",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": 65
+    },
+    {
+     "localized_name": "image_4",
+     "name": "images.image_4",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": 67
+    },
+    {
+     "localized_name": "image_5",
+     "name": "images.image_5",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": 69
+    },
+    {
+     "localized_name": "image_6",
+     "name": "images.image_6",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": 71
+    },
+    {
+     "localized_name": "image_7",
+     "name": "images.image_7",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": 73
+    },
+    {
+     "localized_name": "image_8",
+     "name": "images.image_8",
+     "shape": 7,
+     "type": "IMAGE",
+     "link": 75
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "vae",
+     "locked": null,
+     "name": "vae",
+     "nameLocked": null,
+     "removable": null,
+     "shape": 7,
+     "type": "VAE",
+     "pos": null,
+     "link": 4
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "prompt",
+     "locked": null,
+     "name": "prompt",
+     "nameLocked": null,
+     "removable": null,
+     "type": "STRING",
+     "widget": {
+      "name": "prompt"
+     },
+     "link": 42
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "negative_prompt",
+     "locked": null,
+     "name": "negative_prompt",
+     "nameLocked": null,
+     "removable": null,
+     "type": "STRING",
+     "widget": {
+      "name": "negative_prompt"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "resolution",
+     "locked": null,
+     "name": "resolution",
+     "nameLocked": null,
+     "removable": null,
+     "type": "INT",
+     "widget": {
+      "name": "resolution"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "positive",
+     "locked": null,
+     "name": "positive",
+     "nameLocked": null,
+     "removable": null,
+     "type": "CONDITIONING",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      47
+     ]
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "negative",
+     "locked": null,
+     "name": "negative",
+     "nameLocked": null,
+     "removable": null,
+     "type": "CONDITIONING",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      48
+     ]
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "latent",
+     "locked": null,
+     "name": "latent",
+     "nameLocked": null,
+     "removable": null,
+     "type": "LATENT",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      49
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "TextEncodeQwenImage21"
+   },
+   "widgets_values": [
+    "",
+    "low quality, worst quality, blurry, deformed, bad anatomy, bad hands, extra limbs, jpeg artifacts, watermark, text",
+    1024
+   ],
+   "widgets_values_named": {
+    "prompt": "",
+    "negative_prompt": "low quality, worst quality, blurry, deformed, bad anatomy, bad hands, extra limbs, jpeg artifacts, watermark, text",
+    "resolution": 1024
+   }
+  },
+  {
+   "id": 24,
+   "type": "VAEDecode",
+   "pos": [
+    3736.9,
+    196
+   ],
+   "size": [
+    320,
+    46
+   ],
+   "flags": {},
+   "order": 15,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "amostras",
+     "locked": null,
+     "name": "samples",
+     "nameLocked": null,
+     "removable": null,
+     "type": "LATENT",
+     "pos": null,
+     "link": 50
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "vae",
+     "locked": null,
+     "name": "vae",
+     "nameLocked": null,
+     "removable": null,
+     "type": "VAE",
+     "pos": null,
+     "link": 5
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      27
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode"
+   }
+  },
+  {
+   "id": 25,
+   "type": "SaveImage",
+   "pos": [
+    3736.9,
+    332
+   ],
+   "size": [
+    520,
+    560
+   ],
+   "flags": {},
+   "order": 16,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagens",
+     "locked": null,
+     "name": "images",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "link": 27
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "prefixo_do_arquivo",
+     "locked": null,
+     "name": "filename_prefix",
+     "nameLocked": null,
+     "removable": null,
+     "type": "STRING",
+     "widget": {
+      "name": "filename_prefix"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagens",
+     "locked": null,
+     "name": "images",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "slot_index": null,
+     "links": null
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "qwen21_edit/quality"
+   ],
+   "widgets_values_named": {
+    "filename_prefix": "qwen21_edit/quality"
+   }
+  },
+  {
+   "id": 26,
+   "type": "LoadImage",
+   "pos": [
+    614.8764587844814,
+    4.178608856664751
+   ],
+   "size": [
+    320,
+    326
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "image"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "escolher arquivo para enviar",
+     "locked": null,
+     "name": "upload",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      30
+     ]
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "MÁSCARA",
+     "locked": null,
+     "name": "MASK",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MASK",
+     "pos": null,
+     "slot_index": null,
+     "links": null
+    }
+   ],
+   "title": "Image 1 - Base (cena ou foto a editar)",
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "example.png",
+    "image"
+   ],
+   "widgets_values_named": {
+    "image": "example.png",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 27,
+   "type": "LoadImage",
+   "pos": [
+    629.1246117922431,
+    429.85559315568764
+   ],
+   "size": [
+    320,
+    326
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "image"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "escolher arquivo para enviar",
+     "locked": null,
+     "name": "upload",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      31
+     ]
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "MÁSCARA",
+     "locked": null,
+     "name": "MASK",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MASK",
+     "pos": null,
+     "slot_index": null,
+     "links": null
+    }
+   ],
+   "title": "Image 2 - Referência 1 (pessoa, rosto, estilo, objeto)",
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "example.png",
+    "image"
+   ],
+   "widgets_values_named": {
+    "image": "example.png",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 29,
+   "type": "QwenImage21Cache",
+   "pos": [
+    229.49273989899024,
+    392.60113636363633
+   ],
+   "size": [
+    320,
+    82
+   ],
+   "flags": {},
+   "order": 12,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "model",
+     "locked": null,
+     "name": "model",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MODEL",
+     "pos": null,
+     "link": 80
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "device",
+     "locked": null,
+     "name": "device",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "device"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "dtype",
+     "locked": null,
+     "name": "dtype",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "dtype"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "MODELO",
+     "locked": null,
+     "name": "MODEL",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MODEL",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      46
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "QwenImage21Cache"
+   },
+   "widgets_values": [
+    "auto",
+    "default"
+   ],
+   "widgets_values_named": {
+    "device": "auto",
+    "dtype": "default"
+   }
+  },
+  {
+   "id": 40,
+   "type": "ImageScaleToTotalPixels",
+   "pos": [
+    960,
+    0
+   ],
+   "size": [
+    320,
+    106
+   ],
+   "flags": {},
+   "order": 8,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "link": 30
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "método de upscaling",
+     "locked": null,
+     "name": "upscale_method",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "upscale_method"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "megapixels",
+     "locked": null,
+     "name": "megapixels",
+     "nameLocked": null,
+     "removable": null,
+     "type": "FLOAT",
+     "widget": {
+      "name": "megapixels"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "etapas de resolução",
+     "locked": null,
+     "name": "resolution_steps",
+     "nameLocked": null,
+     "removable": null,
+     "type": "INT",
+     "widget": {
+      "name": "resolution_steps"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "links": [
+      43
+     ]
+    }
+   ],
+   "title": "Base -> 2.0 MP (ajuste scene_mp)",
+   "properties": {
+    "Node name for S&R": "ImageScaleToTotalPixels"
+   },
+   "widgets_values": [
+    "lanczos",
+    2,
+    1
+   ],
+   "widgets_values_named": {
+    "upscale_method": "lanczos",
+    "megapixels": 2,
+    "resolution_steps": 1
+   }
+  },
+  {
+   "id": 41,
+   "type": "ImageScaleToTotalPixels",
+   "pos": [
+    960,
+    200
+   ],
+   "size": [
+    320,
+    106
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "link": 31
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "método de upscaling",
+     "locked": null,
+     "name": "upscale_method",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "upscale_method"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "megapixels",
+     "locked": null,
+     "name": "megapixels",
+     "nameLocked": null,
+     "removable": null,
+     "type": "FLOAT",
+     "widget": {
+      "name": "megapixels"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "etapas de resolução",
+     "locked": null,
+     "name": "resolution_steps",
+     "nameLocked": null,
+     "removable": null,
+     "type": "INT",
+     "widget": {
+      "name": "resolution_steps"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "links": [
+      44
+     ]
+    }
+   ],
+   "title": "Referência 1 -> 0.59 MP (ajuste ref_mp)",
+   "properties": {
+    "Node name for S&R": "ImageScaleToTotalPixels"
+   },
+   "widgets_values": [
+    "lanczos",
+    0.59,
+    1
+   ],
+   "widgets_values_named": {
+    "upscale_method": "lanczos",
+    "megapixels": 0.59,
+    "resolution_steps": 1
+   }
+  },
+  {
+   "id": 42,
+   "type": "KSampler",
+   "pos": [
+    3736.9,
+    0
+   ],
+   "size": [
+    270,
+    270
+   ],
+   "flags": {},
+   "order": 14,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "modelo",
+     "name": "model",
+     "type": "MODEL",
+     "link": 46
+    },
+    {
+     "localized_name": "positivo",
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 47
+    },
+    {
+     "localized_name": "negativo",
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 48
+    },
+    {
+     "localized_name": "imagem_latente",
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 49
+    },
+    {
+     "localized_name": "semente",
+     "name": "seed",
+     "type": "INT",
+     "widget": {
+      "name": "seed"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "passos",
+     "name": "steps",
+     "type": "INT",
+     "widget": {
+      "name": "steps"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "cfg",
+     "name": "cfg",
+     "type": "FLOAT",
+     "widget": {
+      "name": "cfg"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "nome_do_sampler",
+     "name": "sampler_name",
+     "type": "COMBO",
+     "widget": {
+      "name": "sampler_name"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "agendador",
+     "name": "scheduler",
+     "type": "COMBO",
+     "widget": {
+      "name": "scheduler"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "denoise",
+     "name": "denoise",
+     "type": "FLOAT",
+     "widget": {
+      "name": "denoise"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "LATENT",
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      50
+     ]
+    }
+   ],
+   "title": "KSampler (25 passos)",
+   "properties": {
+    "Node name for S&R": "KSampler"
+   },
+   "widgets_values": [
+    903207031637850,
+    "randomize",
+    25,
+    4,
+    "er_sde",
+    "beta",
+    1
+   ],
+   "widgets_values_named": {
+    "seed": 903207031637850,
+    "control_after_generate": "randomize",
+    "steps": 25,
+    "cfg": 4,
+    "sampler_name": "er_sde",
+    "scheduler": "beta",
+    "denoise": 1
+   }
+  },
+  {
+   "id": 45,
+   "type": "LoraLoader",
+   "pos": [
+    -116.60366161616145,
+    237.1523403681056
+   ],
+   "size": [
+    320,
+    130
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "modelo",
+     "name": "model",
+     "type": "MODEL",
+     "link": 57
+    },
+    {
+     "localized_name": "clip",
+     "name": "clip",
+     "type": "CLIP",
+     "link": 59
+    },
+    {
+     "localized_name": "nome_do_lora",
+     "name": "lora_name",
+     "type": "COMBO",
+     "widget": {
+      "name": "lora_name"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "força_modelo",
+     "name": "strength_model",
+     "type": "FLOAT",
+     "widget": {
+      "name": "strength_model"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "força_clip",
+     "name": "strength_clip",
+     "type": "FLOAT",
+     "widget": {
+      "name": "strength_clip"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "MODELO",
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      76
+     ]
+    },
+    {
+     "localized_name": "clip",
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      77
+     ]
+    }
+   ],
+   "title": "Realism: Natural-Exposure 0.6",
+   "properties": {
+    "Node name for S&R": "LoraLoader"
+   },
+   "widgets_values": [
+    "Qwen-Image-2.1-Natural-Exposure-LoRA-4000.safetensors",
+    0.6,
+    0.6
+   ],
+   "widgets_values_named": {
+    "lora_name": "Qwen-Image-2.1-Natural-Exposure-LoRA-4000.safetensors",
+    "strength_model": 0.6,
+    "strength_clip": 0.6
+   }
+  },
+  {
+   "id": 46,
+   "type": "LoraLoader",
+   "pos": [
+    -114.92713484432326,
+    437.3889828922222
+   ],
+   "size": [
+    320,
+    130
+   ],
+   "flags": {},
+   "order": 10,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "modelo",
+     "name": "model",
+     "type": "MODEL",
+     "link": 78
+    },
+    {
+     "localized_name": "clip",
+     "name": "clip",
+     "type": "CLIP",
+     "link": 79
+    },
+    {
+     "localized_name": "nome_do_lora",
+     "name": "lora_name",
+     "type": "COMBO",
+     "widget": {
+      "name": "lora_name"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "força_modelo",
+     "name": "strength_model",
+     "type": "FLOAT",
+     "widget": {
+      "name": "strength_model"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "força_clip",
+     "name": "strength_clip",
+     "type": "FLOAT",
+     "widget": {
+      "name": "strength_clip"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "MODELO",
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      80
+     ]
+    },
+    {
+     "localized_name": "clip",
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      81
+     ]
+    }
+   ],
+   "title": "Consistência 0.5",
+   "properties": {
+    "Node name for S&R": "LoraLoader"
+   },
+   "widgets_values": [
+    "qwen-image-2.1-consistency.safetensors",
+    0.5,
+    0.5
+   ],
+   "widgets_values_named": {
+    "lora_name": "qwen-image-2.1-consistency.safetensors",
+    "strength_model": 0.5,
+    "strength_clip": 0.5
+   }
+  },
+  {
+   "id": 50,
+   "type": "LoadImage",
+   "pos": [
+    500,
+    700
+   ],
+   "size": [
+    320,
+    326
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "image"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "escolher arquivo para enviar",
+     "locked": null,
+     "name": "upload",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      64
+     ]
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "MÁSCARA",
+     "locked": null,
+     "name": "MASK",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MASK",
+     "pos": null,
+     "slot_index": null,
+     "links": []
+    }
+   ],
+   "title": "Image 3 - Referência 2 (opcional)",
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "example.png",
+    "image"
+   ],
+   "widgets_values_named": {
+    "image": "example.png",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 51,
+   "type": "ImageScaleToTotalPixels",
+   "pos": [
+    960,
+    750
+   ],
+   "size": [
+    320,
+    106
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "link": 64
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "método de upscaling",
+     "locked": null,
+     "name": "upscale_method",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "upscale_method"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "megapixels",
+     "locked": null,
+     "name": "megapixels",
+     "nameLocked": null,
+     "removable": null,
+     "type": "FLOAT",
+     "widget": {
+      "name": "megapixels"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "etapas de resolução",
+     "locked": null,
+     "name": "resolution_steps",
+     "nameLocked": null,
+     "removable": null,
+     "type": "INT",
+     "widget": {
+      "name": "resolution_steps"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "links": [
+      65
+     ]
+    }
+   ],
+   "title": "Referência -> 0.59 MP",
+   "properties": {
+    "Node name for S&R": "ImageScaleToTotalPixels"
+   },
+   "widgets_values": [
+    "lanczos",
+    0.59,
+    1
+   ],
+   "widgets_values_named": {
+    "upscale_method": "lanczos",
+    "megapixels": 0.59,
+    "resolution_steps": 1
+   }
+  },
+  {
+   "id": 52,
+   "type": "LoadImage",
+   "pos": [
+    500,
+    950
+   ],
+   "size": [
+    320,
+    326
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "image"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "escolher arquivo para enviar",
+     "locked": null,
+     "name": "upload",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      66
+     ]
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "MÁSCARA",
+     "locked": null,
+     "name": "MASK",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MASK",
+     "pos": null,
+     "slot_index": null,
+     "links": []
+    }
+   ],
+   "title": "Image 4 - Referência 3 (opcional)",
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "example.png",
+    "image"
+   ],
+   "widgets_values_named": {
+    "image": "example.png",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 53,
+   "type": "ImageScaleToTotalPixels",
+   "pos": [
+    960,
+    1000
+   ],
+   "size": [
+    320,
+    106
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "link": 66
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "método de upscaling",
+     "locked": null,
+     "name": "upscale_method",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "upscale_method"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "megapixels",
+     "locked": null,
+     "name": "megapixels",
+     "nameLocked": null,
+     "removable": null,
+     "type": "FLOAT",
+     "widget": {
+      "name": "megapixels"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "etapas de resolução",
+     "locked": null,
+     "name": "resolution_steps",
+     "nameLocked": null,
+     "removable": null,
+     "type": "INT",
+     "widget": {
+      "name": "resolution_steps"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "links": [
+      67
+     ]
+    }
+   ],
+   "title": "Referência -> 0.59 MP",
+   "properties": {
+    "Node name for S&R": "ImageScaleToTotalPixels"
+   },
+   "widgets_values": [
+    "lanczos",
+    0.59,
+    1
+   ],
+   "widgets_values_named": {
+    "upscale_method": "lanczos",
+    "megapixels": 0.59,
+    "resolution_steps": 1
+   }
+  },
+  {
+   "id": 54,
+   "type": "LoadImage",
+   "pos": [
+    500,
+    1200
+   ],
+   "size": [
+    320,
+    326
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "image"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "escolher arquivo para enviar",
+     "locked": null,
+     "name": "upload",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      68
+     ]
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "MÁSCARA",
+     "locked": null,
+     "name": "MASK",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MASK",
+     "pos": null,
+     "slot_index": null,
+     "links": []
+    }
+   ],
+   "title": "Image 5 - Referência 4 (opcional)",
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "example.png",
+    "image"
+   ],
+   "widgets_values_named": {
+    "image": "example.png",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 55,
+   "type": "ImageScaleToTotalPixels",
+   "pos": [
+    960,
+    1250
+   ],
+   "size": [
+    320,
+    106
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "link": 68
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "método de upscaling",
+     "locked": null,
+     "name": "upscale_method",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "upscale_method"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "megapixels",
+     "locked": null,
+     "name": "megapixels",
+     "nameLocked": null,
+     "removable": null,
+     "type": "FLOAT",
+     "widget": {
+      "name": "megapixels"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "etapas de resolução",
+     "locked": null,
+     "name": "resolution_steps",
+     "nameLocked": null,
+     "removable": null,
+     "type": "INT",
+     "widget": {
+      "name": "resolution_steps"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "links": [
+      69
+     ]
+    }
+   ],
+   "title": "Referência -> 0.59 MP",
+   "properties": {
+    "Node name for S&R": "ImageScaleToTotalPixels"
+   },
+   "widgets_values": [
+    "lanczos",
+    0.59,
+    1
+   ],
+   "widgets_values_named": {
+    "upscale_method": "lanczos",
+    "megapixels": 0.59,
+    "resolution_steps": 1
+   }
+  },
+  {
+   "id": 56,
+   "type": "LoadImage",
+   "pos": [
+    500,
+    1450
+   ],
+   "size": [
+    320,
+    326
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "image"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "escolher arquivo para enviar",
+     "locked": null,
+     "name": "upload",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      70
+     ]
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "MÁSCARA",
+     "locked": null,
+     "name": "MASK",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MASK",
+     "pos": null,
+     "slot_index": null,
+     "links": []
+    }
+   ],
+   "title": "Image 6 - Referência 5 (opcional)",
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "example.png",
+    "image"
+   ],
+   "widgets_values_named": {
+    "image": "example.png",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 57,
+   "type": "ImageScaleToTotalPixels",
+   "pos": [
+    960,
+    1500
+   ],
+   "size": [
+    320,
+    106
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "link": 70
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "método de upscaling",
+     "locked": null,
+     "name": "upscale_method",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "upscale_method"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "megapixels",
+     "locked": null,
+     "name": "megapixels",
+     "nameLocked": null,
+     "removable": null,
+     "type": "FLOAT",
+     "widget": {
+      "name": "megapixels"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "etapas de resolução",
+     "locked": null,
+     "name": "resolution_steps",
+     "nameLocked": null,
+     "removable": null,
+     "type": "INT",
+     "widget": {
+      "name": "resolution_steps"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "links": [
+      71
+     ]
+    }
+   ],
+   "title": "Referência -> 0.59 MP",
+   "properties": {
+    "Node name for S&R": "ImageScaleToTotalPixels"
+   },
+   "widgets_values": [
+    "lanczos",
+    0.59,
+    1
+   ],
+   "widgets_values_named": {
+    "upscale_method": "lanczos",
+    "megapixels": 0.59,
+    "resolution_steps": 1
+   }
+  },
+  {
+   "id": 58,
+   "type": "LoadImage",
+   "pos": [
+    500,
+    1700
+   ],
+   "size": [
+    320,
+    326
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "image"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "escolher arquivo para enviar",
+     "locked": null,
+     "name": "upload",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      72
+     ]
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "MÁSCARA",
+     "locked": null,
+     "name": "MASK",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MASK",
+     "pos": null,
+     "slot_index": null,
+     "links": []
+    }
+   ],
+   "title": "Image 7 - Referência 6 (opcional)",
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "example.png",
+    "image"
+   ],
+   "widgets_values_named": {
+    "image": "example.png",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 59,
+   "type": "ImageScaleToTotalPixels",
+   "pos": [
+    960,
+    1750
+   ],
+   "size": [
+    320,
+    106
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "link": 72
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "método de upscaling",
+     "locked": null,
+     "name": "upscale_method",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "upscale_method"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "megapixels",
+     "locked": null,
+     "name": "megapixels",
+     "nameLocked": null,
+     "removable": null,
+     "type": "FLOAT",
+     "widget": {
+      "name": "megapixels"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "etapas de resolução",
+     "locked": null,
+     "name": "resolution_steps",
+     "nameLocked": null,
+     "removable": null,
+     "type": "INT",
+     "widget": {
+      "name": "resolution_steps"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "links": [
+      73
+     ]
+    }
+   ],
+   "title": "Referência -> 0.59 MP",
+   "properties": {
+    "Node name for S&R": "ImageScaleToTotalPixels"
+   },
+   "widgets_values": [
+    "lanczos",
+    0.59,
+    1
+   ],
+   "widgets_values_named": {
+    "upscale_method": "lanczos",
+    "megapixels": 0.59,
+    "resolution_steps": 1
+   }
+  },
+  {
+   "id": 60,
+   "type": "LoadImage",
+   "pos": [
+    500,
+    1950
+   ],
+   "size": [
+    320,
+    326
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "image"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "escolher arquivo para enviar",
+     "locked": null,
+     "name": "upload",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGEUPLOAD",
+     "widget": {
+      "name": "upload"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "slot_index": null,
+     "links": [
+      74
+     ]
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "MÁSCARA",
+     "locked": null,
+     "name": "MASK",
+     "nameLocked": null,
+     "removable": null,
+     "type": "MASK",
+     "pos": null,
+     "slot_index": null,
+     "links": []
+    }
+   ],
+   "title": "Image 8 - Referência 7 (opcional)",
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "example.png",
+    "image"
+   ],
+   "widgets_values_named": {
+    "image": "example.png",
+    "upload": "image"
+   }
+  },
+  {
+   "id": 61,
+   "type": "ImageScaleToTotalPixels",
+   "pos": [
+    960,
+    2000
+   ],
+   "size": [
+    320,
+    106
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "imagem",
+     "locked": null,
+     "name": "image",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "link": 74
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "método de upscaling",
+     "locked": null,
+     "name": "upscale_method",
+     "nameLocked": null,
+     "removable": null,
+     "type": "COMBO",
+     "widget": {
+      "name": "upscale_method"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "megapixels",
+     "locked": null,
+     "name": "megapixels",
+     "nameLocked": null,
+     "removable": null,
+     "type": "FLOAT",
+     "widget": {
+      "name": "megapixels"
+     },
+     "link": null
+    },
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "etapas de resolução",
+     "locked": null,
+     "name": "resolution_steps",
+     "nameLocked": null,
+     "removable": null,
+     "type": "INT",
+     "widget": {
+      "name": "resolution_steps"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "color_off": null,
+     "color_on": null,
+     "dir": null,
+     "label": null,
+     "localized_name": "IMAGEM",
+     "locked": null,
+     "name": "IMAGE",
+     "nameLocked": null,
+     "removable": null,
+     "type": "IMAGE",
+     "pos": null,
+     "links": [
+      75
+     ]
+    }
+   ],
+   "title": "Referência -> 0.59 MP",
+   "properties": {
+    "Node name for S&R": "ImageScaleToTotalPixels"
+   },
+   "widgets_values": [
+    "lanczos",
+    0.59,
+    1
+   ],
+   "widgets_values_named": {
+    "upscale_method": "lanczos",
+    "megapixels": 0.59,
+    "resolution_steps": 1
+   }
+  },
+  {
+   "id": 49,
+   "type": "LoraLoader",
+   "pos": [
+    900,
+    620
+   ],
+   "size": [
+    320,
+    130
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "modelo",
+     "name": "model",
+     "type": "MODEL",
+     "link": 76
+    },
+    {
+     "localized_name": "clip",
+     "name": "clip",
+     "type": "CLIP",
+     "link": 77
+    },
+    {
+     "localized_name": "nome_do_lora",
+     "name": "lora_name",
+     "type": "COMBO",
+     "widget": {
+      "name": "lora_name"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "força_modelo",
+     "name": "strength_model",
+     "type": "FLOAT",
+     "widget": {
+      "name": "strength_model"
+     },
+     "link": null
+    },
+    {
+     "localized_name": "força_clip",
+     "name": "strength_clip",
+     "type": "FLOAT",
+     "widget": {
+      "name": "strength_clip"
+     },
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "MODELO",
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      78
+     ]
+    },
+    {
+     "localized_name": "clip",
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      79
+     ]
+    }
+   ],
+   "title": "Realism: Skin/Realism 0.5",
+   "properties": {
+    "Node name for S&R": "LoraLoader"
+   },
+   "widgets_values": [
+    "flymy_realism.safetensors",
+    0.5,
+    0.5
+   ],
+   "widgets_values_named": {
+    "lora_name": "flymy_realism.safetensors",
+    "strength_model": 0.5,
+    "strength_clip": 0.5
+   }
+  }
+ ],
+ "links": [
+  [
+   5,
+   5,
+   0,
+   24,
+   1,
+   "VAE"
+  ],
+  [
+   27,
+   24,
+   0,
+   25,
+   0,
+   "IMAGE"
+  ],
+  [
+   30,
+   26,
+   0,
+   40,
+   0,
+   "IMAGE"
+  ],
+  [
+   31,
+   27,
+   0,
+   41,
+   0,
+   "IMAGE"
+  ],
+  [
+   46,
+   29,
+   0,
+   42,
+   0,
+   "MODEL"
+  ],
+  [
+   47,
+   18,
+   0,
+   42,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   48,
+   18,
+   1,
+   42,
+   2,
+   "CONDITIONING"
+  ],
+  [
+   49,
+   18,
+   2,
+   42,
+   3,
+   "LATENT"
+  ],
+  [
+   50,
+   42,
+   0,
+   24,
+   0,
+   "LATENT"
+  ],
+  [
+   57,
+   2,
+   0,
+   45,
+   0,
+   "MODEL"
+  ],
+  [
+   59,
+   4,
+   0,
+   45,
+   1,
+   "CLIP"
+  ],
+  [
+   43,
+   40,
+   0,
+   18,
+   1,
+   "IMAGE"
+  ],
+  [
+   44,
+   41,
+   0,
+   18,
+   2,
+   "IMAGE"
+  ],
+  [
+   4,
+   5,
+   0,
+   18,
+   5,
+   "VAE"
+  ],
+  [
+   42,
+   6,
+   0,
+   18,
+   6,
+   "STRING"
+  ],
+  [
+   64,
+   50,
+   0,
+   51,
+   0,
+   "IMAGE"
+  ],
+  [
+   65,
+   51,
+   0,
+   18,
+   3,
+   "IMAGE"
+  ],
+  [
+   66,
+   52,
+   0,
+   53,
+   0,
+   "IMAGE"
+  ],
+  [
+   67,
+   53,
+   0,
+   18,
+   4,
+   "IMAGE"
+  ],
+  [
+   68,
+   54,
+   0,
+   55,
+   0,
+   "IMAGE"
+  ],
+  [
+   69,
+   55,
+   0,
+   18,
+   5,
+   "IMAGE"
+  ],
+  [
+   70,
+   56,
+   0,
+   57,
+   0,
+   "IMAGE"
+  ],
+  [
+   71,
+   57,
+   0,
+   18,
+   6,
+   "IMAGE"
+  ],
+  [
+   72,
+   58,
+   0,
+   59,
+   0,
+   "IMAGE"
+  ],
+  [
+   73,
+   59,
+   0,
+   18,
+   7,
+   "IMAGE"
+  ],
+  [
+   74,
+   60,
+   0,
+   61,
+   0,
+   "IMAGE"
+  ],
+  [
+   75,
+   61,
+   0,
+   18,
+   8,
+   "IMAGE"
+  ],
+  [
+   76,
+   45,
+   0,
+   49,
+   0,
+   "MODEL"
+  ],
+  [
+   77,
+   45,
+   1,
+   49,
+   1,
+   "CLIP"
+  ],
+  [
+   78,
+   49,
+   0,
+   46,
+   0,
+   "MODEL"
+  ],
+  [
+   79,
+   49,
+   1,
+   46,
+   1,
+   "CLIP"
+  ],
+  [
+   80,
+   46,
+   0,
+   29,
+   0,
+   "MODEL"
+  ],
+  [
+   81,
+   46,
+   1,
+   18,
+   0,
+   "CLIP"
+  ]
+ ],
+ "groups": [],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 1.1623537021501735,
+   "offset": [
+    -698.8473794821765,
+    192.09212153649128
+   ]
+  }
+ },
+ "version": 0.4
+}
